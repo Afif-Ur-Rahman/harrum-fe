@@ -1,0 +1,75 @@
+export interface Currency {
+  code: string;
+  symbol: string;
+  name: string;
+}
+
+export const CURRENCIES: Currency[] = [
+  { code: "USD", symbol: "$", name: "US Dollar" },
+  { code: "EUR", symbol: "€", name: "Euro" },
+  { code: "GBP", symbol: "£", name: "British Pound" },
+  { code: "JPY", symbol: "¥", name: "Japanese Yen" },
+  { code: "CNY", symbol: "¥", name: "Chinese Yuan" },
+  { code: "INR", symbol: "₹", name: "Indian Rupee" },
+  { code: "PKR", symbol: "₨", name: "Pakistani Rupee" },
+  { code: "CAD", symbol: "CA$", name: "Canadian Dollar" },
+  { code: "AUD", symbol: "A$", name: "Australian Dollar" },
+  { code: "CHF", symbol: "Fr", name: "Swiss Franc" },
+  { code: "HKD", symbol: "HK$", name: "Hong Kong Dollar" },
+  { code: "SGD", symbol: "S$", name: "Singapore Dollar" },
+  { code: "NZD", symbol: "NZ$", name: "New Zealand Dollar" },
+  { code: "MXN", symbol: "MX$", name: "Mexican Peso" },
+  { code: "BRL", symbol: "R$", name: "Brazilian Real" },
+  { code: "KRW", symbol: "₩", name: "South Korean Won" },
+  { code: "SEK", symbol: "kr", name: "Swedish Krona" },
+  { code: "NOK", symbol: "kr", name: "Norwegian Krone" },
+  { code: "DKK", symbol: "kr", name: "Danish Krone" },
+  { code: "SAR", symbol: "﷼", name: "Saudi Riyal" },
+  { code: "AED", symbol: "د.إ", name: "UAE Dirham" },
+  { code: "QAR", symbol: "﷼", name: "Qatari Riyal" },
+  { code: "KWD", symbol: "د.ك", name: "Kuwaiti Dinar" },
+  { code: "BHD", symbol: ".د.ب", name: "Bahraini Dinar" },
+  { code: "OMR", symbol: "﷼", name: "Omani Rial" },
+  { code: "JOD", symbol: "JD", name: "Jordanian Dinar" },
+  { code: "EGP", symbol: "£", name: "Egyptian Pound" },
+  { code: "TRY", symbol: "₺", name: "Turkish Lira" },
+  { code: "ZAR", symbol: "R", name: "South African Rand" },
+  { code: "NGN", symbol: "₦", name: "Nigerian Naira" },
+  { code: "GHS", symbol: "₵", name: "Ghanaian Cedi" },
+  { code: "KES", symbol: "KSh", name: "Kenyan Shilling" },
+  { code: "TZS", symbol: "TSh", name: "Tanzanian Shilling" },
+  { code: "RUB", symbol: "₽", name: "Russian Ruble" },
+  { code: "PLN", symbol: "zł", name: "Polish Złoty" },
+  { code: "CZK", symbol: "Kč", name: "Czech Koruna" },
+  { code: "HUF", symbol: "Ft", name: "Hungarian Forint" },
+  { code: "RON", symbol: "lei", name: "Romanian Leu" },
+  { code: "IDR", symbol: "Rp", name: "Indonesian Rupiah" },
+  { code: "MYR", symbol: "RM", name: "Malaysian Ringgit" },
+  { code: "THB", symbol: "฿", name: "Thai Baht" },
+  { code: "VND", symbol: "₫", name: "Vietnamese Dong" },
+  { code: "PHP", symbol: "₱", name: "Philippine Peso" },
+  { code: "BDT", symbol: "৳", name: "Bangladeshi Taka" },
+  { code: "LKR", symbol: "₨", name: "Sri Lankan Rupee" },
+  { code: "NPR", symbol: "₨", name: "Nepalese Rupee" },
+  { code: "MMK", symbol: "K", name: "Myanmar Kyat" },
+  { code: "ILS", symbol: "₪", name: "Israeli Shekel" },
+  { code: "IRR", symbol: "﷼", name: "Iranian Rial" },
+  { code: "IQD", symbol: "ع.د", name: "Iraqi Dinar" },
+  { code: "MAD", symbol: "MAD", name: "Moroccan Dirham" },
+  { code: "DZD", symbol: "دج", name: "Algerian Dinar" },
+  { code: "TND", symbol: "د.ت", name: "Tunisian Dinar" },
+  { code: "LYD", symbol: "ل.د", name: "Libyan Dinar" },
+  { code: "CLP", symbol: "CL$", name: "Chilean Peso" },
+  { code: "COP", symbol: "CO$", name: "Colombian Peso" },
+  { code: "ARS", symbol: "AR$", name: "Argentine Peso" },
+  { code: "PEN", symbol: "S/", name: "Peruvian Sol" },
+  { code: "UYU", symbol: "$U", name: "Uruguayan Peso" },
+  { code: "BOB", symbol: "Bs.", name: "Bolivian Boliviano" },
+  { code: "PYG", symbol: "₲", name: "Paraguayan Guaraní" },
+];
+
+export const getCurrencyByCode = (code: string): Currency | undefined =>
+  CURRENCIES.find((c) => c.code === code);
+
+export const formatCurrencyLabel = (currency: Currency) =>
+  `${currency.code} – ${currency.symbol}  ${currency.name}`;
