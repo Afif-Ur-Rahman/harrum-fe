@@ -11,19 +11,16 @@ export async function generateMetadata(): Promise<Metadata> {
 
   if (!authCookies?.user || !authCookies?.accessToken) {
     return {
-      title: "Restaurant",
+      title: "Harrum Cloth House",
       description:
-        "A modern restaurant web platform for managing orders, menus, customers, and daily operations with ease.",
+        "A modern clothing store web platform for managing products, customers, orders, and daily operations with ease.",
     };
   }
 
   return {
-    title:
-      authCookies?.user?.fullName ||
-      authCookies?.user?.username ||
-      "Restaurant",
+    title: authCookies?.user?.username || "Harrum Cloth House",
     description:
-      "A modern restaurant web platform for managing orders, menus, customers, and daily operations with ease.",
+      "A modern clothing store web platform for managing products, customers, orders, and daily operations with ease.",
   };
 }
 
@@ -39,9 +36,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const authCookies = await getAuthCookies();
-  const accessToken = authCookies?.accessToken;
-
   return (
     <html lang="en" suppressHydrationWarning>
       <body

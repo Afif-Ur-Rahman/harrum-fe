@@ -21,18 +21,11 @@ interface EmployeeSection {
 const useEmployees = () => {
   const EMPLOYEE_SECTIONS: EmployeeSection[] = [
     {
-      key: "waiter",
-      title: "Waiters",
-      roleLabel: "Waiter",
-      emoji: "🧑‍🍳",
-      emptyText: "No waiters found.",
-    },
-    {
-      key: "chef",
-      title: "Chefs",
-      roleLabel: "Chef",
-      emoji: "👨‍🍳",
-      emptyText: "No chefs found.",
+      key: "worker",
+      title: "Workers",
+      roleLabel: "Worker",
+      emoji: "🧑",
+      emptyText: "No workers found.",
     },
     {
       key: "accountant",
@@ -43,8 +36,7 @@ const useEmployees = () => {
     },
   ];
   const [employees, setEmployees] = useState<Employees>({
-    waiter: [],
-    chef: [],
+    worker: [],
     accountant: [],
   });
   const [open, setOpen] = useState(false);
@@ -58,11 +50,10 @@ const useEmployees = () => {
       if (res?.error) {
         showToast("error", res.error);
       }
-      setEmployees(res?.data?.data || { waiter: [], chef: [], accountant: [] });
+      setEmployees(res?.data?.data || { worker: [], accountant: [] });
       setLoading(false);
     };
     fetchAllEmployees();
-
   }, []);
 
   const onAddEmployee = async (data: EmployeeFormType) => {

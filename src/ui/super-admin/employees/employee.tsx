@@ -2,6 +2,8 @@
 
 import {
   Briefcase,
+  Calculator,
+  PersonStanding,
   Plus,
   Search,
   Sparkles,
@@ -13,14 +15,12 @@ import ReuseableDialog from "@/components/ui/dialog";
 import AddEmployees from "./empolees-add";
 import { useEmployees } from "./useEmploye";
 import { ConfirmationDialog } from "@/components";
-import Image from "next/image";
 import { useMemo, useState } from "react";
 import { User } from "@/types";
 
 const ROLE_STYLES: Record<string, string> = {
-  Waiter:
+  Worker:
     "bg-emerald-500/15 text-emerald-200 ring-1 ring-inset ring-emerald-400/30",
-  Chef: "bg-amber-500/15 text-amber-100 ring-1 ring-inset ring-amber-300/30",
   Accountant: "bg-sky-500/15 text-sky-100 ring-1 ring-inset ring-sky-300/30",
 };
 
@@ -28,15 +28,10 @@ const ROLE_PANEL_STYLES: Record<
   string,
   { accent: string; glow: string; iconClass: string }
 > = {
-  Waiter: {
+  Worker: {
     accent: "from-emerald-500 via-teal-500 to-cyan-500",
     glow: "shadow-emerald-500/10",
     iconClass: "bg-emerald-500/15 text-emerald-200",
-  },
-  Chef: {
-    accent: "from-amber-500 via-orange-500 to-rose-500",
-    glow: "shadow-amber-500/10",
-    iconClass: "bg-amber-500/15 text-amber-100",
   },
   Accountant: {
     accent: "from-sky-500 via-indigo-500 to-blue-600",
@@ -81,7 +76,6 @@ const Employees = () => {
 
       const matchesSearch =
         !query ||
-        employee.fullName?.toLowerCase().includes(query) ||
         employee.username?.toLowerCase().includes(query) ||
         employee.email?.toLowerCase().includes(query);
 
@@ -108,12 +102,12 @@ const Employees = () => {
   return (
     <div className="min-h-screen overflow-hidden rounded-[28px] text-white">
       <div className="relative isolate">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,_rgba(56,189,248,0.18),_transparent_28%),radial-gradient(circle_at_top_right,_rgba(244,114,182,0.16),_transparent_30%),linear-gradient(180deg,_#020617_0%,_#0f172a_48%,_#111827_100%)]" />
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.18),transparent_28%),radial-gradient(circle_at_top_right,rgba(244,114,182,0.16),transparent_30%),linear-gradient(180deg,#020617_0%,#0f172a_48%,#111827_100%)]" />
         <div className="absolute left-1/2 top-0 -z-10 h-64 w-64 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-3xl" />
 
         <div className="space-y-6 p-4 sm:p-6 xl:p-8">
           <section className="relative overflow-hidden rounded-[30px] border border-white/10 bg-white/8 p-5 shadow-2xl shadow-black/30 backdrop-blur-xl sm:p-7">
-            <div className="absolute inset-y-0 right-0 hidden w-1/2 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.12),_transparent_55%)] lg:block" />
+            <div className="absolute inset-y-0 right-0 hidden w-1/2 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.12),transparent_55%)] lg:block" />
 
             <div className="relative flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
               <div className="max-w-3xl">
@@ -128,12 +122,11 @@ const Employees = () => {
 
                 <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
                   Monitor your workforce, filter by role, and manage staff
-                  records from a dashboard that matches the rest of the super
-                  admin experience.
+                  records.
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:min-w-[420px]">
+              <div className="grid grid-cols-2 gap-3 xl:min-w-105">
                 <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
                   <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
                     Total Staff
@@ -151,26 +144,13 @@ const Employees = () => {
                     {filtered.length}
                   </p>
                 </div>
-
-                <div className="col-span-2 rounded-2xl border border-white/10 bg-gradient-to-r from-cyan-500/20 to-fuchsia-500/20 p-4 sm:col-span-1">
-                  <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
-                    Active Roles
-                  </p>
-                  <p className="mt-2 text-2xl font-semibold text-white">
-                    {EMPLOYEE_SECTIONS.length}
-                  </p>
-                </div>
               </div>
             </div>
           </section>
 
-          <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <section className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {countsByRole.map((item) => {
-              const styles = ROLE_PANEL_STYLES[item.roleLabel] ?? {
-                accent: "from-slate-500 to-slate-700",
-                glow: "shadow-black/10",
-                iconClass: "bg-white/10 text-white",
-              };
+              const styles = ROLE_PANEL_STYLES[item.roleLabel];
 
               return (
                 <div
@@ -178,7 +158,7 @@ const Employees = () => {
                   className={`group relative overflow-hidden rounded-[26px] border border-white/10 bg-white/8 p-5 shadow-2xl ${styles.glow} backdrop-blur-xl transition duration-300 hover:-translate-y-1`}
                 >
                   <div
-                    className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${styles.accent}`}
+                    className={`absolute inset-x-0 top-0 h-1 bg-linear-to-r ${styles.accent}`}
                   />
                   <div className="absolute right-0 top-0 h-28 w-28 rounded-full bg-white/5 blur-2xl transition duration-300 group-hover:scale-125" />
 
@@ -279,7 +259,7 @@ const Employees = () => {
 
           <section className="overflow-hidden rounded-[28px] border border-white/10 bg-white/8 shadow-2xl shadow-black/25 backdrop-blur-xl">
             {loading ? (
-              <div className="flex min-h-[280px] flex-col items-center justify-center px-6 py-16 text-center">
+              <div className="flex min-h-70 flex-col items-center justify-center px-6 py-16 text-center">
                 <div className="mb-4 rounded-2xl bg-cyan-400/10 p-4 text-cyan-200">
                   <Users className="h-7 w-7" />
                 </div>
@@ -291,7 +271,7 @@ const Employees = () => {
                 </p>
               </div>
             ) : filtered.length === 0 ? (
-              <div className="flex min-h-[280px] flex-col items-center justify-center px-6 py-16 text-center">
+              <div className="flex min-h-70 flex-col items-center justify-center px-6 py-16 text-center">
                 <div className="mb-4 rounded-2xl bg-white/10 p-4 text-slate-200">
                   <UserRound className="h-7 w-7" />
                 </div>
@@ -326,36 +306,29 @@ const Employees = () => {
                     {filtered.map((employee: EmployeeWithRole) => (
                       <tr
                         key={employee._id}
-                        className="group transition hover:bg-white/[0.04]"
+                        className="group transition hover:bg-white/4"
                       >
                         <td className="px-5 py-4">
                           <div className="flex items-center gap-3">
-                            <div className="h-11 w-11 overflow-hidden rounded-2xl ring-1 ring-white/10">
-                              <Image
-                                src={employee.image || "/images/r-dummy.png"}
-                                alt={employee.fullName || employee.roleLabel}
-                                width={44}
-                                height={44}
-                                className="h-full w-full object-cover"
-                              />
+                            <div className="flex justify-center items-center h-11 w-11 overflow-hidden rounded-2xl ring-1 ring-white/10">
+                              {employee.type === "worker" ? (
+                                <PersonStanding />
+                              ) : (
+                                <Calculator />
+                              )}
                             </div>
 
                             <div className="min-w-0">
                               <p className="truncate font-semibold text-white">
-                                {employee.fullName ||
-                                  employee.username ||
-                                  "Unnamed Employee"}
-                              </p>
-                              <p className="truncate text-xs text-slate-400 md:hidden">
-                                {employee.email || "No email provided"}
+                                {employee.username}
                               </p>
                             </div>
                           </div>
                         </td>
 
-                        <td className="hidden max-w-[260px] px-5 py-4 text-slate-300 md:table-cell">
+                        <td className="hidden max-w-65 px-5 py-4 text-slate-300 md:table-cell">
                           <span className="block truncate">
-                            {employee.email || "No email provided"}
+                            {employee.email}
                           </span>
                         </td>
 

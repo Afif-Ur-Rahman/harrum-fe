@@ -6,7 +6,7 @@ import { EmployeeFormType } from "@/ui/super-admin/employees/schema";
 export const getAllEmployees = async () => {
   try {
     const response = await serverAction({
-      url: `/dashboard`,
+      url: `/employee`,
       method: "GET",
     });
     return response as ResponseForEmployee;
@@ -19,7 +19,7 @@ export const getAllEmployees = async () => {
 export const createEmployees = async (data: EmployeeFormType) => {
   try {
     const response = await serverAction({
-      url: `/dashboard/create-employee`,
+      url: `/employee/create-employee`,
       method: "POST",
       body: data,
     });
@@ -33,7 +33,7 @@ export const createEmployees = async (data: EmployeeFormType) => {
 export const deleteEmployee = async (id: string) => {
   try {
     const response = await serverAction({
-      url: `/dashboard/employee/${id}`,
+      url: `/employee/${id}`,
       method: "DELETE",
     });
     return response as SimpleResponse;
