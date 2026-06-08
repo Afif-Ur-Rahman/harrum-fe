@@ -118,12 +118,12 @@ export default function SuperAdminDashboard() {
   return (
     <div className="min-h-screen overflow-hidden rounded-[28px] bg-slate-950 text-white">
       <div className="relative isolate">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,_rgba(56,189,248,0.18),_transparent_28%),radial-gradient(circle_at_top_right,_rgba(244,114,182,0.16),_transparent_30%),linear-gradient(180deg,_#020617_0%,_#0f172a_48%,_#111827_100%)]" />
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.18),transparent_28%),radial-gradient(circle_at_top_right,rgba(244,114,182,0.16),transparent_30%),linear-gradient(180deg,#020617_0%,#0f172a_48%,#111827_100%)]" />
         <div className="absolute left-1/2 top-0 -z-10 h-64 w-64 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-3xl" />
 
         <div className="space-y-6 p-4 sm:p-6 xl:p-8">
           <section className="relative overflow-hidden rounded-[30px] border border-white/10 bg-white/8 p-5 shadow-2xl shadow-black/30 backdrop-blur-xl sm:p-7">
-            <div className="absolute inset-y-0 right-0 hidden w-1/2 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.12),_transparent_55%)] lg:block" />
+            <div className="absolute inset-y-0 right-0 hidden w-1/2 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.12),transparent_55%)] lg:block" />
 
             <div className="relative flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
               <div className="max-w-3xl">
@@ -143,20 +143,24 @@ export default function SuperAdminDashboard() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:min-w-[420px]">
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:min-w-105">
                 <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
                   <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
                     Live Orders
                   </p>
-                  <p className="mt-2 text-2xl font-semibold text-white">1,284</p>
+                  <p className="mt-2 text-2xl font-semibold text-white">
+                    1,284
+                  </p>
                 </div>
                 <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
                   <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
                     Pending Alerts
                   </p>
-                  <p className="mt-2 text-2xl font-semibold text-amber-300">16</p>
+                  <p className="mt-2 text-2xl font-semibold text-amber-300">
+                    16
+                  </p>
                 </div>
-                <div className="col-span-2 rounded-2xl border border-white/10 bg-gradient-to-r from-cyan-500/20 to-fuchsia-500/20 p-4 sm:col-span-1">
+                <div className="col-span-2 rounded-2xl border border-white/10 bg-linear-to-r from-cyan-500/20 to-fuchsia-500/20 p-4 sm:col-span-1">
                   <p className="text-xs uppercase tracking-[0.2em] text-slate-300">
                     Growth Score
                   </p>
@@ -177,7 +181,7 @@ export default function SuperAdminDashboard() {
                   className={`group relative overflow-hidden rounded-[26px] border border-white/10 bg-white/8 p-5 shadow-2xl ${item.glow} backdrop-blur-xl transition duration-300 hover:-translate-y-1`}
                 >
                   <div
-                    className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${item.accent}`}
+                    className={`absolute inset-x-0 top-0 h-1 bg-linear-to-r ${item.accent}`}
                   />
                   <div className="absolute right-0 top-0 h-32 w-32 rounded-full bg-white/5 blur-2xl transition duration-300 group-hover:scale-125" />
 
@@ -192,7 +196,7 @@ export default function SuperAdminDashboard() {
                     </div>
 
                     <div
-                      className={`rounded-2xl bg-gradient-to-br ${item.accent} p-3 text-white shadow-lg`}
+                      className={`rounded-2xl bg-linear-to-br ${item.accent} p-3 text-white shadow-lg`}
                     >
                       <Icon className="h-6 w-6" />
                     </div>
@@ -214,7 +218,9 @@ export default function SuperAdminDashboard() {
                       {item.change}
                     </div>
 
-                    <span className="text-xs text-slate-400">{item.subtitle}</span>
+                    <span className="text-xs text-slate-400">
+                      {item.subtitle}
+                    </span>
                   </div>
                 </div>
               );
@@ -245,19 +251,22 @@ export default function SuperAdminDashboard() {
                 </div>
               </div>
 
-              <div className="grid h-[320px] grid-cols-6 items-end gap-3 sm:gap-4">
+              <div className="grid h-80 grid-cols-6 items-end gap-3 sm:gap-4">
                 {salesBars.map((item) => (
-                  <div key={item.label} className="flex h-full flex-col justify-end">
+                  <div
+                    key={item.label}
+                    className="flex h-full flex-col justify-end"
+                  >
                     <div className="flex h-full items-end justify-center gap-2">
-                      <div className="flex w-full max-w-[28px] flex-col justify-end rounded-full bg-slate-800/80">
+                      <div className="flex w-full max-w-7 flex-col justify-end rounded-full bg-slate-800/80">
                         <div
-                          className="rounded-full bg-gradient-to-t from-cyan-600 to-cyan-300"
+                          className="rounded-full bg-linear-to-t from-cyan-600 to-cyan-300"
                           style={{ height: `${item.purchase}%` }}
                         />
                       </div>
-                      <div className="flex w-full max-w-[28px] flex-col justify-end rounded-full bg-slate-800/80">
+                      <div className="flex w-full max-w-7 flex-col justify-end rounded-full bg-slate-800/80">
                         <div
-                          className="rounded-full bg-gradient-to-t from-fuchsia-700 to-fuchsia-300"
+                          className="rounded-full bg-linear-to-t from-fuchsia-700 to-fuchsia-300"
                           style={{ height: `${item.income}%` }}
                         />
                       </div>
@@ -354,8 +363,8 @@ export default function SuperAdminDashboard() {
                 </div>
 
                 <div className="inline-flex items-center gap-2 rounded-full bg-rose-500/10 px-3 py-1.5 text-sm text-rose-100">
-                  <TriangleAlert className="h-4 w-4" />
-                  6 urgent products need attention
+                  <TriangleAlert className="h-4 w-4" />6 urgent products need
+                  attention
                 </div>
               </div>
 
@@ -408,7 +417,9 @@ export default function SuperAdminDashboard() {
                         <p className="text-base font-semibold text-white">
                           {item.id}
                         </p>
-                        <p className="mt-1 text-sm text-slate-400">{item.date}</p>
+                        <p className="mt-1 text-sm text-slate-400">
+                          {item.date}
+                        </p>
                       </div>
                       <span
                         className={`inline-flex rounded-full px-3 py-1 text-xs font-medium ${getStatusStyles(
@@ -477,7 +488,7 @@ export default function SuperAdminDashboard() {
                           {product.revenue}
                         </p>
                       </div>
-                      <div className="h-12 w-24 rounded-2xl bg-gradient-to-r from-emerald-500/30 via-cyan-500/20 to-transparent" />
+                      <div className="h-12 w-24 rounded-2xl bg-linear-to-r from-emerald-500/30 via-cyan-500/20 to-transparent" />
                     </div>
                   </div>
                 ))}

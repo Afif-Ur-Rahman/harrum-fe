@@ -1,190 +1,69 @@
 "use client";
+
 import React, { useState } from "react";
-import { TextField, Text, Flex } from "@radix-ui/themes";
-import { useFormContext } from "react-hook-form";
-import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
-import { checkUsernameAvailability } from "@/api/api-call/public";
-import { BsPatchCheck, BsPatchExclamation } from "react-icons/bs";
+import { useFormContext, RegisterOptions } from "react-hook-form";
+import { Eye, EyeOff } from "lucide-react";
 import { FormFieldError } from "../form";
 
 interface FormInputProps {
-  label?: string;
-  type?: "text" | "password" | "number" | "date" | "textarea" | "search";
   field: string;
-  value?: string;
-  required?: boolean;
-  autoFocus?: boolean;
-  placeHolder?: string;
-  disabled?: boolean;
-  className?: string;
-  maxLength?: number;
-  eye?: boolean;
-  minDateField?: string;
-  maxDateField?: string;
-  noPastDate?: boolean;
-  rows?: number;
-  maxValue?: number;
+  label: string;
+  type?: string;
+  placeholder: string;
+  icon: React.ElementType;
+  rules?: RegisterOptions;
 }
 
 const FormInput = ({
-  label,
-  type = "text",
   field,
-  value,
-  required = true,
-  autoFocus,
-  placeHolder,
-  disabled,
-  className,
-  maxLength,
-  eye = false,
-  minDateField,
-  maxDateField,
-  noPastDate = false,
-  rows = 4,
-  maxValue,
+  label,
+  type,
+  placeholder,
+  icon: Icon,
+  rules,
 }: FormInputProps) => {
-  const [hidePassword, setHidePassword] = useState(true);
-  const [isUsernameValid, setIsUsernameValid] = useState("");
-  const form = useFormContext();
+  const { register } = useFormContext();
+  const [show, setShow] = useState(false);
 
-  const isPasswordType = type === "password" && eye;
-  const toggleVisibility = () => setHidePassword(!hidePassword);
-
-  const minDate = minDateField ? form.watch(minDateField) : undefined;
-  const maxDate = maxDateField ? form.watch(maxDateField) : undefined;
-  const today = new Date().toISOString().split("T")[0];
-  const isNumber = type === "number";
-
-  const commonProps = {
-    required,
-    autoFocus,
-    placeholder: placeHolder,
-    disabled,
-    maxLength,
-    className: `w-full border-[#D0DAEE] border-[0.5px] rounded-lg text-sm ${
-      className || ""
-    }`,
-    ...(type === "number"
-      ? form.register(field, { valueAsNumber: true })
-      : form?.register(field)),
-  };
-
-  const handleUsernameBlur = async () => {
-    if (field !== "username") return;
-    const value = form.getValues(field);
-    if (!value) return;
-    const available = await checkUsernameAvailability(value);
-    setIsUsernameValid(available ? "valid" : "invalid");
-    if (!available) {
-      form.setError(field, {
-        type: "manual",
-        message: "Username is already taken",
-      });
-    } else {
-      form.clearErrors(field);
-    }
-  };
-
-  const registerProps = isNumber
-    ? form.register(field, { valueAsNumber: true })
-    : form.register(field);
-
-  const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (isNumber && maxValue !== undefined) {
-      const inputValue = parseFloat(e.target.value);
-      if (!isNaN(inputValue) && inputValue > maxValue) {
-        form.setValue(field, maxValue);
-        e.target.value = maxValue.toString();
-        return;
-      }
-      form.setValue(field, inputValue);
-    }
-  };
-
-  const numberInputProps =
-    isNumber && maxValue !== undefined ? { onChange: handleNumberChange } : {};
+  const isPassword = type === "password";
+  const inputType = isPassword
+    ? show
+      ? "text"
+      : "password"
+    : (type ?? "text");
 
   return (
-    <div className="flex flex-col gap-2 flex-1">
-      {label && (
-        <Text htmlFor={field} className="block text-sm font-medium mb-1">
-          {label}
-        </Text>
-      )}
-      <Flex
-        direction="column"
-        justify="center"
-        align="center"
-        className="relative w-full"
-      >
-        {type === "textarea" ? (
-          <textarea
-            {...commonProps}
-            rows={rows}
-            value={form.watch(field) ?? value ?? ""}
-          />
-        ) : (
-          <TextField.Root
-            type={isPasswordType ? (hidePassword ? "password" : "text") : type}
-            {...registerProps}
-            {...numberInputProps}
-            defaultValue={value ?? ""}
-            size="3"
-            placeholder={placeHolder}
-            disabled={disabled}
-            min={
-              isNumber
-                ? 0
-                : type === "date"
-                  ? minDate || (noPastDate ? today : undefined)
-                  : undefined
-            }
-            max={type === "date" ? maxDate : undefined}
-            inputMode={isNumber ? "numeric" : undefined}
-            pattern={isNumber ? "\\d*" : undefined}
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-              if (!isNumber) return;
-              if (
-                e.key === "-" ||
-                e.key === "e" ||
-                e.key === "E" ||
-                e.key === "+"
-              ) {
-                e.preventDefault();
-              }
-            }}
-            onWheel={(e: React.WheelEvent<HTMLInputElement>) => {
-              if (isNumber) {
-                (e.currentTarget as HTMLInputElement).blur();
-              }
-            }}
-            onBlur={field === "username" ? handleUsernameBlur : undefined}
-            className={`w-full border-[#D0DAEE] border-[0.5px]! outline-none rounded-lg text-sm ${className}`}
-          />
-        )}
-        {isUsernameValid && form.watch(field) && !disabled && (
-          <Text
-            align="left"
-            className={`absolute right-3 text-sm  ${isUsernameValid === "valid" ? "text-green-500" : "text-red-500"}`}
+    <div className="flex flex-col gap-1.5">
+      <label className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">
+        {label}
+      </label>
+
+      <div className="flex items-center gap-2.5 px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm focus-within:border-gray-900 focus-within:ring-2 focus-within:ring-gray-900/8 shadow-xs transition-all">
+        <Icon className="w-4 h-4 text-gray-400 shrink-0" />
+
+        <input
+          {...register(field, rules)}
+          type={inputType}
+          placeholder={placeholder}
+          className="flex-1 bg-transparent outline-none placeholder-gray-300 text-sm text-gray-900 min-w-0"
+        />
+
+        {isPassword && (
+          <button
+            type="button"
+            onClick={() => setShow((s) => !s)}
+            className="text-gray-300 hover:text-gray-500 transition-colors shrink-0"
           >
-            {isUsernameValid === "valid" ? (
-              <BsPatchCheck size="1rem" />
+            {show ? (
+              <EyeOff className="w-4 h-4" />
             ) : (
-              <BsPatchExclamation size="1rem" />
+              <Eye className="w-4 h-4" />
             )}
-          </Text>
+          </button>
         )}
-        {isPasswordType && (
-          <Flex
-            className="absolute right-3 cursor-pointer text-gray-500"
-            onClick={toggleVisibility}
-          >
-            {!hidePassword ? <IoEyeOutline /> : <IoEyeOffOutline />}
-          </Flex>
-        )}
-      </Flex>
-      <FormFieldError name={field} className="text-red-500" />
+      </div>
+
+      <FormFieldError name={field} className="text-red-500 text-xs" />
     </div>
   );
 };

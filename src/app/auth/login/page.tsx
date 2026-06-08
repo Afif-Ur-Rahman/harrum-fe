@@ -9,7 +9,6 @@ import { usePersistStore } from "@/store/presistStore";
 import { useRouter } from "next/navigation";
 import PasswordForgotDialog from "@/ui/password-forgot/dialog";
 import { showToast } from "@/utils/toast";
-import Link from "next/link";
 import { Mail, Lock } from "lucide-react";
 import { AuthField } from "@/components/inputs/AuthField";
 
@@ -141,24 +140,6 @@ function Login() {
               "Sign In"
             )}
           </button>
-
-          {/* Divider */}
-          <div className="flex items-center gap-3 py-2">
-            <div className="flex-1 h-px bg-gray-100" />
-            <span className="text-xs text-gray-400">or</span>
-            <div className="flex-1 h-px bg-gray-100" />
-          </div>
-
-          {/* Sign up */}
-          <p className="text-center text-sm text-gray-500">
-            Don&apos;t have an account?{" "}
-            <Link
-              href="/auth/signup"
-              className="font-semibold text-gray-900 hover:underline"
-            >
-              Create account
-            </Link>
-          </p>
         </div>
       </FormProvider>
     </OnboardingLayout>

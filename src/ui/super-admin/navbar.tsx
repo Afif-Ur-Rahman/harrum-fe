@@ -23,24 +23,23 @@ const NAV_TABS = [
 interface SidebarHeaderProps {
   collapsed: boolean;
   userFullName?: string;
-  image?: string;
+  type?: string;
   onToggle: () => void;
 }
 
 const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   collapsed,
   userFullName,
-  image,
+  type,
   onToggle,
 }) => (
   <div className="flex items-center justify-between border-b border-white/10 px-4 py-4 text-white">
     <div className="flex items-center gap-3">
       <Image
-        src={image || "/app-logo.png"}
-        alt="Logo"
-        width={40}
-        height={40}
-        className="h-9 w-9 rounded-full ring-2 ring-cyan-400/20 shrink-0"
+        src={type ? `/assets/svgs/${type}.svg` : "/assets/svgs/admin.svg"}
+        alt={type || "Admin"}
+        width={24}
+        height={24}
       />
       {!collapsed && (
         <div className="min-w-0">
@@ -88,7 +87,7 @@ const NavigationItem: React.FC<NavigationItemProps> = ({
       href={href}
       className={`ml-1 flex ${collapsed ? "w-fit" : "w-full"} items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium transition-all duration-200 ${
         isActive
-          ? "bg-gradient-to-r from-cyan-500/20 via-blue-500/20 to-fuchsia-500/20 text-white shadow-lg shadow-cyan-950/30 ring-1 ring-inset ring-white/10"
+          ? "bg-linear-to-r from-cyan-500/20 via-blue-500/20 to-fuchsia-500/20 text-white shadow-lg shadow-cyan-950/30 ring-1 ring-inset ring-white/10"
           : "text-slate-300 hover:bg-white/5 hover:text-white"
       }`}
     >
@@ -100,14 +99,14 @@ const NavigationItem: React.FC<NavigationItemProps> = ({
 
 interface MobileHeaderProps {
   userFullName?: string;
-  image?: string;
+  type?: string;
   isScrolled: boolean;
   onMenuClick: () => void;
 }
 
 const MobileHeader: React.FC<MobileHeaderProps> = ({
   userFullName,
-  image,
+  type,
   isScrolled,
   onMenuClick,
 }) => (
@@ -121,11 +120,10 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
     <Flex justify="between" align="center" p="3" className="max-w-full">
       <Flex align="center" gap="2">
         <Image
-          src={image || "/app-logo.png"}
-          alt="Logo"
-          width={32}
-          height={32}
-          className="h-8 w-8 rounded-full ring-2 ring-cyan-400/20 shrink-0"
+          src={type ? `/assets/svgs/${type}.svg` : "/assets/svgs/owner.svg"}
+          alt={type || "Owner"}
+          width={24}
+          height={24}
         />
         <span className="text-sm font-semibold text-white">
           {userFullName || "Super Admin"}
@@ -182,17 +180,17 @@ function SuperAdminSidebar() {
   return (
     <div>
       <aside
-        className={`sticky left-0 top-0 z-50 hidden h-screen border-r border-white/10 bg-[linear-gradient(180deg,_rgba(2,6,23,0.96)_0%,_rgba(15,23,42,0.94)_52%,_rgba(17,24,39,0.96)_100%)] shadow-2xl shadow-black/30 backdrop-blur-xl transition-all duration-300 lg:block ${
+        className={`sticky left-0 top-0 z-50 hidden h-screen border-r border-white/10 bg-[linear-gradient(180deg,rgba(2,6,23,0.96)_0%,rgba(15,23,42,0.94)_52%,rgba(17,24,39,0.96)_100%)] shadow-2xl shadow-black/30 backdrop-blur-xl transition-all duration-300 lg:block ${
           collapsed ? "w-20" : "w-64"
         }`}
       >
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.10),_transparent_28%),radial-gradient(circle_at_bottom_right,_rgba(244,114,182,0.08),_transparent_32%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.10),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(244,114,182,0.08),transparent_32%)]" />
 
         <div className="relative h-full">
           <SidebarHeader
             collapsed={collapsed}
-            userFullName={user?.fullName || user?.username}
-            image={user?.image}
+            userFullName={user?.username}
+            type={user?.type}
             onToggle={toggleSidebar}
           />
 
@@ -223,15 +221,15 @@ function SuperAdminSidebar() {
       </aside>
 
       <MobileHeader
-        userFullName={user?.fullName || user?.username}
-        image={user?.image}
+        userFullName={user?.username}
+        type={user?.type}
         isScrolled={isScrolled}
         onMenuClick={() => setIsOpen(true)}
       />
 
       <NavRes
-        userFullName={user?.fullName || user?.username}
-        image={user?.image}
+        userFullName={user?.username}
+        type={user?.type}
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         tabs={NAV_TABS}

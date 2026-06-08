@@ -9,7 +9,7 @@ import Image from "next/image";
 
 interface MobileDrawerProps {
   userFullName?: string;
-  image?: string;
+  type?: string;
   isOpen: boolean;
   onClose: () => void;
   tabs: { href: string; label: string }[];
@@ -18,7 +18,7 @@ interface MobileDrawerProps {
 
 const NavRes: React.FC<MobileDrawerProps> = ({
   userFullName,
-  image,
+  type,
   isOpen,
   onClose,
   tabs,
@@ -49,12 +49,10 @@ const NavRes: React.FC<MobileDrawerProps> = ({
         <Flex justify="between" align="center" mb="8">
           <Flex className="flex items-center space-x-2 rtl:space-x-reverse">
             <Image
-              src={image || "/app-logo.png"}
-              alt={`${userFullName} Logo`}
-              width={50}
-              height={50}
-              className="w-8 h-8 rounded-full shrink-0"
-              loading="lazy"
+              src={type ? `/assets/svgs/${type}.svg` : "/assets/svgs/owner.svg"}
+              alt={type || "Owner"}
+              width={24}
+              height={24}
             />
             <Text className="font-bold text-lg mr-2!">
               {userFullName || ""}
