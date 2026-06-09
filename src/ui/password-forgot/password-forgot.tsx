@@ -4,8 +4,8 @@ import { useState } from "react";
 import { FormProvider } from "react-hook-form";
 import { useForgot } from "./useForgot";
 import { useForgotForm } from "./form";
-import { AuthField } from "@/components/inputs/AuthField";
 import { Mail } from "lucide-react";
+import { FormInput } from "@/components";
 
 const Forgotpassword = ({
   setCurrentStep,
@@ -20,38 +20,42 @@ const Forgotpassword = ({
 
   const handleSubmit = async () => {
     setIsLoading(true);
+
     await form.handleSubmit(async (data) => {
       const res = await onForgot(data);
+
       if (res?.error || !res?.data) {
         setCurrentStep(steps.FormForgot);
         setIsLoading(false);
         return;
       }
+
       setCurrentStep(steps.OtpVerification);
       setIsLoading(false);
     })();
+
     setIsLoading(false);
   };
 
   return (
     <FormProvider {...form}>
       <div className="space-y-5">
-        <AuthField
+        <FormInput
           label="Email Address"
-          name="email"
+          field="email"
           type="email"
-          placeholder="you@restaurant.com"
-          icon={<Mail size={16} />}
+          placeholder="you@harrum.com"
+          icon={Mail}
         />
 
         <button
           onClick={handleSubmit}
           disabled={isLoading}
-          className="w-full py-3 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 active:scale-[0.99] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="flex w-full items-center justify-center gap-2 rounded-2xl bg-linear-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-cyan-950/30 transition-all hover:opacity-95 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isLoading ? (
             <>
-              <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
               Sending…
             </>
           ) : (

@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 interface OnboardingProps {
   heading?: string;
@@ -7,71 +8,104 @@ interface OnboardingProps {
   className?: string;
 }
 
-const OnboardingLayout: React.FC<OnboardingProps> = ({ heading, text, children }) => {
+const OnboardingLayout: React.FC<OnboardingProps> = ({
+  heading,
+  text,
+  children,
+  className = "",
+}) => {
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row">
+    <div
+      className={`relative min-h-screen overflow-hidden bg-slate-950 ${className}`}
+    >
+      {/* Background effects */}
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.98)_0%,rgba(15,23,42,0.96)_52%,rgba(17,24,39,0.98)_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.14),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(244,114,182,0.12),transparent_35%)]" />
+      <div className="absolute left-1/2 top-1/2 h-105 w-105 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-500/10 blur-3xl" />
 
-      {/* ── Left: Image Panel ─────────────────────────── */}
-      <div className="relative lg:w-[45%] h-52 lg:h-auto shrink-0">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/images/onboarding-img.jpg"
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-        {/* gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/75" />
+      <div className="relative z-10 flex min-h-screen flex-col lg:flex-row">
+        {/* ── Left: Image Panel ─────────────────────────── */}
+        <div className="relative h-52 shrink-0 overflow-hidden border-b border-white/10 lg:h-auto lg:w-[45%] lg:border-b-0 lg:border-r">
+          <Image
+            src="/images/onboarding-img.jpg"
+            alt="Onboarding Image"
+            className="absolute inset-0 h-full w-full object-cover"
+            width={800}
+            height={600}
+            priority
+          />
 
-        {/* Content over image */}
-        <div className="relative z-10 flex flex-col justify-between h-full p-7 lg:p-10">
-          {/* Logo */}
-          <div className="flex items-center gap-2.5">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/images/r-dummy.png" alt="Logo" className="h-10 w-auto drop-shadow-md" />
-            <span className="text-white font-semibold text-lg tracking-wide">Invo</span>
-          </div>
+          {/* Image overlays */}
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.68)_0%,rgba(15,23,42,0.60)_45%,rgba(2,6,23,0.88)_100%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.20),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(244,114,182,0.18),transparent_38%)]" />
 
-          {/* Brand tagline — desktop only */}
-          <div className="hidden lg:block">
-            <p className="text-white/50 text-xs uppercase tracking-[0.2em] mb-3 font-medium">
-              Premium Management
-            </p>
-            <h2 className="text-white text-4xl font-bold leading-snug">
-              Restaurant<br />Excellence,<br />Simplified.
-            </h2>
-            <p className="text-white/60 mt-4 text-sm leading-relaxed max-w-xs">
-              A complete suite for managing your restaurant — from tables and orders to staff and analytics.
-            </p>
-          </div>
+          {/* Content over image */}
+          <div className="relative z-10 flex h-full flex-col justify-between p-7 lg:p-10">
+            {/* Logo */}
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/10 shadow-lg shadow-black/20 backdrop-blur-md">
+                <span className="text-sm font-bold text-cyan-300">HC</span>
+              </div>
 
-          {/* Mobile heading overlay */}
-          <div className="lg:hidden">
-            {heading && <p className="text-white text-2xl font-bold">{heading}</p>}
-            {text && <p className="text-white/75 text-sm mt-1">{text}</p>}
-          </div>
-        </div>
-      </div>
-
-      {/* ── Right: Form Panel ─────────────────────────── */}
-      <div className="flex-1 flex items-center justify-center bg-white px-6 py-10 lg:px-16">
-        <div className="w-full max-w-md">
-
-          {/* Desktop heading */}
-          {(heading || text) && (
-            <div className="mb-8 hidden lg:block">
-              {heading && (
-                <h1 className="text-3xl font-bold text-gray-900 tracking-tight">{heading}</h1>
-              )}
-              {text && (
-                <p className="text-gray-500 mt-2 text-sm">{text}</p>
-              )}
+              <div>
+                <span className="block text-lg font-semibold tracking-wide text-white">
+                  Harrum Cloth House
+                </span>
+                <span className="text-xs text-slate-400">Control Center</span>
+              </div>
             </div>
-          )}
 
-          {children}
+            {/* Brand tagline — desktop only */}
+            <div className="hidden lg:block">
+              <p className="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-cyan-300">
+                Premium Clothing Management
+              </p>
+
+              <h2 className="text-4xl font-bold leading-snug text-white">
+                Clothing
+                <br />
+                Management,
+                <br />
+                Simplified.
+              </h2>
+
+              <p className="mt-4 max-w-xs text-sm leading-relaxed text-slate-300">
+                A complete suite for managing your clothing store — from
+                products and orders to inventory and analytics.
+              </p>
+            </div>
+
+            {/* Mobile heading overlay */}
+            <div className="lg:hidden">
+              {heading && (
+                <p className="text-2xl font-bold text-white">{heading}</p>
+              )}
+
+              {text && <p className="mt-1 text-sm text-slate-300">{text}</p>}
+            </div>
+          </div>
+        </div>
+
+        {/* ── Right: Form Panel ─────────────────────────── */}
+        <div className="flex flex-1 items-center justify-center px-6 py-10 lg:px-16">
+          <div className="w-full max-w-md rounded-3xl border border-white/10 bg-white/8 p-6 shadow-2xl shadow-black/40 backdrop-blur-xl sm:p-8">
+            {/* Desktop heading */}
+            {(heading || text) && (
+              <div className="mb-8 hidden lg:block">
+                {heading && (
+                  <h1 className="text-3xl font-bold tracking-tight text-white">
+                    {heading}
+                  </h1>
+                )}
+
+                {text && <p className="mt-2 text-sm text-slate-400">{text}</p>}
+              </div>
+            )}
+
+            {children}
+          </div>
         </div>
       </div>
-
     </div>
   );
 };

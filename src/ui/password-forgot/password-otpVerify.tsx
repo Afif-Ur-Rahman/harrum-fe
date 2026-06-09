@@ -28,18 +28,27 @@ const OtpVerify = ({
   useEffect(() => {
     const stored = sessionStorage.getItem("email");
     form.setValue("email", stored || "");
+
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (stored) setEmail(stored);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onSubmit = async (data: ForgotFormType) => {
     setIsLoading(true);
-    const result = await resetVerifyOtp({ ...data, email } as OtpVerificationData);
+
+    const result = await resetVerifyOtp({
+      ...data,
+      email,
+    } as OtpVerificationData);
+
     setIsLoading(false);
+
     if (result?.error || !result?.data) {
       showToast("error", result?.error || "Request Failed");
       return;
     }
+
     showToast("success", result?.data?.message || "OTP Verified Successfully");
     sessionStorage.setItem("otp", data.otp || "");
     setCurrentStep(steps.ResetPassword);
@@ -47,21 +56,25 @@ const OtpVerify = ({
 
   const handleResend = async () => {
     setIsResending(true);
+
     const result = await resendOtp(email);
+
     setIsResending(false);
+
     if (result?.error || !result?.data) {
       showToast("error", result?.error || "Request Failed");
       return;
     }
+
     showToast("success", result?.data?.message || "Code resent successfully");
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {email && (
-        <div className="flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3">
-          <Mail size={16} className="text-gray-400 shrink-0" />
-          <span className="text-sm text-gray-600 truncate">{email}</span>
+        <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/8 px-4 py-3 shadow-lg shadow-black/10 backdrop-blur-md">
+          <Mail size={16} className="shrink-0 text-cyan-300" />
+          <span className="truncate text-sm text-slate-300">{email}</span>
         </div>
       )}
 
@@ -80,12 +93,13 @@ const OtpVerify = ({
               renderInput={(props) => (
                 <input
                   {...props}
-                  className="!w-11 !h-12 border-2 border-gray-200 rounded-xl text-center text-lg font-semibold text-gray-900 bg-gray-50 focus:outline-none focus:border-gray-900 focus:bg-white transition-all"
+                  className="h-12! w-11! rounded-xl border-2 border-white/10 bg-white/8 text-center text-lg font-semibold text-white outline-none transition-all placeholder:text-slate-500 focus:border-cyan-300 focus:bg-white/12 focus:shadow-lg focus:shadow-cyan-950/30"
                 />
               )}
             />
+
             {fieldState.error && (
-              <p className="text-red-500 text-xs">{fieldState.error.message}</p>
+              <p className="text-xs text-red-400">{fieldState.error.message}</p>
             )}
           </div>
         )}
@@ -94,11 +108,11 @@ const OtpVerify = ({
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full py-3 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 active:scale-[0.99] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        className="flex w-full items-center justify-center gap-2 rounded-2xl bg-linear-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-cyan-950/30 transition-all hover:opacity-95 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
       >
         {isLoading ? (
           <>
-            <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
             Verifying…
           </>
         ) : (
@@ -106,13 +120,13 @@ const OtpVerify = ({
         )}
       </button>
 
-      <p className="text-center text-sm text-gray-400">
+      <p className="text-center text-sm text-slate-400">
         Didn&apos;t receive the code?{" "}
         <button
           type="button"
           onClick={handleResend}
           disabled={isResending}
-          className="text-gray-900 font-semibold hover:underline disabled:opacity-50"
+          className="font-semibold text-cyan-300 transition hover:text-cyan-200 hover:underline disabled:opacity-50"
         >
           {isResending ? "Sending…" : "Resend"}
         </button>
