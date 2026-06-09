@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { getAuthCookies } from "@/utils/cookies";
-import AccountantSidebar from "@/ui/accountant/navbar";
+import { AppSidebar } from "@/components/layout";
 
 export default async function AccountantLayout({
   children,
@@ -15,7 +15,7 @@ export default async function AccountantLayout({
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row md:flex-col md:gap-8">
-      <AccountantSidebar />
+      <AppSidebar />
       <div className=" w-full max-w-560 overflow-hidden px-4 sm:px-6 lg:px-8 py-6">
         <main>{children}</main>
       </div>

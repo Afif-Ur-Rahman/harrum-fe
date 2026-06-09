@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { getAuthCookies } from "@/utils/cookies";
-import SuperAdminSidebar from "@/ui/super-admin/navbar";
+import { AppSidebar } from "@/components/layout";
 
 export default async function OwnerLayout({
   children,
@@ -15,7 +15,7 @@ export default async function OwnerLayout({
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.14),transparent_24%),radial-gradient(circle_at_top_right,rgba(244,114,182,0.12),transparent_26%),linear-gradient(180deg,#020617_0%,#0f172a_50%,#111827_100%)] text-white flex flex-col lg:flex-row">
-      <SuperAdminSidebar />
+      <AppSidebar />
 
       <div className="relative flex-1 min-w-0 overflow-hidden">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(34,211,238,0.08),transparent_30%)]" />

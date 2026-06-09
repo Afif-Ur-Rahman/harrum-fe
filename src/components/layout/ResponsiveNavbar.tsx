@@ -2,17 +2,21 @@
 
 import React from "react";
 import Link from "next/link";
-import { IoClose } from "react-icons/io5";
-import { Button, Flex, Text } from "@radix-ui/themes";
-import { usePathname } from "next/navigation";
 import Image from "next/image";
+import { IoClose } from "react-icons/io5";
+import { Flex, Text } from "@radix-ui/themes";
+import { usePathname } from "next/navigation";
 
 interface MobileDrawerProps {
   userFullName?: string;
   type?: string;
   isOpen: boolean;
   onClose: () => void;
-  tabs: { href: string; label: string }[];
+  tabs: {
+    href: string;
+    label: string;
+    icon?: React.ElementType;
+  }[];
   logout: () => void;
 }
 
@@ -25,75 +29,108 @@ const NavRes: React.FC<MobileDrawerProps> = ({
   logout,
 }) => {
   const pathname = usePathname();
+
   return (
     <div
-      className={`fixed inset-0 z-50 transition-opacity duration-300 ${
+      className={`fixed inset-0 z-50 transition-opacity duration-300 lg:hidden ${
         isOpen
-          ? "opacity-100 pointer-events-auto"
-          : "opacity-0 pointer-events-none"
+          ? "pointer-events-auto opacity-100"
+          : "pointer-events-none opacity-0"
       }`}
     >
       {/* Backdrop */}
       <div
-        className="absolute inset-0 backdrop-blur-[1px] bg-black/40"
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         onClick={onClose}
       />
 
-      {/* Offcanvas Drawer */}
+      {/* Drawer */}
       <div
-        className={`absolute top-0 right-0 h-full flex flex-col justify-between min-w-[65%] max-w-xs bg-white shadow-lg p-6 transform transition-transform duration-500 ${
+        className={`absolute right-0 top-0 flex h-full min-w-[72%] max-w-xs flex-col justify-between overflow-hidden border-l border-white/10 bg-[linear-gradient(180deg,rgba(2,6,23,0.98)_0%,rgba(15,23,42,0.96)_52%,rgba(17,24,39,0.98)_100%)] shadow-2xl shadow-black/40 backdrop-blur-xl transition-transform duration-500 ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
         onClick={(e) => e.stopPropagation()}
       >
-        <Flex justify="between" align="center" mb="8">
-          <Flex className="flex items-center space-x-2 rtl:space-x-reverse">
-            <Image
-              src={type ? `/assets/svgs/${type}.svg` : "/assets/svgs/owner.svg"}
-              alt={type || "Owner"}
-              width={24}
-              height={24}
-            />
-            <Text className="font-bold text-lg mr-2!">
-              {userFullName || ""}
-            </Text>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.12),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(244,114,182,0.10),transparent_35%)]" />
+
+        <div className="relative flex h-full flex-col">
+          {/* Header */}
+          <Flex
+            justify="between"
+            align="center"
+            className="border-b border-white/10 px-5 py-4"
+          >
+            <Flex align="center" gap="3" className="min-w-0">
+              <Image
+                src={
+                  type ? `/assets/svgs/${type}.svg` : "/assets/svgs/owner.svg"
+                }
+                alt={type || "Owner"}
+                width={28}
+                height={28}
+              />
+
+              <div className="min-w-0">
+                <Text className="block truncate text-sm font-semibold text-white">
+                  {userFullName || "Super Admin"}
+                </Text>
+                <Text className="block text-xs text-slate-400">
+                  Control Center
+                </Text>
+              </div>
+            </Flex>
+
+            <button
+              onClick={onClose}
+              className="rounded-xl p-2 text-slate-300 transition hover:bg-white/10 hover:text-white"
+              aria-label="Close menu"
+            >
+              <IoClose size="1.6rem" />
+            </button>
           </Flex>
 
-          <button onClick={onClose}>
-            <IoClose size="1.7rem" />
-          </button>
-        </Flex>
+          {/* Navigation */}
+          <nav className="flex-1 border-b border-white/10 px-3 py-5">
+            <ul className="flex flex-col gap-2">
+              {tabs.map(({ href, label, icon: Icon }) => {
+                const isActive = pathname === href;
 
-        <div className="flex flex-col justify-between h-full">
-          <ul className="space-y-4">
-            {tabs.map(({ href, label }) => (
-              <li key={href}>
-                <Link
-                  href={href}
-                  className={`text-lg block ${
-                    pathname === href ? "font-bold" : "font-normal"
-                  }`}
-                  onClick={onClose}
-                >
-                  {label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+                return (
+                  <li key={href}>
+                    <Link
+                      href={href}
+                      onClick={onClose}
+                      className={`flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition-all duration-200 ${
+                        isActive
+                          ? "bg-linear-to-r from-cyan-500/20 via-blue-500/20 to-fuchsia-500/20 text-white shadow-lg shadow-cyan-950/30 ring-1 ring-inset ring-white/10"
+                          : "text-slate-300 hover:bg-white/5 hover:text-white"
+                      }`}
+                    >
+                      {Icon && <Icon size={20} className="shrink-0" />}
+                      <span>{label}</span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
 
-          <Button
-            className="text-lg capitalize cursor-pointer border px-3 py-1 rounded-md! font-medium bg-black! text-white!"
-            onClick={() => {
-              logout();
-              onClose();
-            }}
-          >
-            Logout
-          </Button>
+          {/* Logout */}
+          <div className="px-4 py-5">
+            <button
+              className="w-full rounded-2xl border border-white/10 bg-white/8 px-4 py-3 text-base font-medium text-white transition hover:bg-white/12"
+              onClick={() => {
+                logout();
+                onClose();
+              }}
+            >
+              Logout
+            </button>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default NavRes;
+export { NavRes };
