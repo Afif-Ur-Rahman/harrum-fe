@@ -1,9 +1,9 @@
 import { FormProvider } from "react-hook-form";
-import { useEmployeeForm } from "./form";
-import { EmployeeFormType } from "./schema";
 import { FormInput } from "@/components";
-import { RoleSelector } from "./role-selector";
 import { Mail, Lock, Loader2, Pen } from "lucide-react";
+import { EmployeeFormType } from "../schema";
+import { useEmployeeForm } from "../form";
+import { RoleSelector } from "./role-selector";
 
 const AddEmployees = ({
   onAddEmployee,

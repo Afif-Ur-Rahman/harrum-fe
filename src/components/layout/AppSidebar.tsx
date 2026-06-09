@@ -29,8 +29,8 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   <div className="flex items-center justify-between border-b border-white/10 px-4 py-4 text-white">
     <div className="flex items-center gap-3">
       <Image
-        src={type ? `/assets/svgs/${type}.svg` : "/assets/svgs/admin.svg"}
-        alt={type || "Admin"}
+        src={type ? `/assets/svgs/${type}.svg` : "/assets/svgs/owner.svg"}
+        alt={type || "Owner"}
         width={24}
         height={24}
       />

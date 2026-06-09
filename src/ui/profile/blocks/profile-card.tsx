@@ -13,9 +13,9 @@ export const ProfileCard = ({ user }: { user: User }) => {
             src={
               user?.type
                 ? `/assets/svgs/${user.type}.svg`
-                : "/assets/svgs/admin.svg"
+                : "/assets/svgs/owner.svg"
             }
-            alt={user?.type || "Admin"}
+            alt={user?.type || "Owner"}
             width={58}
             height={58}
             className="object-contain"
