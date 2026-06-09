@@ -5,8 +5,9 @@ import {
 } from "@/api/api-call/employee";
 import { EmployeeFormType } from "./schema";
 import { Employees } from "@/types/employees";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { showToast } from "@/utils/toast";
+import { User } from "@/types";
 
 type EmployeeRoleKey = keyof Employees;
 
@@ -19,22 +20,27 @@ interface EmployeeSection {
 }
 
 const useEmployees = () => {
-  const EMPLOYEE_SECTIONS: EmployeeSection[] = [
-    {
-      key: "worker",
-      title: "Workers",
-      roleLabel: "Worker",
-      emoji: "🧑",
-      emptyText: "No workers found.",
-    },
-    {
-      key: "accountant",
-      title: "Accountants",
-      roleLabel: "Accountant",
-      emoji: "💼",
-      emptyText: "No accountants found.",
-    },
-  ];
+  const EMPLOYEE_SECTIONS: EmployeeSection[] = useMemo<EmployeeSection[]>(
+    () => [
+      {
+        key: "worker",
+        title: "Workers",
+        roleLabel: "Worker",
+        emoji: "🧑",
+        emptyText: "No workers found.",
+      },
+      {
+        key: "accountant",
+        title: "Accountants",
+        roleLabel: "Accountant",
+        emoji: "💼",
+        emptyText: "No accountants found.",
+      },
+    ],
+    [],
+  );
+  const [search, setSearch] = useState("");
+  const [roleFilter, setRoleFilter] = useState<string>("all");
   const [employees, setEmployees] = useState<Employees>({
     worker: [],
     accountant: [],
@@ -119,6 +125,47 @@ const useEmployees = () => {
     }
   };
 
+  const flatEmployees = useMemo(() => {
+    return EMPLOYEE_SECTIONS.flatMap((section) =>
+      (employees[section.key] || []).map((employee: User) => ({
+        ...employee,
+        roleLabel: section.roleLabel,
+      })),
+    );
+  }, [employees, EMPLOYEE_SECTIONS]);
+
+  const filtered = useMemo(() => {
+    const query = search.toLowerCase();
+
+    return flatEmployees.filter((employee) => {
+      const matchesRole =
+        roleFilter === "all" || employee.roleLabel.toLowerCase() === roleFilter;
+
+      const matchesSearch =
+        !query ||
+        employee.username?.toLowerCase().includes(query) ||
+        employee.email?.toLowerCase().includes(query);
+
+      return matchesRole && matchesSearch;
+    });
+  }, [flatEmployees, search, roleFilter]);
+
+  const tabs = [
+    { value: "all", label: "All Staff" },
+    ...EMPLOYEE_SECTIONS.map((section) => ({
+      value: section.roleLabel.toLowerCase(),
+      label: section.title,
+    })),
+  ];
+
+  const countsByRole = useMemo(() => {
+    return EMPLOYEE_SECTIONS.map((section) => ({
+      roleLabel: section.roleLabel,
+      title: section.title,
+      total: employees[section.key]?.length || 0,
+    }));
+  }, [EMPLOYEE_SECTIONS, employees]);
+
   return {
     employees,
     loading,
@@ -129,6 +176,14 @@ const useEmployees = () => {
     onAddEmployee,
     onDeleteEmployee,
     EMPLOYEE_SECTIONS,
+    flatEmployees,
+    search,
+    roleFilter,
+    setSearch,
+    setRoleFilter,
+    filtered,
+    tabs,
+    countsByRole,
   };
 };
 export { useEmployees };
