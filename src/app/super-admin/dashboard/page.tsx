@@ -1,4 +1,4 @@
-import SuperAdminDashboard from "@/ui/super-admin/dashboard";
+import { SuperAdminDashboard } from "@/ui/super-admin";
 
 const DashboardPage = () => {
   return <SuperAdminDashboard />;
