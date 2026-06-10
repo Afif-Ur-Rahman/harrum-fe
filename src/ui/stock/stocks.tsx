@@ -1,9 +1,9 @@
 "use client";
 
 import { useStocks } from "./useStocks";
-import { StockTable } from "./blocks";
+import { StockStats, StockTable } from "./blocks";
 import Link from "next/link";
-import { ArrowDownToLine, History, Package } from "lucide-react";
+import { ArrowDownToLine, History, Package, Boxes } from "lucide-react";
 import { StockVariant } from "@/types";
 
 const getTotalQuantity = (variants: StockVariant[] = []) => {
@@ -26,82 +26,69 @@ export const Stocks = () => {
   ).length;
 
   return (
-    <div className="pb-12 mt-12.5 md:mt-6.25 lg:mt-7.5">
-      <div className="flex items-start justify-between flex-wrap gap-4 mb-6">
+    <div className="mt-12.5 pb-12 md:mt-6.25 lg:mt-7.5">
+      <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
-            Stocks
-          </h1>
-          <p className="text-sm text-gray-400 mt-1">
-            {stocks.length} item{stocks.length !== 1 ? "s" : ""} in inventory
-          </p>
+          <div className="mb-2 flex items-center gap-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/8 shadow-lg shadow-cyan-950/20 backdrop-blur-xl">
+              <Boxes className="h-5 w-5 text-cyan-300" />
+            </div>
+
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+                Stocks
+              </h1>
+              <p className="mt-1 text-sm text-slate-400">
+                {stocks.length} item{stocks.length !== 1 ? "s" : ""} in
+                inventory
+              </p>
+            </div>
+          </div>
         </div>
 
         <div className="flex items-center gap-2">
           <Link
             href="/super-admin/stocks/history"
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gray-50 text-gray-600 text-sm font-medium hover:bg-gray-100 transition active:scale-[0.98]"
+            className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/8 px-4 py-2.5 text-sm font-medium text-slate-300 shadow-lg shadow-black/10 backdrop-blur-xl transition hover:bg-white/12 hover:text-white active:scale-[0.98]"
           >
-            <History className="w-4 h-4" />
+            <History className="h-4 w-4" />
             <span className="hidden sm:inline">History</span>
           </Link>
 
           <Link
             href="/super-admin/stocks/stock-in"
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-50 text-emerald-700 text-sm font-medium hover:bg-emerald-100 transition active:scale-[0.98]"
+            className="flex items-center gap-2 rounded-2xl bg-linear-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-cyan-950/30 transition hover:opacity-95 active:scale-[0.98]"
           >
-            <ArrowDownToLine className="w-4 h-4" />
+            <ArrowDownToLine className="h-4 w-4" />
             <span className="hidden sm:inline">Stock In</span>
           </Link>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
-        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-4">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1">
-            Total Items
-          </p>
-          <p className="text-2xl font-bold text-gray-900">{stocks.length}</p>
-        </div>
+      <StockStats
+        totalStocks={stocks.length}
+        totalValue={totalValue}
+        outOfStock={outOfStock}
+      />
 
-        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-4">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1">
-            Total Sale Value
-          </p>
-          <p className="text-2xl font-bold text-gray-900">
-            {totalValue.toLocaleString(undefined, {
-              minimumFractionDigits: 0,
-              maximumFractionDigits: 2,
-            })}
-            <span className="text-sm font-normal text-gray-400 ml-1">PKR</span>
-          </p>
-        </div>
-
-        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-4 col-span-2 sm:col-span-1">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-1">
-            Out of Stock
-          </p>
-          <p
-            className={`text-2xl font-bold ${
-              outOfStock > 0 ? "text-red-500" : "text-emerald-600"
-            }`}
-          >
-            {outOfStock}
-          </p>
-        </div>
-      </div>
-
+      {/* Content */}
       {stocks.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-24 text-center">
-          <div className="w-14 h-14 rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
-            <Package className="w-6 h-6 text-gray-400" />
+        <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/8 px-6 py-24 text-center shadow-2xl shadow-black/20 backdrop-blur-xl">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.12),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(244,114,182,0.10),transparent_36%)]" />
+
+          <div className="relative z-10 flex flex-col items-center justify-center">
+            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/10 shadow-lg shadow-cyan-950/20">
+              <Package className="h-6 w-6 text-cyan-300" />
+            </div>
+
+            <h3 className="mb-1 text-base font-semibold text-white">
+              No stock items yet
+            </h3>
+
+            <p className="text-sm text-slate-400">
+              Add your first stock item using Stock In.
+            </p>
           </div>
-          <h3 className="text-base font-semibold text-gray-900 mb-1">
-            No stock items yet
-          </h3>
-          <p className="text-sm text-gray-400">
-            Add your first stock item using Stock In.
-          </p>
         </div>
       ) : (
         <StockTable stockData={stocks} />

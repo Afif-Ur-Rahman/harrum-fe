@@ -7,20 +7,19 @@ import Nodata from "./nodata";
 
 type Column<T> =
   | {
-    key: keyof T;
-    header: React.ReactNode;
-    render?: undefined;
-    align?: "left" | "center" | "right";
-    className?: string;
-  }
+      key: keyof T;
+      header: React.ReactNode;
+      render?: undefined;
+      align?: "left" | "center" | "right";
+      className?: string;
+    }
   | {
-    key: string;
-    header: React.ReactNode;
-    render: (row: T, rowIndex: number) => React.ReactNode;
-    align?: "left" | "center" | "right";
-    className?: string;
-  };
-
+      key: string;
+      header: React.ReactNode;
+      render: (row: T, rowIndex: number) => React.ReactNode;
+      align?: "left" | "center" | "right";
+      className?: string;
+    };
 
 interface TableProps<T> {
   data: T[];
@@ -47,59 +46,77 @@ function Table<T>({
   };
 
   return (
-    <Box className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
-      <RadixTable.Root className="text-nowrap!">
-        <RadixTable.Header>
-          <RadixTable.Row className="bg-gray-50">
-            {columns.map((col, index) => (
-              <RadixTable.ColumnHeaderCell
-                key={String(col.key)}
-                align={getAlign(index, col)}
-                className={col.className}
-              >
-                {col.header}
-              </RadixTable.ColumnHeaderCell>
-            ))}
-          </RadixTable.Row>
-        </RadixTable.Header>
+    <Box className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/8 shadow-2xl shadow-black/20 backdrop-blur-xl">
+      {/* Background glow */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.08),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(244,114,182,0.06),transparent_34%)]" />
 
-        <RadixTable.Body>
-          {isLoading ? (
-            <RadixTable.Row>
-              <RadixTable.Cell colSpan={columns.length} className="py-8">
-                <Loader label={title} />
-              </RadixTable.Cell>
+      <div className="relative z-10 overflow-x-auto">
+        <RadixTable.Root className="min-w-full text-nowrap!">
+          <RadixTable.Header>
+            <RadixTable.Row className="border-b border-white/10 bg-white/8">
+              {columns.map((col, index) => (
+                <RadixTable.ColumnHeaderCell
+                  key={String(col.key)}
+                  align={getAlign(index, col)}
+                  className={`px-4! py-4! text-xs! font-semibold! uppercase! tracking-widest! text-slate-400! ${
+                    col.className || ""
+                  }`}
+                >
+                  {col.header}
+                </RadixTable.ColumnHeaderCell>
+              ))}
             </RadixTable.Row>
-          ) : data.length === 0 ? (
-            <RadixTable.Row>
-              <RadixTable.Cell
-                colSpan={columns.length}
-                className="text-center text-gray-500"
-              >
-                <Nodata />
-              </RadixTable.Cell>
-            </RadixTable.Row>
-          ) : (
-            data.map((row, rowIndex) => (
-              <RadixTable.Row
-                key={rowIndex}
-                onClick={() => onRowClick?.(row)}
-                className={`group cursor-pointer transition align-middle! ${getRowClassName?.(row) || ""}`}
-              >
-                {columns.map((col, colIndex) => (
-                  <RadixTable.Cell
-                    key={String(col.key)}
-                    align={getAlign(colIndex, col)}
-                    className={col.className}
-                  >
-                    {col.render ? col.render(row, rowIndex) : String(row[col.key])}
-                  </RadixTable.Cell>
-                ))}
+          </RadixTable.Header>
+
+          <RadixTable.Body>
+            {isLoading ? (
+              <RadixTable.Row>
+                <RadixTable.Cell
+                  colSpan={columns.length}
+                  className="py-10! text-center!"
+                >
+                  <Loader label={title} />
+                </RadixTable.Cell>
               </RadixTable.Row>
-            ))
-          )}
-        </RadixTable.Body>
-      </RadixTable.Root>
+            ) : data.length === 0 ? (
+              <RadixTable.Row>
+                <RadixTable.Cell
+                  colSpan={columns.length}
+                  className="py-12! text-center! text-slate-400!"
+                >
+                  <Nodata />
+                </RadixTable.Cell>
+              </RadixTable.Row>
+            ) : (
+              data.map((row, rowIndex) => (
+                <RadixTable.Row
+                  key={rowIndex}
+                  onClick={() => onRowClick?.(row)}
+                  className={`group border-b border-white/5 align-middle! transition last:border-b-0 ${
+                    onRowClick
+                      ? "cursor-pointer hover:bg-white/8"
+                      : "hover:bg-white/5"
+                  } ${getRowClassName?.(row) || ""}`}
+                >
+                  {columns.map((col, colIndex) => (
+                    <RadixTable.Cell
+                      key={String(col.key)}
+                      align={getAlign(colIndex, col)}
+                      className={`px-4! py-4! text-sm! text-slate-300! ${
+                        col.className || ""
+                      }`}
+                    >
+                      {col.render
+                        ? col.render(row, rowIndex)
+                        : String(row[col.key])}
+                    </RadixTable.Cell>
+                  ))}
+                </RadixTable.Row>
+              ))
+            )}
+          </RadixTable.Body>
+        </RadixTable.Root>
+      </div>
     </Box>
   );
 }
