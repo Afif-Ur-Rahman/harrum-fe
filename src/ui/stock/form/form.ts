@@ -1,15 +1,16 @@
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { StockFormType, StockSchema } from "./schema";
+import { useForm, type Resolver } from "react-hook-form";
+import { stockFormSchema, StockFormType } from "./schema";
 
-const useStockForm = (initialValues?: StockFormType) => {
-  const form = useForm({
-    resolver: zodResolver(StockSchema),
-    reValidateMode: "onChange",
-    defaultValues: initialValues,
+export const useStockForm = (defaultValues: StockFormType) => {
+  return useForm<StockFormType>({
+    resolver: zodResolver(stockFormSchema) as unknown as Resolver<StockFormType>,
+    defaultValues,
   });
-
-  return form;
 };
 
-export { useStockForm };
+export type {
+  StockFormType,
+  StockItemType,
+  StockVariantFormType,
+} from "./schema";
