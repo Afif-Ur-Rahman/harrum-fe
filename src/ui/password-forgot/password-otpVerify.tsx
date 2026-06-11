@@ -5,12 +5,15 @@ import { Controller, useForm } from "react-hook-form";
 import OTPInput from "react-otp-input";
 import { useForgotForm } from "./form";
 import { OtpVerificationData } from "@/types";
-import { resendOtp, resetVerifyOtp } from "@/api/api-call/auth-api";
+import { forgotPassword, resetVerifyOtp } from "@/api/api-call/auth-api";
 import { ForgotFormType } from "./schema";
 import { showToast } from "@/utils/toast";
 import { Mail } from "lucide-react";
+import { Flex } from "@radix-ui/themes";
 
 type FormData = { otp: string; email: string };
+
+const RESEND_TIME = 60;
 
 const OtpVerify = ({
   setCurrentStep,
@@ -21,18 +24,32 @@ const OtpVerify = ({
 }) => {
   const { handleSubmit, control } = useForm<FormData>();
   const form = useForgotForm();
-  const [email, setEmail] = useState("");
+
   const [isLoading, setIsLoading] = useState(false);
   const [isResending, setIsResending] = useState(false);
+  const [timer, setTimer] = useState(RESEND_TIME);
+
+  const canResend = timer === 0 && !isResending;
+
+  const [email] = useState(() => {
+    if (typeof window === "undefined") return "";
+    return sessionStorage.getItem("email") || "";
+  });
 
   useEffect(() => {
-    const stored = sessionStorage.getItem("email");
-    form.setValue("email", stored || "");
-
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (stored) setEmail(stored);
+    form.setValue("email", email);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [email]);
+
+  useEffect(() => {
+    if (timer <= 0) return;
+
+    const interval = setInterval(() => {
+      setTimer((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [timer]);
 
   const onSubmit = async (data: ForgotFormType) => {
     setIsLoading(true);
@@ -55,9 +72,11 @@ const OtpVerify = ({
   };
 
   const handleResend = async () => {
+    if (!canResend) return;
+
     setIsResending(true);
 
-    const result = await resendOtp(email);
+    const result = await forgotPassword(email);
 
     setIsResending(false);
 
@@ -67,6 +86,9 @@ const OtpVerify = ({
     }
 
     showToast("success", result?.data?.message || "Code resent successfully");
+
+    // Restart countdown after successful resend
+    setTimer(RESEND_TIME);
   };
 
   return (
@@ -120,17 +142,24 @@ const OtpVerify = ({
         )}
       </button>
 
-      <p className="text-center text-sm text-slate-400">
-        Didn&apos;t receive the code?{" "}
+      <Flex justify="center" align="center" gap="2" className="min-h-5">
+        <p className="text-center text-sm text-slate-400">
+          Didn&apos;t receive the code?
+        </p>
+
         <button
           type="button"
           onClick={handleResend}
-          disabled={isResending}
-          className="font-semibold text-cyan-300 transition hover:text-cyan-200 hover:underline disabled:opacity-50"
+          disabled={!canResend}
+          className="text-sm font-semibold text-cyan-300 transition hover:text-cyan-200 hover:underline disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isResending ? "Sending…" : "Resend"}
         </button>
-      </p>
+
+        <span className="inline-block min-w-9 text-left text-sm text-slate-500 tabular-nums">
+          {timer > 0 ? `${timer}s` : ""}
+        </span>
+      </Flex>
     </form>
   );
 };

@@ -87,22 +87,6 @@ export const verifyOtp = async (data: OtpVerificationData) => {
   }
 };
 
-// Server action for OTP resend
-export const resendOtp = async (email: string) => {
-  try {
-    const response = await serverAction({
-      url: "/auth/otp-resend",
-      method: "POST",
-      body: { email },
-    });
-
-    return response as SimpleResponse;
-  } catch (error) {
-    console.error("Error during profile completion:", error);
-    return null;
-  }
-};
-
 // Server action for profile completion
 export const completeProfile = async (data: FormData) => {
   try {
