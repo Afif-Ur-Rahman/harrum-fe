@@ -9,7 +9,6 @@ export const OWNER_NAV_TABS = [
 ];
 
 export const ACCOUNTANT_NAV_TABS = [
-  { href: "/accountant/dashboard", label: "Dashboard", icon: LayoutGrid },
   { href: "/accountant/stocks", label: "Stocks", icon: Package },
   { href: "/accountant/profile", label: "Profile", icon: User },
 ];

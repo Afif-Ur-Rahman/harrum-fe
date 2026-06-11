@@ -3,18 +3,6 @@ import { getAuthCookies } from "@/utils/cookies";
 import { createHeaders } from "./api";
 import { API_URL } from "./constants";
 
-const PUBLIC_PATHS = [
-  "/terms-and-conditions",
-  "/privacy-policy",
-  "/menu",      // Customer-facing table menu (QR code destination)
-  "/chatbot",   // Customer-facing AI ordering
-  // Dynamic restaurant public routes — must stay unauthenticated
-  // Note: static app routes (/restaurant, /chef, /waiter, etc.) take precedence in Next.js
-];
-
-// Username-based public routes: /[username], /[username]/table/[tableId], /[username]/order
-const USERNAME_PUBLIC_RE = /^\/[^/]+(?:\/table\/[^/]+|\/order)?$/;
-
 const NO_AUTH_PATHS = [
   "/auth/login",
   "/auth/signup",
@@ -77,13 +65,8 @@ const middleware = async (request: NextRequest) => {
     }
   }
 
-  const isPublicRoute = isPathMatch(pathname, PUBLIC_PATHS) || USERNAME_PUBLIC_RE.test(pathname);
   const isNoAuthRoute = isPathMatch(pathname, NO_AUTH_PATHS);
   const isAuthenticated = Boolean(token && user);
-
-  if (isPublicRoute) {
-    return NextResponse.next({ headers });
-  }
 
   if (isNoAuthRoute) {
     if (isAuthenticated) {
@@ -96,8 +79,8 @@ const middleware = async (request: NextRequest) => {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
-  if (pathname.startsWith("/admin")) {
-    if (user?.type !== "admin") {
+  if (pathname.startsWith("/super-admin")) {
+    if (user?.type !== "owner") {
       return NextResponse.redirect(new URL("/", request.url));
     }
   }

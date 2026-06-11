@@ -10,7 +10,7 @@ interface FormInputProps {
   label: string;
   type?: string;
   placeholder: string;
-  icon: React.ElementType;
+  icon?: React.ElementType;
   rules?: RegisterOptions;
 }
 
@@ -39,7 +39,9 @@ const FormInput = ({
       </label>
 
       <div className="flex items-center gap-2.5 rounded-2xl border border-white/10 bg-white/8 px-4 py-3 text-sm shadow-lg shadow-black/10 backdrop-blur-xl transition-all focus-within:border-cyan-300/60 focus-within:bg-white/12 focus-within:ring-2 focus-within:ring-cyan-300/10">
-        <Icon className="h-4 w-4 shrink-0 text-slate-300 transition-colors" />
+        {Icon && (
+          <Icon className="h-4 w-4 shrink-0 text-slate-300 transition-colors" />
+        )}
 
         <input
           {...register(field, rules)}
