@@ -51,7 +51,6 @@ export const StockSearchAdd = ({
     if (!canCreateNew) return;
 
     onCreateNew(trimmedQuery);
-
     setQuery("");
     setOpen(false);
 
@@ -70,97 +69,114 @@ export const StockSearchAdd = ({
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
-      <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-3">
-        Add New Stock
-      </p>
+    <div
+      className={`relative overflow-visible rounded-3xl border border-white/10 bg-white/8 p-4 shadow-2xl shadow-black/20 backdrop-blur-xl z-50`}
+    >
+      {/* Background glow */}
+      <div className="pointer-events-none absolute inset-0 rounded-3xl bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.10),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(244,114,182,0.08),transparent_36%)]" />
 
-      <div className="relative">
-        <div
-          className={`flex items-center gap-2 h-10 px-3 rounded-xl border bg-gray-50 transition ${
-            open ? "border-emerald-400 bg-white" : "border-gray-200"
-          }`}
-        >
-          <Search className="w-4 h-4 text-gray-400 shrink-0" />
+      <div className="relative z-10">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-slate-400">
+          Add New Stock
+        </p>
 
-          <input
-            ref={inputRef}
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onFocus={handleOpen}
-            onBlur={() => {
-              blurTimer.current = setTimeout(() => setOpen(false), 150);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                handleEnter();
-              } else if (e.key === "Tab") {
-                const firstInput =
-                  tableRef?.current?.querySelector<HTMLInputElement>("input");
+        <div className="relative">
+          <div
+            className={`flex h-11 items-center gap-2 rounded-2xl border px-3 shadow-lg shadow-black/10 transition-all ${
+              open
+                ? "border-cyan-300/60 bg-white/12 ring-2 ring-cyan-300/10"
+                : "border-white/10 bg-white/8 hover:bg-white/10"
+            }`}
+          >
+            <Search className="h-4 w-4 shrink-0 text-slate-400" />
 
-                if (firstInput) {
+            <input
+              ref={inputRef}
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onFocus={handleOpen}
+              onBlur={() => {
+                blurTimer.current = setTimeout(() => setOpen(false), 150);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
                   e.preventDefault();
-                  setOpen(false);
-                  firstInput.focus();
-                }
-              }
-            }}
-            placeholder="Type stock name to create…"
-            className="flex-1 text-sm bg-transparent outline-none placeholder-gray-400"
-          />
+                  handleEnter();
+                } else if (e.key === "Tab") {
+                  const firstInput =
+                    tableRef?.current?.querySelector<HTMLInputElement>("input");
 
-          {open || query ? (
-            <button
-              type="button"
-              onClick={handleClose}
-              className="text-gray-400 hover:text-gray-600"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
-          ) : null}
-        </div>
-
-        {open && (
-          <div className="absolute top-full mt-1 left-0 right-0 bg-white border border-gray-200 rounded-xl shadow-lg z-50 overflow-hidden">
-            <div className="max-h-60 overflow-y-auto">
-              {canCreateNew ? (
-                <button
-                  type="button"
-                  onMouseDown={(e) => {
+                  if (firstInput) {
                     e.preventDefault();
-                    handleCreateNew();
-                  }}
-                  className="w-full flex items-center gap-3 px-4 py-3 text-sm text-left bg-blue-50 hover:bg-blue-100 transition text-blue-700"
-                >
-                  <PlusCircle className="w-4 h-4 shrink-0 text-blue-600" />
+                    setOpen(false);
+                    firstInput.focus();
+                  }
+                }
+              }}
+              placeholder="Type stock name to create…"
+              className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-slate-500"
+            />
 
-                  <span>
-                    <span className="block font-semibold">
-                      No matching stock found
-                    </span>
-                    <span className="block text-xs text-blue-500">
-                      Click to add “{trimmedQuery}” as a new stock item
-                    </span>
-                  </span>
-                </button>
-              ) : filtered.length > 0 ? (
-                <div className="px-4 py-3">
-                  <p className="text-sm font-semibold text-gray-700 mb-1">
-                    Stock already exists
-                  </p>
-                  <p className="text-xs text-gray-400">
-                    This flow is currently for creating new stock only.
-                  </p>
-                </div>
-              ) : (
-                <p className="text-sm text-gray-400 px-4 py-3">
-                  Type a stock name to create a new item
-                </p>
-              )}
-            </div>
+            {open || query ? (
+              <button
+                type="button"
+                onClick={handleClose}
+                className="rounded-lg p-1 text-slate-500 transition hover:bg-white/10 hover:text-white"
+                aria-label="Clear stock search"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            ) : null}
           </div>
-        )}
+
+          {open && (
+            <div className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-2xl border border-white/10 bg-slate-950 shadow-2xl shadow-black/40 backdrop-blur-xl">
+              <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.98)_0%,rgba(15,23,42,0.96)_100%)]" />
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.12),transparent_32%)]" />
+
+              <div className="relative z-10 max-h-60 overflow-y-auto">
+                {canCreateNew ? (
+                  <button
+                    type="button"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      handleCreateNew();
+                    }}
+                    className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-cyan-300 transition hover:bg-cyan-400/10"
+                  >
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-cyan-300/20 bg-cyan-400/10">
+                      <PlusCircle className="h-4 w-4 text-cyan-300" />
+                    </div>
+
+                    <span>
+                      <span className="block font-semibold text-white">
+                        No matching stock found
+                      </span>
+
+                      <span className="block text-xs text-slate-400">
+                        Click to add “{trimmedQuery}” as a new stock item
+                      </span>
+                    </span>
+                  </button>
+                ) : filtered.length > 0 ? (
+                  <div className="px-4 py-3">
+                    <p className="mb-1 text-sm font-semibold text-white">
+                      Stock already exists
+                    </p>
+
+                    <p className="text-xs text-slate-400">
+                      This flow is currently for creating new stock only.
+                    </p>
+                  </div>
+                ) : (
+                  <p className="px-4 py-3 text-sm text-slate-400">
+                    Type a stock name to create a new item
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

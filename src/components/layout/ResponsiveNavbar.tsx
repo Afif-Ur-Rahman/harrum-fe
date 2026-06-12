@@ -32,7 +32,7 @@ const NavRes: React.FC<MobileDrawerProps> = ({
 
   return (
     <div
-      className={`fixed inset-0 z-50 transition-opacity duration-300 lg:hidden ${
+      className={`fixed inset-0 z-110 transition-opacity duration-300 lg:hidden ${
         isOpen
           ? "pointer-events-auto opacity-100"
           : "pointer-events-none opacity-0"

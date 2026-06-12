@@ -3,8 +3,10 @@
 import React from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { StockItemType } from "../form/schema";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, Package, Palette } from "lucide-react";
 import { StockFormType } from "../form";
+import { FormInput } from "@/components";
+import { STOCK_ITEM_FIELDS, VARIANT_FIELDS } from "../constants";
 
 interface StockInTableProps {
   stockData: StockItemType[];
@@ -22,7 +24,7 @@ const StockRow = ({
   removeField: (id: string) => void;
   isLast: boolean;
 }) => {
-  const { register, control } = useFormContext<StockFormType>();
+  const { control } = useFormContext<StockFormType>();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -30,125 +32,90 @@ const StockRow = ({
   });
 
   return (
-    <div className={`px-4 py-4 ${!isLast ? "border-b border-gray-100" : ""}`}>
-      <div className="grid grid-cols-[1fr_120px_120px_36px] gap-3 items-start">
-        <div className="min-w-0">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-            <input
-              type="text"
-              placeholder="Name"
-              {...register(`stockItems.${idx}.name`)}
-              className="text-black h-9 px-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-emerald-400 transition"
-            />
+    <div
+      className={`relative px-4 py-5 ${
+        !isLast ? "border-b border-white/10" : ""
+      }`}
+    >
+      <div className="min-w-0">
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-white/8">
+              <Package className="h-4 w-4 text-cyan-300" />
+            </div>
 
-            <input
-              type="text"
-              placeholder="Brand"
-              {...register(`stockItems.${idx}.brand`)}
-              className="text-black h-9 px-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-emerald-400 transition"
-            />
-
-            <input
-              type="text"
-              placeholder="Article"
-              {...register(`stockItems.${idx}.article`)}
-              className="text-black h-9 px-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-emerald-400 transition"
-            />
+            <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
+              Item Details
+            </p>
           </div>
 
-          <input
-            type="text"
-            placeholder="Size e.g. meter(s)"
-            {...register(`stockItems.${idx}.size`)}
-            className="text-black mt-2 h-9 w-full px-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-emerald-400 transition"
-          />
+          <button
+            type="button"
+            onClick={() => removeField(row._id)}
+            className="flex h-9 w-9 items-center justify-center rounded-xl border border-red-300/20 bg-red-400/10 text-red-300 transition hover:bg-red-400/15 hover:text-red-200 active:scale-[0.98]"
+            aria-label="Remove stock item"
+          >
+            <Trash2 className="h-4 w-4" />
+          </button>
         </div>
 
-        <div>
-          <input
-            type="number"
-            min="0"
-            step="any"
-            placeholder="Wholesale"
-            {...register(`stockItems.${idx}.wholesalePrice`)}
-            onKeyDown={(e) =>
-              ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
-            }
-            onWheel={(e) => (e.currentTarget as HTMLInputElement).blur()}
-            className="text-black w-full h-9 px-2 rounded-lg border border-gray-200 text-sm font-medium text-center focus:outline-none focus:border-emerald-400 transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-          />
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {STOCK_ITEM_FIELDS.map(({ name, label, type, placeholder, icon }) => (
+            <FormInput
+              key={name}
+              field={`stockItems.${idx}.${name}`}
+              label={label}
+              type={type}
+              placeholder={placeholder}
+              icon={icon}
+            />
+          ))}
         </div>
-
-        <div>
-          <input
-            type="number"
-            min="0"
-            step="any"
-            placeholder="Sale"
-            {...register(`stockItems.${idx}.salePrice`)}
-            onKeyDown={(e) =>
-              ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
-            }
-            onWheel={(e) => (e.currentTarget as HTMLInputElement).blur()}
-            className="text-black w-full h-9 px-2 rounded-lg border border-gray-200 text-sm font-medium text-center focus:outline-none focus:border-emerald-400 transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-          />
-        </div>
-
-        <button
-          type="button"
-          onClick={() => removeField(row._id)}
-          className="w-9 h-9 flex items-center justify-center rounded-lg text-gray-300 hover:text-red-400 hover:bg-red-50 transition"
-        >
-          <Trash2 className="w-3.5 h-3.5" />
-        </button>
       </div>
 
-      <div className="mt-4 bg-gray-50 rounded-xl border border-gray-100 overflow-hidden">
-        <div className="grid grid-cols-[1fr_120px_36px] gap-3 px-3 py-2 border-b border-gray-100">
-          <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">
-            Color
-          </p>
-          <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest text-center">
+      <div className="mt-5 overflow-hidden rounded-3xl border border-white/10 bg-white/5">
+        <div className="grid grid-cols-[1fr_140px_44px] gap-3 border-b border-white/10 bg-white/8 px-4 py-3 max-sm:grid-cols-1">
+          <div className="flex items-center gap-2">
+            <Palette className="h-4 w-4 text-cyan-300" />
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">
+              Color Variants
+            </p>
+          </div>
+
+          <p className="text-center text-[11px] font-semibold uppercase tracking-widest text-slate-400 max-sm:hidden">
             Quantity
           </p>
-          <span />
+
+          <span className="max-sm:hidden" />
         </div>
 
-        <div className="divide-y divide-gray-100">
+        <div className="divide-y divide-white/10">
           {fields.map((field, variantIdx) => (
             <div
               key={field.id}
-              className="grid grid-cols-[1fr_120px_36px] gap-3 px-3 py-2 items-center bg-white"
+              className="grid grid-cols-[1fr_140px_44px] items-start gap-3 bg-white/3 px-4 py-4 transition hover:bg-white/5 max-sm:grid-cols-1"
             >
-              <input
-                type="text"
-                placeholder="Color"
-                {...register(`stockItems.${idx}.variants.${variantIdx}.color`)}
-                className="text-black w-full h-9 px-3 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-emerald-400 transition"
-              />
-
-              <input
-                type="number"
-                min="0"
-                step="any"
-                placeholder="0"
-                {...register(
-                  `stockItems.${idx}.variants.${variantIdx}.quantity`,
-                )}
-                onKeyDown={(e) =>
-                  ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
-                }
-                onWheel={(e) => (e.currentTarget as HTMLInputElement).blur()}
-                className="text-black w-full h-9 px-2 rounded-lg border border-gray-200 text-sm font-medium text-center focus:outline-none focus:border-emerald-400 transition [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-              />
+              {VARIANT_FIELDS.map(
+                ({ name, label, type, placeholder, icon }) => (
+                  <FormInput
+                    key={name}
+                    field={`stockItems.${idx}.variants.${variantIdx}.${name}`}
+                    label={label}
+                    type={type}
+                    placeholder={placeholder}
+                    icon={icon}
+                  />
+                ),
+              )}
 
               <button
                 type="button"
                 onClick={() => remove(variantIdx)}
                 disabled={fields.length === 1}
-                className="w-9 h-9 flex items-center justify-center rounded-lg text-gray-300 hover:text-red-400 hover:bg-red-50 transition disabled:opacity-30 disabled:cursor-not-allowed"
+                className="mt-5 flex h-12 w-12 items-center justify-center rounded-2xl border border-red-300/20 bg-red-400/10 text-red-300 transition hover:bg-red-400/15 hover:text-red-200 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-30 max-sm:mt-0 max-sm:w-full"
+                aria-label="Remove color variant"
               >
-                <Trash2 className="w-3.5 h-3.5" />
+                <Trash2 className="h-4 w-4" />
               </button>
             </div>
           ))}
@@ -157,9 +124,9 @@ const StockRow = ({
         <button
           type="button"
           onClick={() => append({ color: "", quantity: "" })}
-          className="w-full flex items-center justify-center gap-2 py-2 text-xs font-semibold text-emerald-700 hover:bg-emerald-50 transition"
+          className="flex w-full items-center justify-center gap-2 border-t border-white/10 px-4 py-3 text-xs font-semibold text-cyan-300 transition hover:bg-cyan-400/10 hover:text-cyan-200"
         >
-          <Plus className="w-3.5 h-3.5" />
+          <Plus className="h-3.5 w-3.5" />
           Add another color
         </button>
       </div>
@@ -172,29 +139,28 @@ export const StockInTable: React.FC<StockInTableProps> = ({
   removeField,
 }) => {
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-      <div className="grid grid-cols-[1fr_120px_120px_36px] gap-3 px-4 py-2 bg-gray-50 border-b border-gray-100">
-        <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest">
-          Item Details
-        </p>
-        <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest text-center">
-          Wholesale
-        </p>
-        <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest text-center">
-          Sale
-        </p>
-        <span />
-      </div>
+    <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/8 shadow-2xl shadow-black/20 backdrop-blur-xl">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.10),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(244,114,182,0.08),transparent_36%)]" />
 
-      {stockData.map((row, idx) => (
-        <StockRow
-          key={row._id}
-          row={row}
-          idx={idx}
-          removeField={removeField}
-          isLast={idx === stockData.length - 1}
-        />
-      ))}
+      <div className="relative z-10">
+        <div className="hidden grid-cols-[1fr_44px] gap-5 border-b border-white/10 bg-white/8 px-4 py-3 xl:grid">
+          <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">
+            Stock Items
+          </p>
+
+          <span />
+        </div>
+
+        {stockData.map((row, idx) => (
+          <StockRow
+            key={row._id}
+            row={row}
+            idx={idx}
+            removeField={removeField}
+            isLast={idx === stockData.length - 1}
+          />
+        ))}
+      </div>
     </div>
   );
 };

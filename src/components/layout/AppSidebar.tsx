@@ -104,7 +104,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
   onMenuClick,
 }) => (
   <header
-    className={`fixed left-0 right-0 top-0 z-40 border-b transition-all duration-200 lg:hidden ${
+    className={`fixed left-0 right-0 top-0 z-100 border-b transition-all duration-200 lg:hidden ${
       isScrolled
         ? "border-white/10 bg-slate-950/85 shadow-xl shadow-black/20 backdrop-blur-xl"
         : "border-white/5 bg-slate-950/65 backdrop-blur-lg"
