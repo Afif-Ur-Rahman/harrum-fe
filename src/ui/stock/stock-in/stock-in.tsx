@@ -48,7 +48,7 @@ const StockIn = () => {
       <FormProvider {...form}>
         <div
           data-sticky-target
-          className="sticky top-0 z-50 pb-3 pt-1 backdrop-blur-md"
+          className="sticky top-16 md:top-0 z-50 pb-3 pt-1 backdrop-blur-md"
         >
           <StockSearchAdd
             stockOptions={stockOptions}
