@@ -78,7 +78,6 @@ const useStocks = () => {
 
   const addNewStockRow = (name: string) => {
     append({
-      _id: `new-${Date.now()}`,
       name,
       brand: "",
       article: "",
@@ -94,10 +93,36 @@ const useStocks = () => {
     });
   };
 
-  const removeStockRow = (id: string) => {
-    const index = form
-      .getValues("stockItems")
-      .findIndex((item) => item._id === id);
+  const addExistingStockRow = (stock: Stock) => {
+    const currentItems = form.getValues("stockItems") || [];
+
+    const alreadyAdded = currentItems.some((item) => item._id === stock._id);
+
+    if (alreadyAdded) {
+      showToast("error", "This stock item is already added");
+      return;
+    }
+
+    append({
+      _id: stock._id,
+      name: stock.name || "",
+      brand: stock.brand || "",
+      article: stock.article || "",
+      size: stock.size || "meter(s)",
+      wholesalePrice: String(stock.wholesalePrice ?? ""),
+      salePrice: String(stock.salePrice ?? ""),
+      variants: stock.variants?.map((variant) => ({
+        color: variant.color || "",
+        quantity: String(variant.quantity ?? ""),
+      })),
+    });
+  };
+
+  const removeStockRow = (id: string | number) => {
+    const index =
+      typeof id === "number"
+        ? id
+        : form.getValues("stockItems").findIndex((item) => item._id === id);
 
     if (index !== -1) {
       remove(index);
@@ -129,6 +154,7 @@ const useStocks = () => {
     fields,
     stockOptions,
     addNewStockRow,
+    addExistingStockRow,
     removeStockRow,
     onAddStock,
     isSaveDisabled,

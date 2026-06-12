@@ -6,7 +6,7 @@ export const stockVariantSchema = z.object({
 });
 
 export const stockItemSchema = z.object({
-  _id: z.string(),
+  _id: z.string().optional(),
   name: z.string().min(1, "Name is required"),
   brand: z.string().min(1, "Brand is required"),
   article: z.string().min(1, "Article is required"),

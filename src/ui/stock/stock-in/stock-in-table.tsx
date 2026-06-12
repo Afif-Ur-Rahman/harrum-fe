@@ -10,7 +10,7 @@ import { STOCK_ITEM_FIELDS, VARIANT_FIELDS } from "../constants";
 
 interface StockInTableProps {
   stockData: StockItemType[];
-  removeField: (id: string) => void;
+  removeField: (id: string | number) => void;
 }
 
 const StockRow = ({
@@ -21,7 +21,7 @@ const StockRow = ({
 }: {
   row: StockItemType;
   idx: number;
-  removeField: (id: string) => void;
+  removeField: (id: string | number) => void;
   isLast: boolean;
 }) => {
   const { control } = useFormContext<StockFormType>();
@@ -51,7 +51,7 @@ const StockRow = ({
 
           <button
             type="button"
-            onClick={() => removeField(row._id)}
+            onClick={() => removeField(row._id || idx)}
             className="flex h-9 w-9 items-center justify-center rounded-xl border border-red-300/20 bg-red-400/10 text-red-300 transition hover:bg-red-400/15 hover:text-red-200 active:scale-[0.98]"
             aria-label="Remove stock item"
           >
@@ -153,7 +153,7 @@ export const StockInTable: React.FC<StockInTableProps> = ({
 
         {stockData.map((row, idx) => (
           <StockRow
-            key={row._id}
+            key={row._id || idx}
             row={row}
             idx={idx}
             removeField={removeField}
