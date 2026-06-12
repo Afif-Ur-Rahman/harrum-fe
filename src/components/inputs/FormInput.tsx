@@ -26,11 +26,44 @@ const FormInput = ({
   const [show, setShow] = useState(false);
 
   const isPassword = type === "password";
+  const isNumber = type === "number";
+
   const inputType = isPassword
     ? show
       ? "text"
       : "password"
     : (type ?? "text");
+
+  const numberRules: RegisterOptions = isNumber
+    ? {
+        ...rules,
+        min: rules?.min ?? {
+          value: 0,
+          message: `${label} cannot be negative`,
+        },
+        setValueAs: (value) => {
+          const transformedValue = rules?.setValueAs
+            ? rules.setValueAs(value)
+            : value;
+
+          if (
+            transformedValue === "" ||
+            transformedValue === null ||
+            transformedValue === undefined
+          ) {
+            return "";
+          }
+
+          const numberValue = Number(transformedValue);
+
+          if (Number.isNaN(numberValue)) {
+            return "";
+          }
+
+          return numberValue < 0 ? 0 : transformedValue;
+        },
+      }
+    : (rules ?? {});
 
   return (
     <div className="flex flex-col gap-1.5">
@@ -44,10 +77,32 @@ const FormInput = ({
         )}
 
         <input
-          {...register(field, rules)}
+          {...register(field, numberRules)}
           type={inputType}
+          min={isNumber ? 0 : undefined}
+          step={isNumber ? "any" : undefined}
+          inputMode={isNumber ? "decimal" : undefined}
           placeholder={placeholder}
-          className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-slate-300"
+          onKeyDown={(e) => {
+            if (isNumber && ["-", "+", "e", "E"].includes(e.key)) {
+              e.preventDefault();
+            }
+          }}
+          onPaste={(e) => {
+            if (!isNumber) return;
+
+            const pastedValue = e.clipboardData.getData("text");
+            const numericValue = Number(pastedValue);
+
+            if (pastedValue.includes("-") || numericValue < 0) {
+              e.preventDefault();
+            }
+          }}
+          className={`min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-slate-300 ${
+            isNumber
+              ? "[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+              : ""
+          }`}
         />
 
         {isPassword && (
