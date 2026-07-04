@@ -40,7 +40,7 @@ const StockIn = () => {
           </h1>
 
           <p className="mt-1 text-xs text-slate-400">
-            Create new stock items with brand, article, prices, and variants
+            Create new stock items with brand, prices, and variants
           </p>
         </div>
       </div>

@@ -5,6 +5,7 @@ export interface StockVariant {
 
 export interface StockHistory {
   _id: string;
+  purchasePrice: number;
   wholesalePrice: number;
   salePrice: number;
   variants: StockVariant[];
@@ -15,17 +16,18 @@ export interface Stock {
   _id: string;
   name: string;
   brand: string;
+  purchasePrice: number;
   wholesalePrice: number;
   salePrice: number;
   variants: StockVariant[];
   size: string;
-  article: string;
   history: StockHistory[];
   createdAt: string;
   updatedAt: string;
 }
 
 export interface AddStockPayload {
+  purchasePrice: number;
   wholesalePrice: number;
   salePrice: number;
   variants: StockVariant[];

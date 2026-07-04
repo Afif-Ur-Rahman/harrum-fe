@@ -3,7 +3,7 @@
 import { useStocks } from "./useStocks";
 import { StockStats, StockTable } from "./blocks";
 import Link from "next/link";
-import { ArrowDownToLine, History, Package, Boxes } from "lucide-react";
+import { ArrowDownToLine, Package, Boxes } from "lucide-react";
 import { StockVariant } from "@/types";
 
 const getTotalQuantity = (variants: StockVariant[] = []) => {
@@ -47,13 +47,13 @@ export const Stocks = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <Link
+          {/* <Link
             href="/super-admin/stocks/history"
             className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/8 px-4 py-2.5 text-sm font-medium text-slate-300 shadow-lg shadow-black/10 backdrop-blur-xl transition hover:bg-white/12 hover:text-white active:scale-[0.98]"
           >
             <History className="h-4 w-4" />
             <span className="hidden sm:inline">History</span>
-          </Link>
+          </Link> */}
 
           <Link
             href="/super-admin/stocks/stock-in"

@@ -18,7 +18,7 @@ const useStocks = () => {
     return Array.isArray(stocks)
       ? stocks.map((item) => ({
           value: item._id,
-          label: `${item.name} - ${item.brand} - ${item.article}`,
+          label: `${item.name} - ${item.brand}`,
           stock: item,
         }))
       : [];
@@ -38,16 +38,17 @@ const useStocks = () => {
   const isSaveDisabled =
     !stockItems?.length ||
     stockItems.some((item) => {
+      const purchasePrice = Number(item.purchasePrice);
       const wholesalePrice = Number(item.wholesalePrice);
       const salePrice = Number(item.salePrice);
 
       const invalidBasicFields =
         !item.name?.trim() ||
         !item.brand?.trim() ||
-        !item.article?.trim() ||
         !item.size?.trim();
 
       const invalidPrices =
+        purchasePrice < 0 ||
         wholesalePrice < 0 ||
         salePrice < 0 ||
         salePrice < wholesalePrice ||
@@ -80,8 +81,8 @@ const useStocks = () => {
     append({
       name,
       brand: "",
-      article: "",
       size: "meter(s)",
+      purchasePrice: "",
       wholesalePrice: "",
       salePrice: "",
       variants: [
@@ -107,8 +108,8 @@ const useStocks = () => {
       _id: stock._id,
       name: stock.name || "",
       brand: stock.brand || "",
-      article: stock.article || "",
       size: stock.size || "meter(s)",
+      purchasePrice: String(stock.purchasePrice ?? ""),
       wholesalePrice: String(stock.wholesalePrice ?? ""),
       salePrice: String(stock.salePrice ?? ""),
       variants: stock.variants?.map((variant) => ({

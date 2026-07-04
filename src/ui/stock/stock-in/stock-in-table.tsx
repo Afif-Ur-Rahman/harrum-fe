@@ -60,14 +60,15 @@ const StockRow = ({
         </div>
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
-          {STOCK_ITEM_FIELDS.map(({ name, label, type, placeholder, icon }) => (
+          {STOCK_ITEM_FIELDS.map((item) => (
             <FormInput
-              key={name}
-              field={`stockItems.${idx}.${name}`}
-              label={label}
-              type={type}
-              placeholder={placeholder}
-              icon={icon}
+              key={item.name}
+              field={`stockItems.${idx}.${item.name}`}
+              label={item.label}
+              type={item.type}
+              placeholder={item.placeholder}
+              icon={item.icon}
+              options={"options" in item ? item.options : []}
             />
           ))}
         </div>

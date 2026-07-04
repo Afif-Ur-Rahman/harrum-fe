@@ -1,14 +1,31 @@
-import {
-  BadgeDollarSign,
-  Building2,
-  Hash,
-  Palette,
-  Ruler,
-  Tag,
-  Type,
-} from "lucide-react";
+import { Building2, Palette, Ruler, Tag, Type, Coins } from "lucide-react";
 
-export const STOCK_ITEM_FIELDS = [
+type FieldType = "text" | "number" | "select";
+
+interface FieldOption {
+  label: string;
+  value: string;
+  disabled?: boolean;
+}
+
+interface StockItemField {
+  name: string;
+  label: string;
+  type: FieldType;
+  placeholder: string;
+  icon?: React.ElementType;
+  options?: FieldOption[];
+}
+
+interface VariantField {
+  name: string;
+  label: string;
+  type: FieldType;
+  placeholder: string;
+  icon?: React.ElementType;
+}
+
+export const STOCK_ITEM_FIELDS: StockItemField[] = [
   {
     name: "name",
     label: "Name",
@@ -24,25 +41,31 @@ export const STOCK_ITEM_FIELDS = [
     icon: Building2,
   },
   {
-    name: "article",
-    label: "Article",
-    type: "text",
-    placeholder: "Article",
-    icon: Hash,
-  },
-  {
     name: "size",
     label: "Size",
-    type: "text",
-    placeholder: "Size e.g. meter(s)",
+    type: "select",
+    placeholder: "Size",
+    options: [
+      {
+        label: "Meter(s)",
+        value: "meter(s)",
+      },
+    ],
     icon: Ruler,
+  },
+  {
+    name: "purchasePrice",
+    label: "Purchase Price",
+    type: "number",
+    placeholder: "Purchase price",
+    icon: Coins,
   },
   {
     name: "wholesalePrice",
     label: "Wholesale",
     type: "number",
     placeholder: "Wholesale price",
-    icon: BadgeDollarSign,
+    icon: Coins,
   },
   {
     name: "salePrice",
@@ -51,9 +74,9 @@ export const STOCK_ITEM_FIELDS = [
     placeholder: "Sale price",
     icon: Tag,
   },
-] as const;
+];
 
-export const VARIANT_FIELDS = [
+export const VARIANT_FIELDS: VariantField[] = [
   {
     name: "color",
     label: "Color",
@@ -68,4 +91,4 @@ export const VARIANT_FIELDS = [
     placeholder: "0",
     icon: undefined,
   },
-] as const;
+];

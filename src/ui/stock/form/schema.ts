@@ -9,9 +9,9 @@ export const stockItemSchema = z.object({
   _id: z.string().optional(),
   name: z.string().min(1, "Name is required"),
   brand: z.string().min(1, "Brand is required"),
-  article: z.string().min(1, "Article is required"),
   size: z.string().default("meter(s)"),
 
+  purchasePrice: z.string().min(1, "Purchase price is required"),
   wholesalePrice: z.string().min(1, "Wholesale price is required"),
   salePrice: z.string().min(1, "Sale price is required"),
 

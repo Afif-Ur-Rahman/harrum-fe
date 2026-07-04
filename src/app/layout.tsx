@@ -8,17 +8,11 @@ import { getAuthCookies } from "@/utils/cookies";
 
 export async function generateMetadata(): Promise<Metadata> {
   const authCookies = await getAuthCookies();
-
-  if (!authCookies?.user || !authCookies?.accessToken) {
-    return {
-      title: "Harrum Cloth House",
-      description:
-        "A modern clothing store web platform for managing products, customers, orders, and daily operations with ease.",
-    };
-  }
+  const token = authCookies?.accessToken;
+  const user = authCookies?.user;
 
   return {
-    title: authCookies?.user?.username || "Harrum Cloth House",
+    title: `${!user || !token ? "" : `${user.username} - `}Harrum Cloth House`,
     description:
       "A modern clothing store web platform for managing products, customers, orders, and daily operations with ease.",
   };

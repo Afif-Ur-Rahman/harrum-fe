@@ -35,13 +35,6 @@ export const StockTable: React.FC<StockTableProps> = ({ stockData = [] }) => {
       ),
     },
     {
-      key: "article" as const,
-      header: "Article",
-      render: (row: Stock) => (
-        <span className="text-slate-300">{row.article}</span>
-      ),
-    },
-    {
       key: "quantity" as const,
       header: "Total Qty",
       render: (row: Stock) => {
@@ -53,6 +46,15 @@ export const StockTable: React.FC<StockTableProps> = ({ stockData = [] }) => {
           </span>
         );
       },
+    },
+    {
+      key: "purchasePrice" as const,
+      header: "Purchase Price (PKR)",
+      render: (row: Stock) => (
+        <span className="text-slate-300">
+          {formatPrice(Number(row.purchasePrice)) || 0}
+        </span>
+      ),
     },
     {
       key: "wholesalePrice" as const,
@@ -116,7 +118,7 @@ export const StockTable: React.FC<StockTableProps> = ({ stockData = [] }) => {
         <Flex justify="end" align="center" gap="2">
           {row.variants?.length > 0 && (
             <ReuseableDialog
-              title={`${row.name} - ${row.article} Colors`}
+              title={`${row.name} - ${row.brand} Colors`}
               triggerButton={
                 <button
                   type="button"
@@ -132,7 +134,7 @@ export const StockTable: React.FC<StockTableProps> = ({ stockData = [] }) => {
 
           {row.history?.length > 0 && (
             <ReuseableDialog
-              title={`${row.name} - ${row.article} History`}
+              title={`${row.name} - ${row.brand} History`}
               triggerButton={
                 <button
                   type="button"

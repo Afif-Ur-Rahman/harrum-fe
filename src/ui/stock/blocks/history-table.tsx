@@ -42,6 +42,15 @@ export const HistoryTable: React.FC<HistoryTableProps> = ({
       ),
     },
     {
+      key: "purchasePrice" as const,
+      header: "Purchase (PKR)",
+      render: (row: StockHistory) => (
+        <span className="text-slate-300">
+          {formatPrice(Number(row.purchasePrice)) || 0}
+        </span>
+      ),
+    },
+    {
       key: "wholesalePrice" as const,
       header: "Wholesale (PKR)",
       render: (row: StockHistory) => (

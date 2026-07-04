@@ -201,7 +201,7 @@ export const StockSearchAdd = ({
                           </span>
 
                           <span className="block truncate text-xs text-slate-400">
-                            {option.stock.brand} - {option.stock.article}
+                            {option.stock.brand}
                           </span>
 
                           <span className="block truncate text-xs text-slate-500">
