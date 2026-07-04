@@ -4,7 +4,7 @@ import { existsSync } from "fs";
 import { join } from "path";
 
 const PORT = process.env.PORT || 8021;
-const SERVICE_NAME = process.env.SERVICE_NAME || "restaurant-web";
+const SERVICE_NAME = process.env.SERVICE_NAME || "harrum-cloth-house";
 
 // Check if standalone build exists
 const standalonePath = join(process.cwd(), ".next", "standalone", "server.js");

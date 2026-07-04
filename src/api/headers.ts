@@ -7,10 +7,10 @@ import {
   APP_VERSION,
 } from "@/constants";
 
-const HEADER_Restaurant_APPLICATION = "Restaurant-Application";
-const HEADER_Restaurant_APP_VERSION = "Restaurant-AppVersion";
-const HEADER_Restaurant_RUN_ENVIRONMENT = "Restaurant-RunEnvironment";
-const HEADER_Restaurant_DEVICE = "Restaurant-Device";
+const HEADER_Harrum_APPLICATION = "Harrum-Application";
+const HEADER_Harrum_APP_VERSION = "Harrum-AppVersion";
+const HEADER_Harrum_RUN_ENVIRONMENT = "Harrum-RunEnvironment";
+const HEADER_Harrum_DEVICE = "Harrum-Device";
 const HEADER_AUTHORIZATION = "Authorization";
 const HEADER_CONTENT_TYPE = "Content-Type";
 const HEADER_USER_AGENT = "user-agent";
@@ -30,10 +30,10 @@ const createHeaders = async (init?: HeadersInit): Promise<Headers> => {
   const requestHeaders = await nextHeaders();
   const userAgent = requestHeaders.get(HEADER_USER_AGENT) ?? "";
 
-  headers.set(HEADER_Restaurant_APPLICATION, APP_NAME);
-  headers.set(HEADER_Restaurant_APP_VERSION, APP_VERSION);
-  headers.set(HEADER_Restaurant_RUN_ENVIRONMENT, APP_ENV);
-  headers.set(HEADER_Restaurant_DEVICE, userAgent);
+  headers.set(HEADER_Harrum_APPLICATION, APP_NAME);
+  headers.set(HEADER_Harrum_APP_VERSION, APP_VERSION);
+  headers.set(HEADER_Harrum_RUN_ENVIRONMENT, APP_ENV);
+  headers.set(HEADER_Harrum_DEVICE, userAgent);
 
   return headers;
 };

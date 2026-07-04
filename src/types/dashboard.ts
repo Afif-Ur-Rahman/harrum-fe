@@ -1,4 +1,3 @@
-import { MainOrder } from "./orders";
 
 export interface Chart {
   categories: string[];
@@ -12,7 +11,7 @@ export interface DashboardResponse {
     pendingOrdersPrice: number;
     totalOrdersCount: number;
     chart: Chart | null;
-    recentOrders: MainOrder[];
+    recentOrders: any[];
   };
 }
 
