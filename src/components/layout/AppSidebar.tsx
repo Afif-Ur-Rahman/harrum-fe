@@ -197,7 +197,9 @@ export const AppSidebar = () => {
                   key={tab.href}
                   {...tab}
                   collapsed={collapsed}
-                  isActive={pathname === tab.href}
+                  isActive={
+                    pathname === tab.href || pathname.startsWith(`${tab.href}/`)
+                  }
                 />
               ))}
             </ul>
