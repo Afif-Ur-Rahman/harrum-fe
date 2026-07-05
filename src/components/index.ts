@@ -14,3 +14,4 @@ export * from "./pagination";
 export * from "./ui/table";
 export * from "./ui/nodata";
 export * from "./inputs";
+export * from "./comming-soon";
