@@ -1,4 +1,13 @@
-import { Building2, Palette, Ruler, Tag, Type, Coins } from "lucide-react";
+import {
+  Building2,
+  Palette,
+  Ruler,
+  Type,
+  Shapes,
+  ShoppingCart,
+  Store,
+  BadgeDollarSign,
+} from "lucide-react";
 
 type FieldType = "text" | "number" | "select";
 
@@ -14,12 +23,12 @@ interface StockItemField {
   type: FieldType;
   placeholder: string;
   icon?: React.ElementType;
+  required?: boolean;
   options?: FieldOption[];
 }
 
 interface VariantField {
   name: string;
-  label: string;
   type: FieldType;
   placeholder: string;
   icon?: React.ElementType;
@@ -32,6 +41,7 @@ export const STOCK_ITEM_FIELDS: StockItemField[] = [
     type: "text",
     placeholder: "Name",
     icon: Type,
+    required: true,
   },
   {
     name: "brand",
@@ -39,6 +49,25 @@ export const STOCK_ITEM_FIELDS: StockItemField[] = [
     type: "text",
     placeholder: "Brand",
     icon: Building2,
+    required: true,
+  },
+  {
+    name: "type",
+    label: "Type",
+    type: "select",
+    placeholder: "Type",
+    options: [
+      {
+        label: "Cotton",
+        value: "cotton",
+      },
+      {
+        label: "Wash & Wear",
+        value: "wash_and_wear",
+      },
+    ],
+    icon: Shapes,
+    required: true,
   },
   {
     name: "size",
@@ -47,46 +76,52 @@ export const STOCK_ITEM_FIELDS: StockItemField[] = [
     placeholder: "Size",
     options: [
       {
-        label: "Meter(s)",
-        value: "meter(s)",
+        label: "Meters",
+        value: "meters",
+      },
+      {
+        label: "Pieces",
+        value: "pcs",
       },
     ],
     icon: Ruler,
+    required: true,
   },
   {
     name: "purchasePrice",
     label: "Purchase Price",
     type: "number",
     placeholder: "Purchase price",
-    icon: Coins,
+    icon: ShoppingCart,
+    required: true,
   },
   {
     name: "wholesalePrice",
     label: "Wholesale",
     type: "number",
     placeholder: "Wholesale price",
-    icon: Coins,
+    icon: Store,
+    required: true,
   },
   {
     name: "salePrice",
     label: "Sale",
     type: "number",
     placeholder: "Sale price",
-    icon: Tag,
+    icon: BadgeDollarSign,
+    required: true,
   },
 ];
 
 export const VARIANT_FIELDS: VariantField[] = [
   {
     name: "color",
-    label: "Color",
     type: "text",
     placeholder: "Color",
     icon: Palette,
   },
   {
     name: "quantity",
-    label: "Quantity",
     type: "number",
     placeholder: "0",
     icon: undefined,

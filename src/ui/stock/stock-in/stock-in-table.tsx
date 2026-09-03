@@ -3,7 +3,7 @@
 import React from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { StockItemType } from "../form/schema";
-import { Plus, Trash2, Package, Palette } from "lucide-react";
+import { Plus, Trash2, Package, Palette, X } from "lucide-react";
 import { StockFormType } from "../form";
 import { FormInput } from "@/components";
 import { STOCK_ITEM_FIELDS, VARIANT_FIELDS } from "../constants";
@@ -69,6 +69,7 @@ const StockRow = ({
               placeholder={item.placeholder}
               icon={item.icon}
               options={"options" in item ? item.options : []}
+              required={item.required}
             />
           ))}
         </div>
@@ -94,29 +95,26 @@ const StockRow = ({
           {fields.map((field, variantIdx) => (
             <div
               key={field.id}
-              className="grid grid-cols-[1fr_140px_44px] items-start gap-3 bg-white/3 px-4 py-4 transition hover:bg-white/5 max-sm:grid-cols-1"
+              className="grid grid-cols-[1fr_140px_44px] items-center gap-3 bg-white/3 px-4 py-4 transition hover:bg-white/5 max-sm:grid-cols-1"
             >
-              {VARIANT_FIELDS.map(
-                ({ name, label, type, placeholder, icon }) => (
-                  <FormInput
-                    key={name}
-                    field={`stockItems.${idx}.variants.${variantIdx}.${name}`}
-                    label={label}
-                    type={type}
-                    placeholder={placeholder}
-                    icon={icon}
-                  />
-                ),
-              )}
+              {VARIANT_FIELDS.map(({ name, type, placeholder, icon }) => (
+                <FormInput
+                  key={name}
+                  field={`stockItems.${idx}.variants.${variantIdx}.${name}`}
+                  type={type}
+                  placeholder={placeholder}
+                  icon={icon}
+                />
+              ))}
 
               <button
                 type="button"
                 onClick={() => remove(variantIdx)}
                 disabled={fields.length === 1}
-                className="mt-5 flex h-12 w-12 items-center justify-center rounded-2xl border border-red-300/20 bg-red-400/10 text-red-300 transition hover:bg-red-400/15 hover:text-red-200 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-30 max-sm:mt-0 max-sm:w-full"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-red-300/20 bg-white/5 text-red-300 transition hover:bg-red-400/10 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-30 max-sm:w-full"
                 aria-label="Remove color variant"
               >
-                <Trash2 className="h-4 w-4" />
+                <X className="h-4 w-4" />
               </button>
             </div>
           ))}
