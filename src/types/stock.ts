@@ -16,6 +16,7 @@ export interface Stock {
   _id: string;
   name: string;
   brand: string;
+  type: string;
   purchasePrice: number;
   wholesalePrice: number;
   salePrice: number;

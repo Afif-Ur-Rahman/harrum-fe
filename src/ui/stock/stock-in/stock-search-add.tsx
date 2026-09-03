@@ -42,16 +42,6 @@ export const StockSearchAdd = ({
 
   const canCreateNew = trimmedQuery.length > 0 && filtered.length === 0;
 
-  const focusLastTableInput = () => {
-    setTimeout(() => {
-      const inputs =
-        tableRef?.current?.querySelectorAll<HTMLInputElement>("input");
-
-      const lastInput = inputs?.[inputs.length - 1];
-      lastInput?.focus();
-    }, 50);
-  };
-
   const handleOpen = () => {
     clearTimeout(blurTimer.current);
     setOpen(true);
@@ -68,14 +58,12 @@ export const StockSearchAdd = ({
     onCreateNew(trimmedQuery);
     setQuery("");
     setOpen(false);
-    focusLastTableInput();
   };
 
   const handleSelectExisting = (stock: Stock) => {
     onSelectExisting(stock);
     setQuery("");
     setOpen(false);
-    focusLastTableInput();
   };
 
   const handleEnter = () => {

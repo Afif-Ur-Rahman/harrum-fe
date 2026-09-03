@@ -43,9 +43,7 @@ const useStocks = () => {
       const salePrice = Number(item.salePrice);
 
       const invalidBasicFields =
-        !item.name?.trim() ||
-        !item.brand?.trim() ||
-        !item.size?.trim();
+        !item.name?.trim() || !item.brand?.trim() || !item.size?.trim();
 
       const invalidPrices =
         purchasePrice < 0 ||
@@ -81,7 +79,8 @@ const useStocks = () => {
     append({
       name,
       brand: "",
-      size: "meter(s)",
+      type: "cotton",
+      size: "meters",
       purchasePrice: "",
       wholesalePrice: "",
       salePrice: "",
@@ -108,7 +107,8 @@ const useStocks = () => {
       _id: stock._id,
       name: stock.name || "",
       brand: stock.brand || "",
-      size: stock.size || "meter(s)",
+      type: stock.type || "",
+      size: stock.size || "meters",
       purchasePrice: String(stock.purchasePrice ?? ""),
       wholesalePrice: String(stock.wholesalePrice ?? ""),
       salePrice: String(stock.salePrice ?? ""),
