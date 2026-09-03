@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { ACCESS_TOKEN_COOKIE, APP_ENV, USER_COOKIE } from "@/constants";
+import { ACCESS_TOKEN_COOKIE, MODE, USER_COOKIE } from "@/constants";
 import type { AuthCookies } from "@/types";
 
 const getAuthCookies = async (): Promise<AuthCookies | undefined> => {
@@ -25,7 +25,7 @@ const getAuthCookies = async (): Promise<AuthCookies | undefined> => {
 
 const setAuthCookies = async (value: AuthCookies) => {
   const cookieStore = await cookies();
-  const secure = APP_ENV === "prod";
+  const secure = MODE === "prod";
   const sameSite = "lax";
   const httpOnly = true;
 

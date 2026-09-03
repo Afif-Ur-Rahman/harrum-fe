@@ -1,11 +1,5 @@
-
 import { cookies, headers as nextHeaders } from "next/headers";
-import {
-  ACCESS_TOKEN_COOKIE,
-  APP_NAME,
-  APP_ENV,
-  APP_VERSION,
-} from "@/constants";
+import { ACCESS_TOKEN_COOKIE, APP_NAME, MODE, APP_VERSION } from "@/constants";
 
 const HEADER_Harrum_APPLICATION = "Harrum-Application";
 const HEADER_Harrum_APP_VERSION = "Harrum-AppVersion";
@@ -32,7 +26,7 @@ const createHeaders = async (init?: HeadersInit): Promise<Headers> => {
 
   headers.set(HEADER_Harrum_APPLICATION, APP_NAME);
   headers.set(HEADER_Harrum_APP_VERSION, APP_VERSION);
-  headers.set(HEADER_Harrum_RUN_ENVIRONMENT, APP_ENV);
+  headers.set(HEADER_Harrum_RUN_ENVIRONMENT, MODE);
   headers.set(HEADER_Harrum_DEVICE, userAgent);
 
   return headers;

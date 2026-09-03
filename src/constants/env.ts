@@ -3,7 +3,7 @@ type AppEnv = "dev" | "stag" | "prod";
 // General
 const APP_NAME = process.env.APP_NAME ?? "HarrumClothHouse";
 const APP_VERSION = process.env.APP_VERSION ?? "1.0.0";
-const APP_ENV = (process.env.APP_ENV ?? "dev") as AppEnv;
+const MODE = (process.env.MODE ?? "dev") as AppEnv;
 const ROOT_DOMAIN = process.env.ROOT_DOMAIN ?? "Root_Domain";
 
 // Harrum service URLs
@@ -25,7 +25,7 @@ const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY || "";
 export {
   APP_NAME,
   APP_VERSION,
-  APP_ENV,
+  MODE,
   ROOT_DOMAIN,
   API_URL,
   USER_COOKIE,
