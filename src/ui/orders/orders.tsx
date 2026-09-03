@@ -66,6 +66,7 @@ const Orders = () => {
             <div className="mt-6">
               <OrderItemSearchAdd
                 stockOptions={stockOptions}
+                selectedStockIds={fields.map((item) => item.stockId)}
                 onSelectItem={addOrderItem}
               />
             </div>

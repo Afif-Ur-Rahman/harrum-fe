@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Search, X, PackageCheck } from "lucide-react";
 import { Stock } from "@/types";
 
@@ -12,11 +12,13 @@ interface StockOption {
 
 interface OrderItemSearchAddProps {
   stockOptions: StockOption[];
+  selectedStockIds: string[];
   onSelectItem: (stock: Stock) => void;
 }
 
 export const OrderItemSearchAdd = ({
   stockOptions,
+  selectedStockIds,
   onSelectItem,
 }: OrderItemSearchAddProps) => {
   const [query, setQuery] = useState("");
@@ -27,12 +29,18 @@ export const OrderItemSearchAdd = ({
 
   const trimmedQuery = query.trim();
 
+  const availableOptions = useMemo(
+    () =>
+      stockOptions.filter((option) => !selectedStockIds.includes(option.value)),
+    [stockOptions, selectedStockIds],
+  );
+
   const filtered =
     trimmedQuery.length > 0
-      ? stockOptions.filter((option) =>
+      ? availableOptions.filter((option) =>
           option.label.toLowerCase().includes(trimmedQuery.toLowerCase()),
         )
-      : stockOptions;
+      : availableOptions;
 
   const handleOpen = () => {
     clearTimeout(blurTimer.current);
@@ -129,7 +137,9 @@ export const OrderItemSearchAdd = ({
                   </div>
                 ) : (
                   <p className="px-4 py-3 text-sm text-slate-400">
-                    No matching stock items found
+                    {trimmedQuery.length > 0
+                      ? "No matching items found"
+                      : "All items have been selected"}
                   </p>
                 )}
               </div>

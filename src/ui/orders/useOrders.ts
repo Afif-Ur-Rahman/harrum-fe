@@ -59,8 +59,7 @@ const useOrders = () => {
     append({
       stockId: stock._id,
       name: `${stock.name} - ${stock.brand}`,
-      color: "",
-      quantity: "",
+      variants: [{ color: "", quantity: "" }],
     });
   };
 

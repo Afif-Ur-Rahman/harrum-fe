@@ -12,4 +12,8 @@ export const useOrderForm = (defaultValues?: OrderFormType) => {
   });
 };
 
-export type { OrderFormType, OrderItemFormType } from "./schema";
+export type {
+  OrderFormType,
+  OrderItemFormType,
+  OrderItemVariantFormType,
+} from "./schema";
