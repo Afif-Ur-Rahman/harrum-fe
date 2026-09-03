@@ -2,7 +2,7 @@
 @import "@radix-ui/themes/styles.css";
 
 .radix-themes {
-	--default-font-family: var(--font-poppins);
+  --default-font-family: var(--font-poppins);
 }
 
 html {
@@ -24,8 +24,24 @@ body {
   overscroll-behavior: contain;
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  caret-color: #ffffff;
+  transition: background-color 9999s ease-in-out 0s;
+}
+
 @keyframes qr-scan {
-  0%   { top: 0%; }
-  50%  { top: calc(100% - 2px); }
-  100% { top: 0%; }
+  0% {
+    top: 0%;
+  }
+  50% {
+    top: calc(100% - 2px);
+  }
+  100% {
+    top: 0%;
+  }
 }

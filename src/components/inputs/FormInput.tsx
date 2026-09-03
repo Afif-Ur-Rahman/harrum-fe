@@ -4,12 +4,13 @@ import React, { useState } from "react";
 import { Controller, RegisterOptions, useFormContext } from "react-hook-form";
 import { Eye, EyeOff } from "lucide-react";
 import { Select } from "@radix-ui/themes";
+import { format, parse, isValid } from "date-fns";
 import { FormFieldError } from "../form";
 
 interface FormInputProps {
   field: string;
   label: string;
-  type?: "text" | "number" | "password" | "email" | "select";
+  type?: "text" | "number" | "password" | "email" | "select" | "date";
   placeholder: string;
   icon?: React.ElementType;
   rules?: RegisterOptions;
@@ -18,6 +19,9 @@ interface FormInputProps {
     value: string;
     disabled?: boolean;
   }[];
+  required?: boolean;
+  onValueChange?: (value: string) => void;
+  max?: number;
 }
 
 const FormInput = ({
@@ -28,6 +32,9 @@ const FormInput = ({
   icon: Icon,
   rules,
   options = [],
+  required = false,
+  onValueChange,
+  max,
 }: FormInputProps) => {
   const { register, control } = useFormContext();
   const [show, setShow] = useState(false);
@@ -35,6 +42,7 @@ const FormInput = ({
   const isPassword = type === "password";
   const isNumber = type === "number";
   const isSelect = type === "select";
+  const isDate = type === "date";
 
   const inputType = isPassword ? (show ? "text" : "password") : type;
 
@@ -64,15 +72,24 @@ const FormInput = ({
             return "";
           }
 
-          return numberValue < 0 ? 0 : transformedValue;
+          if (numberValue < 0) return 0;
+          if (max !== undefined && numberValue > max) return max;
+
+          return transformedValue;
         },
       }
     : (rules ?? {});
 
+  const { onChange: registerOnChange, ...registerRest } = register(
+    field,
+    numberRules,
+  );
+
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">
-        {label}
+      <label className="text-[12px] font-semibold uppercase tracking-widest text-slate-400">
+        {label}{" "}
+        <span className="text-red-400 text-[14px]">{required && "*"}</span>
       </label>
 
       <div className="flex items-center gap-2.5 rounded-2xl border border-white/10 bg-white/8 px-4 py-3 text-sm shadow-lg shadow-black/10 backdrop-blur-xl transition-all focus-within:border-cyan-300/60 focus-within:bg-white/12 focus-within:ring-2 focus-within:ring-cyan-300/10">
@@ -82,10 +99,14 @@ const FormInput = ({
           <Controller
             name={field}
             control={control}
+            rules={rules}
             render={({ field: controllerField }) => (
               <Select.Root
                 value={controllerField.value}
-                onValueChange={controllerField.onChange}
+                onValueChange={(value) => {
+                  controllerField.onChange(value);
+                  onValueChange?.(value);
+                }}
               >
                 <div className="flex min-w-0 flex-1 cursor-pointer">
                   <Select.Trigger
@@ -122,12 +143,56 @@ const FormInput = ({
               </Select.Root>
             )}
           />
+        ) : isDate ? (
+          <Controller
+            name={field}
+            control={control}
+            rules={rules}
+            render={({ field: controllerField }) => {
+              const dateValue =
+                controllerField.value instanceof Date &&
+                isValid(controllerField.value)
+                  ? format(controllerField.value, "yyyy-MM-dd")
+                  : "";
+
+              return (
+                <input
+                  type="date"
+                  value={dateValue}
+                  onChange={(e) => {
+                    const raw = e.target.value;
+                    if (!raw) {
+                      controllerField.onChange(undefined);
+                      return;
+                    }
+                    const parsed = parse(raw, "yyyy-MM-dd", new Date());
+                    controllerField.onChange(
+                      isValid(parsed) ? parsed : undefined,
+                    );
+                  }}
+                  onBlur={controllerField.onBlur}
+                  placeholder={placeholder}
+                  className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-slate-300 scheme-dark"
+                />
+              );
+            }}
+          />
         ) : (
           <>
             <input
-              {...register(field, numberRules)}
+              {...registerRest}
+              onChange={(e) => {
+                if (isNumber && max !== undefined && e.target.value !== "") {
+                  const numericValue = Number(e.target.value);
+                  if (!Number.isNaN(numericValue) && numericValue > max) {
+                    e.target.value = String(max);
+                  }
+                }
+                registerOnChange(e);
+              }}
               type={inputType}
               min={isNumber ? 0 : undefined}
+              max={isNumber ? max : undefined}
               step={isNumber ? "any" : undefined}
               inputMode={isNumber ? "decimal" : undefined}
               placeholder={placeholder}
