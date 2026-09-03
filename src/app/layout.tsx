@@ -5,6 +5,8 @@ import { Theme } from "@radix-ui/themes";
 import { Poppins } from "next/font/google";
 import { ToastProvider } from "@/utils/toast-provider";
 import { getAuthCookies } from "@/utils/cookies";
+import { DevLogger } from "@/components/dev-logger";
+import { APP_ENV } from "@/constants";
 
 export async function generateMetadata(): Promise<Metadata> {
   const authCookies = await getAuthCookies();
@@ -50,6 +52,8 @@ export default async function RootLayout({
           />
           <Theme>{children}</Theme>
         </ToastProvider>
+
+        {APP_ENV === "dev" && <DevLogger />}
       </body>
     </html>
   );
