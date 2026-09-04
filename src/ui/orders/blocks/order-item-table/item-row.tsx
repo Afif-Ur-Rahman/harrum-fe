@@ -1,18 +1,18 @@
 "use client";
 
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { Trash2, Package, Plus, Palette, X } from "lucide-react";
-import { OrderFormType, OrderItemFormType } from "../form";
-import { FormInput } from "@/components";
+import { Trash2, Package, Plus, Palette } from "lucide-react";
 import { Stock } from "@/types";
+import { VariantRow } from "./variant-row";
+import { OrderFormType, OrderItemFormType } from "../../form";
 import {
+  getUnitPrice,
   ItemPriceSelector,
   PriceType,
-  getUnitPrice,
-} from "./item-price-selector";
+} from "../item-price-selector";
 
-interface OrderItemRowProps {
+interface ItemRowProps {
   item: OrderItemFormType;
   index: number;
   stock?: Stock;
@@ -20,13 +20,13 @@ interface OrderItemRowProps {
   isLast: boolean;
 }
 
-const OrderItemRow = ({
+export const ItemRow = ({
   item,
   index,
   stock,
   removeItem,
   isLast,
-}: OrderItemRowProps) => {
+}: ItemRowProps) => {
   const { control, watch, setValue } = useFormContext<OrderFormType>();
 
   const { fields, append, remove } = useFieldArray({
@@ -141,34 +141,15 @@ const OrderItemRow = ({
 
         <div className="divide-y divide-white/10">
           {fields.map((field, variantIdx) => (
-            <div
+            <VariantRow
               key={field.id}
-              className="grid grid-cols-[1fr_140px_44px] items-center gap-3 bg-white/3 px-4 py-4 transition hover:bg-white/5 max-sm:grid-cols-1"
-            >
-              <FormInput
-                field={`items.${index}.variants.${variantIdx}.color`}
-                type="select"
-                placeholder="Select color"
-                options={getColorOptions(variantIdx)}
-              />
-
-              <FormInput
-                field={`items.${index}.variants.${variantIdx}.quantity`}
-                type="number"
-                placeholder="0"
-                max={getMaxQuantity(variantIdx)}
-              />
-
-              <button
-                type="button"
-                onClick={() => remove(variantIdx)}
-                disabled={fields.length === 1}
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-red-300/20 bg-white/5 text-red-300 transition hover:bg-red-400/10 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-30 max-sm:w-full"
-                aria-label="Remove color"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
+              itemIndex={index}
+              variantIndex={variantIdx}
+              colorOptions={getColorOptions(variantIdx)}
+              maxQuantity={getMaxQuantity(variantIdx)}
+              onRemove={() => remove(variantIdx)}
+              removeDisabled={fields.length === 1}
+            />
           ))}
         </div>
 
@@ -181,46 +162,6 @@ const OrderItemRow = ({
           <Plus className="h-3.5 w-3.5" />
           {canAddMoreColors ? "Add color" : "All available colors added"}
         </button>
-      </div>
-    </div>
-  );
-};
-
-interface OrderItemsTableProps {
-  items: OrderItemFormType[];
-  stocks: Stock[];
-  removeItem: (index: number) => void;
-}
-
-export const OrderItemsTable: React.FC<OrderItemsTableProps> = ({
-  items,
-  stocks,
-  removeItem,
-}) => {
-  useFormContext<OrderFormType>();
-
-  return (
-    <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/8 shadow-2xl shadow-black/20 backdrop-blur-xl">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.10),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(244,114,182,0.08),transparent_36%)]" />
-
-      <div className="relative z-10">
-        <div className="hidden grid-cols-[1fr_44px] gap-5 border-b border-white/10 bg-white/8 px-4 py-3 xl:grid">
-          <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">
-            Order Items
-          </p>
-          <span />
-        </div>
-
-        {items.map((item, idx) => (
-          <OrderItemRow
-            key={item.stockId || idx}
-            item={item}
-            index={idx}
-            stock={stocks.find((s) => s._id === item.stockId)}
-            removeItem={removeItem}
-            isLast={idx === items.length - 1}
-          />
-        ))}
       </div>
     </div>
   );
