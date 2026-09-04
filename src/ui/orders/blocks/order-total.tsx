@@ -11,9 +11,12 @@ interface OrderTotalProps {
 
 export const OrderTotal = ({ orderTotal }: OrderTotalProps) => {
   const { watch, setValue, getValues } = useFormContext<OrderFormType>();
+
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState("");
+
   const inputRef = useRef<HTMLInputElement>(null);
+  const lastTapRef = useRef(0);
 
   const discount = Number(watch("discount")) || 0;
   const finalTotal = Math.max(orderTotal - discount, 0);
@@ -21,6 +24,19 @@ export const OrderTotal = ({ orderTotal }: OrderTotalProps) => {
   const startEditing = () => {
     setDraft(discount ? String(discount) : "");
     setEditing(true);
+  };
+
+  const handleTouchEnd = () => {
+    const now = Date.now();
+    const DOUBLE_TAP_DELAY = 300;
+
+    if (now - lastTapRef.current < DOUBLE_TAP_DELAY) {
+      startEditing();
+      lastTapRef.current = 0;
+      return;
+    }
+
+    lastTapRef.current = now;
   };
 
   useEffect(() => {
@@ -32,6 +48,7 @@ export const OrderTotal = ({ orderTotal }: OrderTotalProps) => {
 
   useEffect(() => {
     const computed = String(finalTotal);
+
     if (getValues("totalPrice") !== computed) {
       setValue("totalPrice", computed, { shouldDirty: true });
     }
@@ -41,14 +58,18 @@ export const OrderTotal = ({ orderTotal }: OrderTotalProps) => {
     const value = Number(draft);
     const safeValue = !draft || isNaN(value) || value < 0 ? 0 : value;
 
-    setValue("discount", String(safeValue), { shouldValidate: true });
+    setValue("discount", String(safeValue), {
+      shouldValidate: true,
+    });
+
     setEditing(false);
   };
 
   return (
     <div
       onDoubleClick={startEditing}
-      className="text-sm text-slate-300 select-none"
+      onTouchEnd={handleTouchEnd}
+      className="text-sm text-slate-300 select-none touch-manipulation"
     >
       Order Total{" "}
       {editing ? (
@@ -65,12 +86,14 @@ export const OrderTotal = ({ orderTotal }: OrderTotalProps) => {
               e.preventDefault();
               commitDiscount();
             }
+
             if (e.key === "Escape") {
               e.preventDefault();
               setEditing(false);
             }
           }}
           onClick={(e) => e.stopPropagation()}
+          onContextMenu={(e) => e.preventDefault()}
           className="ml-1 w-28 rounded-lg border border-cyan-300/40 bg-white/10 px-2 py-1 text-sm font-semibold text-white outline-none focus:border-cyan-300 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
         />
       ) : (

@@ -25,12 +25,12 @@ const Orders = () => {
         <div className="absolute left-1/2 top-0 -z-10 h-64 w-64 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-3xl" />
 
         <div className="space-y-6 p-4 sm:p-6 xl:p-8">
-          <div className="mb-2 flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/8 shadow-lg shadow-cyan-950/20 backdrop-blur-xl">
+          <div className="mb-2 flex flex-1 items-center gap-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/8">
               <ShoppingBag className="h-5 w-5 text-cyan-300" />
             </div>
 
-            <div>
+            <div className="flex flex-1 flex-col">
               <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
                 Create Order
               </h1>

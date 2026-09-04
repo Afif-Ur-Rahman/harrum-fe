@@ -120,7 +120,9 @@ export const OrderForm = ({
           className="flex items-center justify-center gap-2 rounded-2xl bg-linear-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-cyan-950/30 transition hover:opacity-95 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
         >
           <Save className="h-4 w-4" />
-          <span>{submitting ? "Saving…" : "Create Order"}</span>
+          <span className="hidden sm:block">
+            {submitting ? "Saving…" : "Create Order"}
+          </span>
         </button>
       </div>
     </FormProvider>
