@@ -113,7 +113,7 @@ const FormInput = ({
                 <div className="flex min-w-0 flex-1 cursor-pointer">
                   <Select.Trigger
                     placeholder={placeholder}
-                    className="text-white! h-auto! w-full! border-0! bg-transparent! p-0! shadow-none!"
+                    className="text-white! h-auto! w-full! border-0! bg-transparent! p-0! shadow-none! outline-none! ring-0! focus:outline-none! focus:ring-0! focus:shadow-none! focus-visible:outline-none! focus-visible:ring-0! focus-visible:shadow-none! data-[state=open]:shadow-none! data-[state=open]:outline-none!"
                   />
                 </div>
 

@@ -1,18 +1,24 @@
 import { useEffect, useMemo, useState } from "react";
 import { useFieldArray } from "react-hook-form";
 import { getAllStocks } from "@/api/api-call/stock";
-import { Stock } from "@/types";
+import { getAllEmployees } from "@/api/api-call/employee";
+import { Stock, Employees } from "@/types";
 import { useOrderForm, OrderFormType } from "./form";
 import { showToast } from "@/utils/toast";
 
 const useOrders = () => {
   const [stocks, setStocks] = useState<Stock[]>([]);
+  const [employees, setEmployees] = useState<Employees>({
+    worker: [],
+    accountant: [],
+  });
   const [submitting, setSubmitting] = useState(false);
 
   const initialValues: OrderFormType = {
     customerName: "",
     email: "",
     phone: "",
+    salesmanId: "",
     items: [],
   };
 
@@ -33,6 +39,18 @@ const useOrders = () => {
       : [];
   }, [stocks]);
 
+  const salesmanOptions = useMemo(() => {
+    const allEmployees = [
+      ...(employees.worker || []),
+      ...(employees.accountant || []),
+    ];
+
+    return allEmployees.map((employee) => ({
+      value: employee._id,
+      label: employee.username,
+    }));
+  }, [employees]);
+
   const getStocks = async () => {
     const response = await getAllStocks();
 
@@ -44,22 +62,34 @@ const useOrders = () => {
     setStocks(response?.data?.data || []);
   };
 
-  const addOrderItem = (stock: Stock) => {
-    const currentItems = form.getValues("items") || [];
+  const getEmployees = async () => {
+    const response = await getAllEmployees();
 
-    const alreadyAdded = currentItems.some(
-      (item) => item.stockId === stock._id,
-    );
-
-    if (alreadyAdded) {
-      showToast("error", "This item is already added to the order");
+    if (response?.error) {
+      showToast("error", response.error);
       return;
     }
+
+    const data = response?.data?.data || { worker: [], accountant: [] };
+    setEmployees(data);
+
+    const firstEmployee = [
+      ...(data.worker || []),
+      ...(data.accountant || []),
+    ][0];
+
+    if (firstEmployee && !form.getValues("salesmanId")) {
+      form.setValue("salesmanId", firstEmployee._id);
+    }
+  };
+
+  const addOrderItem = (stock: Stock) => {
+    const color = stock.variants?.[0]?.color || "";
 
     append({
       stockId: stock._id,
       name: `${stock.name} - ${stock.brand}`,
-      variants: [{ color: "", quantity: "" }],
+      variants: [{ color: color, quantity: "" }],
     });
   };
 
@@ -76,19 +106,21 @@ const useOrders = () => {
 
     showToast("success", "Order logged to console — API integration pending");
 
-    form.reset(initialValues);
+    form.reset({ ...initialValues, salesmanId: data.salesmanId });
     setSubmitting(false);
   };
 
   useEffect(() => {
     (async () => {
-      await getStocks();
+      await Promise.all([getStocks(), getEmployees()]);
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {
     stocks,
     stockOptions,
+    salesmanOptions,
     form,
     fields,
     addOrderItem,

@@ -1,7 +1,7 @@
 "use client";
 
 import { FormProvider } from "react-hook-form";
-import { Save, ShoppingBag, PackagePlus } from "lucide-react";
+import { Save, ShoppingBag, PackagePlus, UserCheck } from "lucide-react";
 import { useOrders } from "./useOrders";
 import { OrderItemSearchAdd, OrderItemsTable } from "./blocks";
 import { FormInput } from "@/components";
@@ -11,6 +11,7 @@ const Orders = () => {
   const {
     stocks,
     stockOptions,
+    salesmanOptions,
     form,
     fields,
     addOrderItem,
@@ -60,6 +61,16 @@ const Orders = () => {
                     options={item.options}
                   />
                 ))}
+
+                <FormInput
+                  field="salesmanId"
+                  label="Salesman"
+                  type="select"
+                  placeholder="Select salesman"
+                  icon={UserCheck}
+                  required
+                  options={salesmanOptions}
+                />
               </div>
             </section>
 
