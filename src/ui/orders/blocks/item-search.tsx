@@ -10,17 +10,17 @@ interface StockOption {
   stock: Stock;
 }
 
-interface OrderItemSearchAddProps {
+interface ItemSearchProps {
   stockOptions: StockOption[];
   selectedStockIds: string[];
   onSelectItem: (stock: Stock) => void;
 }
 
-export const OrderItemSearchAdd = ({
+export const ItemSearch = ({
   stockOptions,
   selectedStockIds,
   onSelectItem,
-}: OrderItemSearchAddProps) => {
+}: ItemSearchProps) => {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const blurTimer = useRef<ReturnType<typeof setTimeout> | undefined>(

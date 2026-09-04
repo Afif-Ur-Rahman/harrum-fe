@@ -6,13 +6,13 @@ import { OrderFormType, OrderItemFormType } from "../../form";
 import { Stock } from "@/types";
 import { ItemRow } from "./item-row";
 
-interface OrderItemsTableProps {
+interface ItemsTableProps {
   items: OrderItemFormType[];
   stocks: Stock[];
   removeItem: (index: number) => void;
 }
 
-export const OrderItemsTable: React.FC<OrderItemsTableProps> = ({
+export const ItemsTable: React.FC<ItemsTableProps> = ({
   items,
   stocks,
   removeItem,

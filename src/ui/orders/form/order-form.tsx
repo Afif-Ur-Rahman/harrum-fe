@@ -6,7 +6,7 @@ import { OrderFormType } from "../form";
 import { Stock } from "@/types";
 import { CUSTOMER_FORM_FIELDS } from "../constants";
 import { FormInput } from "@/components";
-import { OrderItemSearchAdd, OrderItemsTable, OrderTotal } from "../blocks";
+import { ItemSearch, ItemsTable, OrderTotal } from "../blocks";
 
 interface StockOption {
   value: string;
@@ -77,7 +77,7 @@ export const OrderForm = ({
         </div>
       </section>
       <div className="mt-6">
-        <OrderItemSearchAdd
+        <ItemSearch
           stockOptions={stockOptions}
           selectedStockIds={fields.map((item) => item.stockId)}
           onSelectItem={addOrderItem}
@@ -102,7 +102,7 @@ export const OrderForm = ({
             </div>
           </div>
         ) : (
-          <OrderItemsTable
+          <ItemsTable
             items={fields}
             stocks={stocks}
             removeItem={removeOrderItem}

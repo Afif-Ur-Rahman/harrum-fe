@@ -20,19 +20,19 @@ export const getUnitPrice = (stock: Stock | undefined, type: PriceType) => {
   return Number(stock.salePrice) || 0;
 };
 
-interface ItemPriceSelectorProps {
+interface PriceSelectorProps {
   stock?: Stock;
   totalQuantity: number;
   value: PriceType;
   onChange: (value: PriceType) => void;
 }
 
-export const ItemPriceSelector = ({
+export const PriceSelector = ({
   stock,
   totalQuantity,
   value,
   onChange,
-}: ItemPriceSelectorProps) => {
+}: PriceSelectorProps) => {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 

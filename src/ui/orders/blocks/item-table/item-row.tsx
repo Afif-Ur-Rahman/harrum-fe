@@ -6,11 +6,7 @@ import { Trash2, Package, Plus, Palette } from "lucide-react";
 import { Stock } from "@/types";
 import { VariantRow } from "./variant-row";
 import { OrderFormType, OrderItemFormType } from "../../form";
-import {
-  getUnitPrice,
-  ItemPriceSelector,
-  PriceType,
-} from "../item-price-selector";
+import { getUnitPrice, PriceSelector, PriceType } from "../price-selector";
 
 interface ItemRowProps {
   item: OrderItemFormType;
@@ -101,7 +97,7 @@ export const ItemRow = ({
         </div>
 
         <div className="flex items-center gap-2">
-          <ItemPriceSelector
+          <PriceSelector
             stock={stock}
             totalQuantity={totalQuantity}
             value={priceType}
