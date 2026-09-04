@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useFieldArray } from "react-hook-form";
+import { useFieldArray, useWatch } from "react-hook-form";
 import { getAllStocks } from "@/api/api-call/stock";
 import { getAllEmployees } from "@/api/api-call/employee";
 import { Stock, Employees } from "@/types";
@@ -19,6 +19,8 @@ const useOrders = () => {
     email: "",
     phone: "",
     salesmanId: "",
+    totalPrice: "0",
+    discount: "0",
     items: [],
   };
 
@@ -28,6 +30,16 @@ const useOrders = () => {
     control: form.control,
     name: "items",
   });
+
+  const items = useWatch({ control: form.control, name: "items" }) || [];
+
+  const orderTotal = items.reduce((sum, item) => {
+    const itemTotal = (item?.variants || []).reduce(
+      (vSum, v) => vSum + (Number(v?.price) || 0),
+      0,
+    );
+    return sum + itemTotal;
+  }, 0);
 
   const stockOptions = useMemo(() => {
     return Array.isArray(stocks)
@@ -89,7 +101,8 @@ const useOrders = () => {
     append({
       stockId: stock._id,
       name: `${stock.name} - ${stock.brand}`,
-      variants: [{ color: color, quantity: "" }],
+      priceType: "sale",
+      variants: [{ color: color, quantity: "", price: "0" }],
     });
   };
 
@@ -106,7 +119,10 @@ const useOrders = () => {
 
     showToast("success", "Order logged to console — API integration pending");
 
-    form.reset({ ...initialValues, salesmanId: data.salesmanId });
+    form.reset({
+      ...initialValues,
+      salesmanId: data.salesmanId,
+    });
     setSubmitting(false);
   };
 
@@ -127,6 +143,7 @@ const useOrders = () => {
     removeOrderItem,
     onSubmitOrder,
     submitting,
+    orderTotal,
   };
 };
 

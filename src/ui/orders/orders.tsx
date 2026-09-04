@@ -3,7 +3,7 @@
 import { FormProvider } from "react-hook-form";
 import { Save, ShoppingBag, PackagePlus, UserCheck } from "lucide-react";
 import { useOrders } from "./useOrders";
-import { OrderItemSearchAdd, OrderItemsTable } from "./blocks";
+import { OrderItemSearchAdd, OrderItemsTable, OrderTotal } from "./blocks";
 import { FormInput } from "@/components";
 import { CUSTOMER_FORM_FIELDS } from "./constants";
 
@@ -18,6 +18,7 @@ const Orders = () => {
     removeOrderItem,
     onSubmitOrder,
     submitting,
+    orderTotal,
   } = useOrders();
 
   return (
@@ -110,12 +111,14 @@ const Orders = () => {
               )}
             </div>
 
-            <div className="mt-6 flex w-full justify-end">
+            <div className="mt-6 flex w-full items-center justify-between gap-4">
+              <OrderTotal orderTotal={orderTotal} />
+
               <button
                 type="button"
                 onClick={form.handleSubmit(onSubmitOrder)}
                 disabled={fields.length === 0 || submitting}
-                className="flex w-full items-center justify-center gap-2 rounded-2xl bg-linear-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-cyan-950/30 transition hover:opacity-95 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 sm:w-fit"
+                className="flex items-center justify-center gap-2 rounded-2xl bg-linear-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-cyan-950/30 transition hover:opacity-95 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
               >
                 <Save className="h-4 w-4" />
                 <span>{submitting ? "Saving…" : "Create Order"}</span>
