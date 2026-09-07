@@ -40,9 +40,16 @@ export interface OrderResponse {
   data: Order;
 }
 
-export interface OrderResponseMultiple {
+export interface OrderListData {
+  orders: Order[];
+  total: number;
+  page: number;
+  totalPages: number;
+}
+
+export interface OrderListResponse {
   message: string;
-  data: Order[];
+  data: OrderListData;
 }
 
 export interface ResponseForOrder {
@@ -53,6 +60,6 @@ export interface ResponseForOrder {
 
 export interface ResponseForMultipleOrders {
   state: boolean;
-  data?: OrderResponseMultiple;
+  data?: OrderListResponse;
   error?: string;
 }

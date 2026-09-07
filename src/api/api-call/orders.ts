@@ -2,10 +2,19 @@ import { serverAction } from "../server-action";
 import { OrderFormType } from "@/ui/orders/add-order/form/schema";
 import { ResponseForMultipleOrders, ResponseForOrder } from "@/types";
 
-export const getAllOrders = async () => {
+export const getAllOrders = async (params?: {
+  page?: number;
+  limit?: number;
+  search?: string;
+}) => {
   try {
+    const query = new URLSearchParams();
+    if (params?.page) query.set("page", String(params.page));
+    if (params?.limit) query.set("limit", String(params.limit));
+    if (params?.search) query.set("search", params.search);
+
     const response = await serverAction({
-      url: `/orders`,
+      url: `/orders?${query.toString()}`,
       method: "GET",
     });
     return response as ResponseForMultipleOrders;
