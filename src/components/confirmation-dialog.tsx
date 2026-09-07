@@ -2,9 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button, Dialog, Flex, Text } from "@radix-ui/themes";
-import { CloseDialogIcon } from "./dialog";
-import { AlertTriangle, Trash2, CheckCircle } from "lucide-react";
+import { Dialog, Flex } from "@radix-ui/themes";
+import { AlertTriangle, Trash2, CheckCircle2, X } from "lucide-react";
 import { showToast } from "@/utils/toast";
 
 interface ConfirmationDialogProps<T = { state: string; error?: string }> {
@@ -18,7 +17,9 @@ interface ConfirmationDialogProps<T = { state: string; error?: string }> {
   description: string;
 }
 
-const ConfirmationDialog = <T extends { state: boolean; message?: string; error?: string }>({
+const ConfirmationDialog = <
+  T extends { state: boolean; message?: string; error?: string },
+>({
   trigger,
   onCancel,
   onSuccess,
@@ -28,7 +29,6 @@ const ConfirmationDialog = <T extends { state: boolean; message?: string; error?
   cancelButtonTitle,
   description,
 }: ConfirmationDialogProps<T>) => {
-  
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -40,13 +40,16 @@ const ConfirmationDialog = <T extends { state: boolean; message?: string; error?
     const result = await confirmAction();
 
     if (result.state === false) {
-      showToast("error",result?.error||"An error occurred. Please try again.")
+      showToast(
+        "error",
+        result?.error || "An error occurred. Please try again.",
+      );
       setLoading(false);
       return;
     }
 
     if (result.state === true && result.message)
-      showToast("success",result?.message || "")
+      showToast("success", result?.message || "");
 
     router.refresh();
     setOpen(false);
@@ -61,77 +64,96 @@ const ConfirmationDialog = <T extends { state: boolean; message?: string; error?
       <Flex align="start" className="group cursor-pointer">
         <Dialog.Trigger>{trigger}</Dialog.Trigger>
       </Flex>
-      <Dialog.Content className="relative max-w-md">
-        <CloseDialogIcon />
 
-        <Flex justify="center" className="mb-4">
-          <div
-            className={`rounded-full p-4 ${hasRemoveOrDelete
-              ? "bg-red-100"
-              : "bg-blue-100"
-              }`}
+      <Dialog.Content className="relative max-w-md! w-full! overflow-hidden! rounded-3xl! border! border-white/10! bg-slate-950! p-0! shadow-2xl! shadow-black/50!">
+        {/* Background effects */}
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.98)_0%,rgba(15,23,42,0.96)_52%,rgba(17,24,39,0.98)_100%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.14),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(244,114,182,0.12),transparent_36%)]" />
+
+        <div className="relative z-10">
+          <Dialog.Close
+            className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-xl p-2 text-slate-300 transition hover:bg-white/10 hover:text-white"
+            onClick={(e) => e.stopPropagation()}
+            aria-label="Close dialog"
           >
-            {hasRemoveOrDelete ? (
-              <Trash2 className="w-8 h-8 text-red-600" />
-            ) : (
-              <CheckCircle className="w-8 h-8 text-blue-600" />
-            )}
-          </div>
-        </Flex>
-
-        <Dialog.Title className="font-sans text-center text-xl font-bold mb-3 -tracking-[0.25px]">
-          {title}
-        </Dialog.Title>
-
-        <Dialog.Description size="3" className="text-center text-gray-600 mb-6">
-          {description}
-        </Dialog.Description>
-
-        {hasRemoveOrDelete && (
-          <Flex
-            align="center"
-            gap="2"
-            className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4"
-          >
-            <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0" />
-            <Text size="2" className="text-amber-800">
-              This action cannot be undone. Please confirm to proceed.
-            </Text>
-          </Flex>
-        )}
-
-        <Flex gap="3" mt="4" justify="end" className="flex-col sm:flex-row">
-          <Dialog.Close className="w-full sm:w-auto">
-            <Button
-              variant="outline"
-              color="gray"
-              highContrast
-              onClick={onCancel}
-              className="w-full sm:w-auto px-6 py-3 cursor-pointer"
-              disabled={loading}
-            >
-              {cancelButtonTitle ?? "Cancel"}
-            </Button>
+            <X size="1.15rem" />
           </Dialog.Close>
 
-          <Button
-            color={hasRemoveOrDelete ? "tomato" : "blue"}
-            highContrast={!hasRemoveOrDelete}
-            onClick={onConfrim}
-            disabled={loading}
-            className={`w-full sm:w-auto px-6 py-3 cursor-pointer ${loading ? "opacity-50 cursor-not-allowed" : ""
-              }`}
-          >
-            {loading ? (
-              <Flex align="center" gap="2">
-                <span className="animate-spin">⏳</span>
-                <span>Processing...</span>
+          <div className="px-6 pb-6 pt-8">
+            <Flex justify="center" className="mb-5">
+              <div
+                className={`flex h-16 w-16 items-center justify-center rounded-2xl border shadow-lg ${
+                  hasRemoveOrDelete
+                    ? "border-red-300/20 bg-red-400/10 shadow-red-950/20"
+                    : "border-cyan-300/20 bg-cyan-400/10 shadow-cyan-950/20"
+                }`}
+              >
+                {hasRemoveOrDelete ? (
+                  <Trash2 className="h-7 w-7 text-red-300" />
+                ) : (
+                  <CheckCircle2 className="h-7 w-7 text-cyan-300" />
+                )}
+              </div>
+            </Flex>
+
+            <Dialog.Title className="mb-0! text-center! text-xl! font-bold! text-white!">
+              {title}
+            </Dialog.Title>
+
+            <Dialog.Description
+              size="3"
+              className="mb-0! mt-2! text-center! text-sm! leading-relaxed! text-slate-400!"
+            >
+              {description}
+            </Dialog.Description>
+
+            {hasRemoveOrDelete && (
+              <Flex
+                align="center"
+                gap="2"
+                className="mt-5 rounded-2xl border border-amber-300/20 bg-amber-400/10 p-3.5"
+              >
+                <AlertTriangle className="h-4.5 w-4.5 shrink-0 text-amber-300" />
+                <span className="text-xs leading-relaxed text-amber-100">
+                  This action cannot be undone. Please confirm to proceed.
+                </span>
               </Flex>
-            ) : (
-              saveButtonTitle
             )}
-          </Button>
-        </Flex>
+
+            <Flex gap="3" mt="6" className="flex-col sm:flex-row">
+              <Dialog.Close className="w-full sm:w-auto sm:flex-1">
+                <button
+                  type="button"
+                  onClick={onCancel}
+                  disabled={loading}
+                  className="flex w-full items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-sm font-semibold text-slate-200 transition hover:bg-white/10 hover:text-white active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {cancelButtonTitle ?? "Cancel"}
+                </button>
+              </Dialog.Close>
+
+              <button
+                type="button"
+                onClick={onConfrim}
+                disabled={loading}
+                className={`flex w-full items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-semibold text-white shadow-lg transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 sm:flex-1 ${
+                  hasRemoveOrDelete
+                    ? "bg-linear-to-r from-red-500 via-rose-500 to-red-600 shadow-red-950/30 hover:opacity-95"
+                    : "bg-linear-to-r from-cyan-500 via-blue-500 to-fuchsia-500 shadow-cyan-950/30 hover:opacity-95"
+                }`}
+              >
+                {loading ? (
+                  <>
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                    Processing…
+                  </>
+                ) : (
+                  saveButtonTitle
+                )}
+              </button>
+            </Flex>
+          </div>
+        </div>
       </Dialog.Content>
     </Dialog.Root>
   );

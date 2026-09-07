@@ -5,7 +5,7 @@ import { Save, PackagePlus, UserCheck } from "lucide-react";
 import { OrderFormType } from ".";
 import { Stock } from "@/types";
 import { CUSTOMER_FORM_FIELDS } from "./constants";
-import { FormInput } from "@/components";
+import { EmptyState, FormInput } from "@/components";
 import { ItemSearch, ItemsTable, OrderTotal } from "../blocks";
 
 interface StockOption {
@@ -86,21 +86,11 @@ export const OrderForm = ({
 
       <div className="mt-4">
         {fields.length === 0 ? (
-          <div className="relative overflow-hidden rounded-3xl border border-dashed border-white/15 bg-white/8 px-6 py-16 text-center shadow-2xl shadow-black/20 backdrop-blur-xl">
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.12),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(244,114,182,0.08),transparent_36%)]" />
-
-            <div className="relative z-10 flex flex-col items-center justify-center">
-              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/10 shadow-lg shadow-cyan-950/20">
-                <PackagePlus className="h-6 w-6 text-cyan-300" />
-              </div>
-
-              <p className="text-sm font-semibold text-white">No items added</p>
-
-              <p className="mt-1 text-xs text-slate-400">
-                Search and select an item above to add it to the order
-              </p>
-            </div>
-          </div>
+          <EmptyState
+            icon={PackagePlus}
+            title="No items added"
+            description="Search and select an item above to add it to the order"
+          />
         ) : (
           <ItemsTable
             items={fields}

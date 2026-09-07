@@ -3,7 +3,8 @@
 import React from "react";
 import { Box, Table as RadixTable } from "@radix-ui/themes";
 import Loader from "@/components/ui/loader";
-import Nodata from "./nodata";
+import { PackageSearch } from "lucide-react";
+import { EmptyState } from "./empty-state";
 
 type Column<T> =
   | {
@@ -46,7 +47,7 @@ function Table<T>({
   };
 
   return (
-    <Box className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/8 shadow-2xl shadow-black/20 backdrop-blur-xl">
+    <Box className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/8 shadow-2xl shadow-black/20 backdrop-blur-xl">
       {/* Background glow */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.08),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(244,114,182,0.06),transparent_34%)]" />
 
@@ -84,7 +85,12 @@ function Table<T>({
                   colSpan={columns.length}
                   className="py-12! text-center! text-slate-400!"
                 >
-                  <Nodata />
+                  <EmptyState
+                    icon={PackageSearch}
+                    title="No data found"
+                    showGlow={false}
+                    className="border-none! bg-transparent! shadow-none! backdrop-blur-none!"
+                  />
                 </RadixTable.Cell>
               </RadixTable.Row>
             ) : (

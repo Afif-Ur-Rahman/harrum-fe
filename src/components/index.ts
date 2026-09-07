@@ -12,6 +12,6 @@ export * from "./label-and-value";
 export * from "./scroll-bar";
 export * from "./pagination";
 export * from "./ui/table";
-export * from "./ui/nodata";
+export * from "./ui/empty-state";
 export * from "./inputs";
 export * from "./comming-soon";

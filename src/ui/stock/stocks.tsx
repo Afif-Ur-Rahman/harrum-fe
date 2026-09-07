@@ -5,6 +5,7 @@ import { StockStats, StockTable } from "./blocks";
 import Link from "next/link";
 import { ArrowDownToLine, Package, Boxes } from "lucide-react";
 import { StockVariant } from "@/types";
+import { EmptyState } from "@/components";
 
 const getTotalQuantity = (variants: StockVariant[] = []) => {
   return variants.reduce(
@@ -73,23 +74,11 @@ export const Stocks = () => {
 
       {/* Content */}
       {stocks.length === 0 ? (
-        <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/8 px-6 py-24 text-center shadow-2xl shadow-black/20 backdrop-blur-xl">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.12),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(244,114,182,0.10),transparent_36%)]" />
-
-          <div className="relative z-10 flex flex-col items-center justify-center">
-            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/10 shadow-lg shadow-cyan-950/20">
-              <Package className="h-6 w-6 text-cyan-300" />
-            </div>
-
-            <h3 className="mb-1 text-base font-semibold text-white">
-              No stock items yet
-            </h3>
-
-            <p className="text-sm text-slate-400">
-              Add your first stock item using Stock In.
-            </p>
-          </div>
-        </div>
+        <EmptyState
+          icon={Package}
+          title="No stock items yet"
+          description="Add your first stock item using Stock In."
+        />
       ) : (
         <StockTable stockData={stocks} />
       )}
