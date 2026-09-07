@@ -1,3 +1,9 @@
+export interface Salesman {
+  _id: string;
+  username: string;
+  email: string;
+}
+
 export interface OrderVariant {
   _id?: string;
   color: string;
@@ -20,7 +26,7 @@ export interface Order {
   customerName: string;
   email?: string;
   phone: string;
-  salesmanId: string | { _id: string; username: string; email: string };
+  salesman: Salesman;
   items: OrderItem[];
   discount: number;
   totalPrice: number;

@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useMemo, useState } from "react";
 import { useFieldArray, useWatch } from "react-hook-form";
 import { getAllStocks } from "@/api/api-call/stock";
@@ -7,7 +9,7 @@ import { useOrderForm, OrderFormType } from "./form";
 import { showToast } from "@/utils/toast";
 import { createOrder } from "@/api/api-call";
 
-const useOrders = () => {
+const useAddOrder = () => {
   const [stocks, setStocks] = useState<Stock[]>([]);
   const [employees, setEmployees] = useState<Employees>({
     worker: [],
@@ -152,4 +154,4 @@ const useOrders = () => {
   };
 };
 
-export { useOrders };
+export { useAddOrder };

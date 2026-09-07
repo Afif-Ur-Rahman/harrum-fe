@@ -1,8 +1,8 @@
 "use client";
 
-import { ShoppingBag } from "lucide-react";
-import { useOrders } from "./useOrders";
-import { OrderForm } from "./form";
+import Link from "next/link";
+import { ShoppingBag, ClipboardList } from "lucide-react";
+import { OrderForm, useAddOrder } from "./add-order";
 
 const Orders = () => {
   const {
@@ -16,7 +16,7 @@ const Orders = () => {
     onSubmitOrder,
     submitting,
     orderTotal,
-  } = useOrders();
+  } = useAddOrder();
 
   return (
     <div className="min-h-screen overflow-hidden rounded-[28px] text-white">
@@ -25,19 +25,29 @@ const Orders = () => {
         <div className="absolute left-1/2 top-0 -z-10 h-64 w-64 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-3xl" />
 
         <div className="space-y-6 p-4 sm:p-6 xl:p-8">
-          <div className="mb-2 flex flex-1 items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/8">
-              <ShoppingBag className="h-5 w-5 text-cyan-300" />
+          <div className="mb-2 flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-1 items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/8">
+                <ShoppingBag className="h-5 w-5 text-cyan-300" />
+              </div>
+
+              <div className="flex flex-1 flex-col">
+                <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+                  Create Order
+                </h1>
+                <p className="mt-1 text-sm text-slate-400">
+                  Add customer details and select items to create a new order
+                </p>
+              </div>
             </div>
 
-            <div className="flex flex-1 flex-col">
-              <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
-                Create Order
-              </h1>
-              <p className="mt-1 text-sm text-slate-400">
-                Add customer details and select items to create a new order
-              </p>
-            </div>
+            <Link
+              href="/super-admin/orders/all"
+              className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/8 px-4 py-2.5 text-sm font-medium text-slate-300 shadow-lg shadow-black/10 backdrop-blur-xl transition hover:bg-white/12 hover:text-white active:scale-[0.98]"
+            >
+              <ClipboardList className="h-4 w-4" />
+              <span>View All Orders</span>
+            </Link>
           </div>
 
           <OrderForm

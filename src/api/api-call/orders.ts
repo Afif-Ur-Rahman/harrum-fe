@@ -1,5 +1,5 @@
 import { serverAction } from "../server-action";
-import { OrderFormType } from "@/ui/orders/form/schema";
+import { OrderFormType } from "@/ui/orders/add-order/form/schema";
 import { ResponseForMultipleOrders, ResponseForOrder } from "@/types";
 
 export const getAllOrders = async () => {

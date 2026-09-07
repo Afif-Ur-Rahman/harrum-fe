@@ -2,9 +2,9 @@
 
 import { FormProvider, UseFormReturn } from "react-hook-form";
 import { Save, PackagePlus, UserCheck } from "lucide-react";
-import { OrderFormType } from "../form";
+import { OrderFormType } from ".";
 import { Stock } from "@/types";
-import { CUSTOMER_FORM_FIELDS } from "../constants";
+import { CUSTOMER_FORM_FIELDS } from "./constants";
 import { FormInput } from "@/components";
 import { ItemSearch, ItemsTable, OrderTotal } from "../blocks";
 
