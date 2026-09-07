@@ -5,6 +5,7 @@ import { getAllEmployees } from "@/api/api-call/employee";
 import { Stock, Employees } from "@/types";
 import { useOrderForm, OrderFormType } from "./form";
 import { showToast } from "@/utils/toast";
+import { createOrder } from "@/api/api-call";
 
 const useOrders = () => {
   const [stocks, setStocks] = useState<Stock[]>([]);
@@ -113,11 +114,15 @@ const useOrders = () => {
   const onSubmitOrder = async (data: OrderFormType) => {
     setSubmitting(true);
 
-    // TODO: replace with real API call once the Orders backend is ready
-    // const response = await createOrder(data);
-    console.log("New Order Payload:", data);
+    const response = await createOrder(data);
 
-    showToast("success", "Order logged to console — API integration pending");
+    if (response?.error || !response?.data) {
+      showToast("error", response?.error || "Failed to create order");
+      setSubmitting(false);
+      return;
+    }
+
+    showToast("success", response.data.message || "Order created successfully");
 
     form.reset({
       ...initialValues,

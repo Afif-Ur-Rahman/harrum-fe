@@ -17,7 +17,7 @@ export const orderItemSchema = z.object({
 
 export const orderFormSchema = z.object({
   customerName: z.string().min(1, "Customer name is required"),
-  email: z.string().email("Invalid email address"),
+  email: z.email("Invalid email address").optional(),
   phone: z.string().min(1, "Phone number is required"),
   salesmanId: z.string().min(1, "Salesman is required"),
   totalPrice: z.string(),
