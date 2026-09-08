@@ -6,7 +6,7 @@ import { OrderFormType } from ".";
 import { Stock } from "@/types";
 import { CUSTOMER_FORM_FIELDS } from "./constants";
 import { EmptyState, FormInput } from "@/components";
-import { ItemSearch, ItemsTable, OrderTotal } from "../blocks";
+import { ItemSearch, ItemsTable, OrderTotal, PaidCheckbox } from "../blocks";
 
 interface StockOption {
   value: string;
@@ -100,8 +100,11 @@ export const OrderForm = ({
         )}
       </div>
 
-      <div className="mt-6 flex w-full items-center justify-between gap-4">
-        <OrderTotal orderTotal={orderTotal} />
+      <div className="mt-6 flex w-full flex-wrap items-center justify-between gap-4">
+        <div className="flex flex-wrap items-center gap-5">
+          <OrderTotal orderTotal={orderTotal} />
+          <PaidCheckbox />
+        </div>
 
         <button
           type="button"

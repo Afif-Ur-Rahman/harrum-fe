@@ -30,6 +30,7 @@ const useAddOrder = () => {
     salesmanId: "",
     totalPrice: "0",
     discount: "0",
+    isPaid: true,
     items: [],
   };
 

@@ -28,6 +28,8 @@ export interface Order {
   customerName: string;
   email?: string;
   phone: string;
+  customerId?: string;
+  isPaid: boolean;
   salesman: Salesman;
   items: OrderItem[];
   discount: number;
