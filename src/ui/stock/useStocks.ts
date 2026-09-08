@@ -1,12 +1,13 @@
 import { createStock, getAllStocks } from "@/api/api-call";
 import { Stock } from "@/types";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useStockForm, StockFormType } from "./form";
 import { useFieldArray, useWatch } from "react-hook-form";
 import { showToast } from "@/utils/toast";
+import { usePersistStore } from "@/store/presistStore";
 
 const useStocks = () => {
-  const [stocks, setStocks] = useState<Stock[]>([]);
+  const { stocks, stocksLoaded, setStocks } = usePersistStore();
 
   const initialValues: StockFormType = {
     stockItems: [],
@@ -65,6 +66,8 @@ const useStocks = () => {
     });
 
   const getStocks = async () => {
+    if (stocksLoaded) return;
+
     const response = await getAllStocks();
 
     if (response?.error) {
@@ -140,13 +143,16 @@ const useStocks = () => {
 
     form.reset(initialValues);
 
+    if (response?.data?.data) {
+      setStocks(response.data.data);
+    }
+
     showToast("success", "Stock created successfully");
   };
 
   useEffect(() => {
-    (async () => {
-      await getStocks();
-    })();
+    getStocks();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {

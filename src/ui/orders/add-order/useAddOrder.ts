@@ -4,17 +4,22 @@ import { useEffect, useMemo, useState } from "react";
 import { useFieldArray, useWatch } from "react-hook-form";
 import { getAllStocks } from "@/api/api-call/stock";
 import { getAllEmployees } from "@/api/api-call/employee";
-import { Stock, Employees } from "@/types";
+import { Stock } from "@/types";
 import { useOrderForm, OrderFormType } from "./form";
 import { showToast } from "@/utils/toast";
 import { createOrder } from "@/api/api-call";
+import { usePersistStore } from "@/store/presistStore";
 
 const useAddOrder = () => {
-  const [stocks, setStocks] = useState<Stock[]>([]);
-  const [employees, setEmployees] = useState<Employees>({
-    worker: [],
-    accountant: [],
-  });
+  const {
+    stocks,
+    stocksLoaded,
+    setStocks,
+    employees,
+    employeesLoaded,
+    setEmployees,
+  } = usePersistStore();
+
   const [submitting, setSubmitting] = useState(false);
 
   const initialValues: OrderFormType = {
@@ -34,24 +39,27 @@ const useAddOrder = () => {
     name: "items",
   });
 
-  const items = useWatch({ control: form.control, name: "items" }) || [];
+  const items =
+    useWatch({
+      control: form.control,
+      name: "items",
+    }) || [];
 
   const orderTotal = items.reduce((sum, item) => {
     const itemTotal = (item?.variants || []).reduce(
       (vSum, v) => vSum + (Number(v?.price) || 0),
       0,
     );
+
     return sum + itemTotal;
   }, 0);
 
   const stockOptions = useMemo(() => {
-    return Array.isArray(stocks)
-      ? stocks.map((item) => ({
-          value: item._id,
-          label: `${item.name} - ${item.brand}`,
-          stock: item,
-        }))
-      : [];
+    return stocks.map((item) => ({
+      value: item._id,
+      label: `${item.name} - ${item.brand}`,
+      stock: item,
+    }));
   }, [stocks]);
 
   const salesmanOptions = useMemo(() => {
@@ -67,6 +75,8 @@ const useAddOrder = () => {
   }, [employees]);
 
   const getStocks = async () => {
+    if (stocksLoaded) return;
+
     const response = await getAllStocks();
 
     if (response?.error) {
@@ -78,6 +88,8 @@ const useAddOrder = () => {
   };
 
   const getEmployees = async () => {
+    if (employeesLoaded) return;
+
     const response = await getAllEmployees();
 
     if (response?.error) {
@@ -85,7 +97,11 @@ const useAddOrder = () => {
       return;
     }
 
-    const data = response?.data?.data || { worker: [], accountant: [] };
+    const data = response?.data?.data || {
+      worker: [],
+      accountant: [],
+    };
+
     setEmployees(data);
 
     const firstEmployee = [
@@ -105,7 +121,13 @@ const useAddOrder = () => {
       stockId: stock._id,
       name: `${stock.name} - ${stock.brand}`,
       priceType: "sale",
-      variants: [{ color: color, quantity: "", price: "0" }],
+      variants: [
+        {
+          color,
+          quantity: "",
+          price: "0",
+        },
+      ],
     });
   };
 
@@ -130,13 +152,12 @@ const useAddOrder = () => {
       ...initialValues,
       salesmanId: data.salesmanId,
     });
+
     setSubmitting(false);
   };
 
   useEffect(() => {
-    (async () => {
-      await Promise.all([getStocks(), getEmployees()]);
-    })();
+    Promise.all([getStocks(), getEmployees()]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -8,6 +8,7 @@ import { Employees } from "@/types/employees";
 import { useEffect, useMemo, useState } from "react";
 import { showToast } from "@/utils/toast";
 import { User } from "@/types";
+import { usePersistStore } from "@/store/presistStore";
 
 type EmployeeRoleKey = keyof Employees;
 
@@ -20,6 +21,8 @@ interface EmployeeSection {
 }
 
 const useEmployees = () => {
+  const { employees, employeesLoaded, setEmployees } = usePersistStore();
+
   const EMPLOYEE_SECTIONS: EmployeeSection[] = useMemo<EmployeeSection[]>(
     () => [
       {
@@ -41,16 +44,14 @@ const useEmployees = () => {
   );
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState<string>("all");
-  const [employees, setEmployees] = useState<Employees>({
-    worker: [],
-    accountant: [],
-  });
   const [open, setOpen] = useState(false);
   const [openDialogId, setOpenDialogId] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(!employeesLoaded);
 
   useEffect(() => {
     const fetchAllEmployees = async () => {
+      if (employeesLoaded) return;
+
       setLoading(true);
       const res = await getAllEmployees();
       if (res?.error) {
@@ -60,6 +61,7 @@ const useEmployees = () => {
       setLoading(false);
     };
     fetchAllEmployees();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onAddEmployee = async (data: EmployeeFormType) => {
@@ -76,13 +78,13 @@ const useEmployees = () => {
       const newEmployee = res?.data?.data;
       if (!newEmployee) return;
 
-      setEmployees((prev) => ({
-        ...prev,
+      setEmployees({
+        ...employees,
         [newEmployee.type]: [
-          ...(prev[newEmployee.type as keyof Employees] || []),
+          ...(employees[newEmployee.type as keyof Employees] || []),
           newEmployee,
         ],
-      }));
+      });
       showToast("success", "Employee added successfully");
 
       setOpen(false);
@@ -105,16 +107,15 @@ const useEmployees = () => {
           error: res.error,
         };
       }
-      setEmployees((prev) => {
-        const updatedEmployees = { ...prev };
-        for (const role in updatedEmployees) {
-          updatedEmployees[role as keyof Employees] =
-            updatedEmployees[role as keyof Employees]?.filter(
-              (emp) => emp._id !== id,
-            ) || [];
-        }
-        return updatedEmployees;
-      });
+
+      const updatedEmployees = { ...employees };
+      for (const role in updatedEmployees) {
+        updatedEmployees[role as keyof Employees] =
+          updatedEmployees[role as keyof Employees]?.filter(
+            (emp) => emp._id !== id,
+          ) || [];
+      }
+      setEmployees(updatedEmployees);
 
       return { state: true, message: res?.data?.message };
     } catch (err) {

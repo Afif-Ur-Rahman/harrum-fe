@@ -1,57 +1,42 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { zustandStorage } from "./storage/storage";
-import { User } from "@/types";
-import { Channel } from "@/types/chat";
-import { Category } from "@/types/category";
-
-export interface CartItem {
-  productId: string;
-  name: string;
-  description?: string;
-  image: string;
-  variants: Array<{
-    variantId: string;
-    name: string;
-    price: number;
-    quantity: number;
-  }>;
-}
+import { User, Stock, Employees, Order } from "@/types";
 
 interface AuthState {
   token?: string | null;
   setToken: (token: string | null) => void;
   user: User | null;
   setUser: (user: User | null) => void;
-  channels: Channel[];
-  setChannels: (payload: Channel[]) => void;
-  categories: Category[];
-  setCategories: (categories: Category[]) => void;
-  cart: CartItem[];
-  addToCart: (item: {
-    productId: string;
-    description?: string;
-    name: string;
-    image: string;
-    variant: { _id: string; name: string; price: number };
-    quantity: number;
-  }) => void;
-  removeFromCart: (productId: string, variantId?: string) => void;
-  updateCartItemQuantity: (
-    productId: string,
-    variantId: string,
-    quantity: number
-  ) => void;
-  clearCart: () => void;
-  getCartTotal: () => number;
+
+  // ── Stocks ─────────────────────────────────────────────
+  stocks: Stock[];
+  stocksLoaded: boolean;
+  setStocks: (stocks: Stock[]) => void;
+  setStocksLoaded: (loaded: boolean) => void;
+  updateStockById: (stock: Stock) => void;
+  updateStocksByIds: (stocks: Stock[]) => void;
+
+  // ── Employees ──────────────────────────────────────────
+  employees: Employees;
+  employeesLoaded: boolean;
+  setEmployees: (employees: Employees) => void;
+  setEmployeesLoaded: (loaded: boolean) => void;
+
+  // ── Orders ─────────────────────────────────────────────
+  orders: Order[];
+  ordersTotal: number;
+  setOrders: (orders: Order[], total: number) => void;
+  appendOrders: (orders: Order[], total: number) => void;
+  updateOrderById: (order: Order) => void;
+  resetOrders: () => void;
 }
 
 export const usePersistStore = create<AuthState>()(
   persist(
-    (set, get) => {
+    (set) => {
       return {
         user: null,
-        channels: [],
         setUser: (user) => {
           set({ user });
         },
@@ -59,101 +44,44 @@ export const usePersistStore = create<AuthState>()(
         setToken: (token) => {
           set({ token });
         },
-        setChannels: (channels) => set({ channels }),
-        categories: [],
-        setCategories: (categories) => set({ categories }),
-        cart: [],
-        addToCart: (item) => {
-          const cart = get().cart;
-          const existingProductIndex = cart.findIndex(
-            (cartItem) => cartItem.productId === item.productId
-          );
 
-          if (existingProductIndex > -1) {
-            const updatedCart = [...cart];
-            const existingVariantIndex = updatedCart[
-              existingProductIndex
-            ].variants.findIndex((v) => v.variantId === item.variant._id);
+        // ── Stocks ─────────────────────────────────────────
+        stocks: [],
+        stocksLoaded: false,
+        setStocks: (stocks) => set({ stocks, stocksLoaded: true }),
+        setStocksLoaded: (loaded) => set({ stocksLoaded: loaded }),
+        updateStockById: (stock) =>
+          set((state) => ({
+            stocks: state.stocks.map((s) => (s._id === stock._id ? stock : s)),
+          })),
+        updateStocksByIds: (stocks) =>
+          set((state) => ({
+            stocks: state.stocks.map((s) => {
+              const updated = stocks.find((u) => u._id === s._id);
+              return updated || s;
+            }),
+          })),
 
-            if (existingVariantIndex > -1) {
-              updatedCart[existingProductIndex].variants[
-                existingVariantIndex
-              ].quantity += item.quantity;
-            } else {
-              updatedCart[existingProductIndex].variants.push({
-                variantId: item.variant._id,
-                name: item.variant.name,
-                price: item.variant.price,
-                quantity: item.quantity,
-              });
-            }
-            set({ cart: updatedCart });
-          } else {
-            set({
-              cart: [
-                ...cart,
-                {
-                  productId: item.productId,
-                  name: item.name,
-                  image: item.image,
-                  variants: [
-                    {
-                      variantId: item.variant._id,
-                      name: item.variant.name,
-                      price: item.variant.price,
-                      quantity: item.quantity,
-                    },
-                  ],
-                },
-              ],
-            });
-          }
-        },
-        removeFromCart: (productId, variantId) => {
-          const cart = get().cart;
-          if (variantId) {
-            const updatedCart = cart
-              .map((item) => {
-                if (item.productId === productId) {
-                  return {
-                    ...item,
-                    variants: item.variants.filter(
-                      (v) => v.variantId !== variantId
-                    ),
-                  };
-                }
-                return item;
-              })
-              .filter((item) => item.variants.length > 0);
-            set({ cart: updatedCart });
-          } else {
-            set({ cart: cart.filter((item) => item.productId !== productId) });
-          }
-        },
-        updateCartItemQuantity: (productId, variantId, quantity) => {
-          const cart = get().cart;
-          const updatedCart = cart.map((item) => {
-            if (item.productId === productId) {
-              return {
-                ...item,
-                variants: item.variants.map((v) =>
-                  v.variantId === variantId ? { ...v, quantity } : v
-                ),
-              };
-            }
-            return item;
-          });
-          set({ cart: updatedCart });
-        },
-        clearCart: () => set({ cart: [] }),
-        getCartTotal: () => {
-          return get().cart.reduce(
-            (total, item) =>
-              total +
-              item.variants.reduce((sum, v) => sum + v.price * v.quantity, 0),
-            0
-          );
-        },
+        // ── Employees ────────────────────────────────────────
+        employees: { worker: [], accountant: [] },
+        employeesLoaded: false,
+        setEmployees: (employees) => set({ employees, employeesLoaded: true }),
+        setEmployeesLoaded: (loaded) => set({ employeesLoaded: loaded }),
+
+        // ── Orders ─────────────────────────────────────────
+        orders: [],
+        ordersTotal: 0,
+        setOrders: (orders, total) => set({ orders, ordersTotal: total }),
+        appendOrders: (orders, total) =>
+          set((state) => ({
+            orders: [...state.orders, ...orders],
+            ordersTotal: total,
+          })),
+        updateOrderById: (order) =>
+          set((state) => ({
+            orders: state.orders.map((o) => (o._id === order._id ? order : o)),
+          })),
+        resetOrders: () => set({ orders: [], ordersTotal: 0 }),
       };
     },
     {
@@ -161,9 +89,7 @@ export const usePersistStore = create<AuthState>()(
       storage: createJSONStorage(() => zustandStorage),
       partialize: (state) => ({
         user: state.user,
-        categories: state.categories,
-        cart: state.cart,
       }),
-    }
-  )
+    },
+  ),
 );

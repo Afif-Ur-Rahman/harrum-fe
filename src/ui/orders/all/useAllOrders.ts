@@ -4,19 +4,26 @@ import {
   claimOrderItem,
   returnOrderItem,
 } from "@/api/api-call/orders";
-import { Order } from "@/types";
 import { showToast } from "@/utils/toast";
+import { usePersistStore } from "@/store/presistStore";
 
 const ORDERS_PER_PAGE = 30;
 const SEARCH_DEBOUNCE_MS = 400;
 
 const useAllOrders = () => {
-  const [orders, setOrders] = useState<Order[]>([]);
+  const {
+    orders,
+    ordersTotal,
+    setOrders,
+    appendOrders,
+    updateOrderById,
+    updateStockById,
+  } = usePersistStore();
+
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [total, setTotal] = useState(0);
   const [search, setSearch] = useState("");
 
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
@@ -28,8 +35,11 @@ const useAllOrders = () => {
     async (targetPage: number, searchTerm: string, append: boolean) => {
       const currentRequestId = ++requestId.current;
 
-      if (append) setLoadingMore(true);
-      else setLoading(true);
+      if (append) {
+        setLoadingMore(true);
+      } else {
+        setLoading(true);
+      }
 
       const res = await getAllOrders({
         page: targetPage,
@@ -37,7 +47,6 @@ const useAllOrders = () => {
         search: searchTerm || undefined,
       });
 
-      // Ignore stale responses (e.g. a fast follow-up search overtaking a slow one)
       if (currentRequestId !== requestId.current) return;
 
       if (res?.error) {
@@ -49,25 +58,38 @@ const useAllOrders = () => {
 
       const data = res?.data?.data;
 
-      setOrders((prev) =>
-        append ? [...prev, ...(data?.orders || [])] : data?.orders || [],
-      );
-      setPage(data?.page || 1);
+      const fetchedOrders = data?.orders || [];
+      const fetchedTotal = data?.total || 0;
+
+      if (append) {
+        appendOrders(fetchedOrders, fetchedTotal);
+      } else {
+        setOrders(fetchedOrders, fetchedTotal);
+      }
+
+      setPage(data?.page || targetPage);
       setTotalPages(data?.totalPages || 1);
-      setTotal(data?.total || 0);
+
       setLoading(false);
       setLoadingMore(false);
     },
-    [],
+    [setOrders, appendOrders],
   );
 
-  const onSearchChange = (value: string) => {
-    setSearch(value);
-    clearTimeout(debounceTimer.current);
-    debounceTimer.current = setTimeout(() => {
-      fetchOrders(1, value, false);
-    }, SEARCH_DEBOUNCE_MS);
-  };
+  const onSearchChange = useCallback(
+    (value: string) => {
+      setSearch(value);
+
+      clearTimeout(debounceTimer.current);
+
+      debounceTimer.current = setTimeout(() => {
+        requestId.current += 1;
+
+        fetchOrders(1, value, false);
+      }, SEARCH_DEBOUNCE_MS);
+    },
+    [fetchOrders],
+  );
 
   const loadMore = useCallback(() => {
     if (loading || loadingMore) return;
@@ -86,15 +108,18 @@ const useAllOrders = () => {
     const res = await claimOrderItem(orderId, itemId, variantId);
 
     if (res?.error || !res?.data) {
-      return { state: false, error: res?.error || "Failed to claim item" };
+      return {
+        state: false,
+        error: res?.error || "Failed to claim item",
+      };
     }
 
-    const updatedOrder = res.data.data;
-    setOrders((prev) =>
-      prev.map((order) => (order._id === orderId ? updatedOrder : order)),
-    );
+    updateOrderById(res.data.data);
 
-    return { state: true, message: res.data.message };
+    return {
+      state: true,
+      message: res.data.message,
+    };
   };
 
   const onReturnItem = async (
@@ -105,15 +130,22 @@ const useAllOrders = () => {
     const res = await returnOrderItem(orderId, itemId, variantId);
 
     if (res?.error || !res?.data) {
-      return { state: false, error: res?.error || "Failed to return item" };
+      return {
+        state: false,
+        error: res?.error || "Failed to return item",
+      };
     }
 
-    const updatedOrder = res.data.data;
-    setOrders((prev) =>
-      prev.map((order) => (order._id === orderId ? updatedOrder : order)),
-    );
+    updateOrderById(res.data.data);
 
-    return { state: true, message: res.data.message };
+    if (res.data.updatedStock) {
+      updateStockById(res.data.updatedStock);
+    }
+
+    return {
+      state: true,
+      message: res.data.message,
+    };
   };
 
   useEffect(() => {
@@ -129,7 +161,7 @@ const useAllOrders = () => {
     loading,
     loadingMore,
     hasMore,
-    total,
+    total: ordersTotal,
     search,
     onSearchChange,
     loadMore,

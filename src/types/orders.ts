@@ -1,3 +1,5 @@
+import type { Stock } from "./stock";
+
 export interface Salesman {
   _id: string;
   username: string;
@@ -38,6 +40,8 @@ export interface Order {
 export interface OrderResponse {
   message: string;
   data: Order;
+  updatedStocks?: Stock[];
+  updatedStock?: Stock;
 }
 
 export interface OrderListData {
