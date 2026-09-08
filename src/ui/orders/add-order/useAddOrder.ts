@@ -18,6 +18,7 @@ const useAddOrder = () => {
     employees,
     employeesLoaded,
     setEmployees,
+    updateStocksByIds,
   } = usePersistStore();
 
   const [submitting, setSubmitting] = useState(false);
@@ -144,6 +145,10 @@ const useAddOrder = () => {
       showToast("error", response?.error || "Failed to create order");
       setSubmitting(false);
       return;
+    }
+
+    if (response.data.updatedStocks?.length) {
+      updateStocksByIds(response.data.updatedStocks);
     }
 
     showToast("success", response.data.message || "Order created successfully");
