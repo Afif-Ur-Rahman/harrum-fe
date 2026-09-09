@@ -21,7 +21,6 @@ const Customers = () => {
     openAddDialog,
     openEditDialog,
     onSubmitCustomer,
-    onDeleteCustomer,
   } = useCustomers();
 
   return (
@@ -73,7 +72,6 @@ const Customers = () => {
         filtered={filtered}
         loading={loading}
         onEdit={openEditDialog}
-        onDelete={onDeleteCustomer}
       />
     </PageLayout>
   );
