@@ -2,12 +2,12 @@
 
 import { useEffect } from "react";
 import { FormProvider } from "react-hook-form";
-import { User, Mail, Phone, Loader2 } from "lucide-react";
+import { User, Mail, Phone, Wallet, Loader2 } from "lucide-react";
 import { FormInput } from "@/components";
 import { CustomerFormType, useCustomerForm } from "../form";
 import { Customer } from "@/types";
 
-const AddEditCustomer = ({
+export const CustomerForm = ({
   customer,
   onSubmitCustomer,
   loading,
@@ -16,10 +16,13 @@ const AddEditCustomer = ({
   onSubmitCustomer: (data: CustomerFormType) => Promise<void>;
   loading: boolean;
 }) => {
+  const isEditing = Boolean(customer);
+
   const form = useCustomerForm({
     name: customer?.name || "",
     phone: customer?.phone || "",
     email: customer?.email || "",
+    remainingAmount: "",
   });
 
   useEffect(() => {
@@ -27,6 +30,7 @@ const AddEditCustomer = ({
       name: customer?.name || "",
       phone: customer?.phone || "",
       email: customer?.email || "",
+      remainingAmount: "",
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [customer]);
@@ -64,6 +68,16 @@ const AddEditCustomer = ({
           icon={Mail}
         />
 
+        {!isEditing && (
+          <FormInput
+            field="remainingAmount"
+            label="Remaining Amount"
+            type="number"
+            placeholder="0"
+            icon={Wallet}
+          />
+        )}
+
         <button
           type="button"
           onClick={handleSubmit}
@@ -71,11 +85,9 @@ const AddEditCustomer = ({
           className="mt-1 flex w-full items-center justify-center gap-2 rounded-2xl bg-linear-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-cyan-950/30 transition-all hover:opacity-95 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-          {loading ? "Saving…" : customer ? "Update Customer" : "Add Customer"}
+          {loading ? "Saving…" : isEditing ? "Update Customer" : "Add Customer"}
         </button>
       </div>
     </FormProvider>
   );
 };
-
-export { AddEditCustomer };

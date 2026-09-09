@@ -8,11 +8,45 @@ let patched = false;
 const safeParseResponse = async (res: Response) => {
   try {
     const text = await res.clone().text();
+
+    if (!text.trim()) return undefined;
+
+    // Normal JSON
     try {
       return JSON.parse(text);
     } catch {
-      return text.slice(0, 2000);
+      // Continue
     }
+
+    // Next.js RSC / React Flight
+    const lines = text.split("\n");
+    const parsedResponses: unknown[] = [];
+
+    for (const line of lines) {
+      const match = line.match(/^\d+:(\{.*\})$/);
+
+      if (!match) continue;
+
+      try {
+        parsedResponses.push(JSON.parse(match[1]));
+      } catch {
+        // Ignore invalid JSON
+      }
+    }
+
+    const apiResponse = parsedResponses.findLast(
+      (item) =>
+        typeof item === "object" &&
+        item !== null &&
+        ("state" in item || "data" in item || "error" in item),
+    );
+
+    if (apiResponse) {
+      return apiResponse;
+    }
+
+    // Otherwise return the last parsed JSON
+    return parsedResponses.at(-1) ?? text.slice(0, 2000);
   } catch {
     return undefined;
   }

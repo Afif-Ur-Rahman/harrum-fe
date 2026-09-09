@@ -1,9 +1,21 @@
-import { CustomerFormType } from "@/ui/customers/form";
 import { serverAction } from "../server-action";
 import {
   ResponseForMultipleCustomers,
   ResponseForSingleCustomer,
 } from "@/types";
+
+interface CreateCustomerPayload {
+  name: string;
+  phone: string;
+  email?: string;
+  remainingAmount?: number;
+}
+
+interface UpdateCustomerPayload {
+  name: string;
+  phone: string;
+  email?: string;
+}
 
 export const getAllCustomers = async () => {
   try {
@@ -18,7 +30,7 @@ export const getAllCustomers = async () => {
   }
 };
 
-export const createCustomer = async (data: CustomerFormType) => {
+export const createCustomer = async (data: CreateCustomerPayload) => {
   try {
     const response = await serverAction({
       url: "/customers",
@@ -32,7 +44,10 @@ export const createCustomer = async (data: CustomerFormType) => {
   }
 };
 
-export const updateCustomer = async (id: string, data: CustomerFormType) => {
+export const updateCustomer = async (
+  id: string,
+  data: UpdateCustomerPayload,
+) => {
   try {
     const response = await serverAction({
       url: `/customers/${id}`,

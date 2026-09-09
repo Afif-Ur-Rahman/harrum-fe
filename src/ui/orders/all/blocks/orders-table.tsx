@@ -1,7 +1,6 @@
 "use client";
 
-import { Table } from "@/components";
-import ReuseableDialog from "@/components/ui/dialog";
+import { ReuseableDialog, Table } from "@/components";
 import { Order } from "@/types";
 import { Flex } from "@radix-ui/themes";
 import { Eye } from "lucide-react";

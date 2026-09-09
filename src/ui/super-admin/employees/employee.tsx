@@ -1,7 +1,6 @@
 "use client";
 
 import { Plus, Search } from "lucide-react";
-import ReuseableDialog from "@/components/ui/dialog";
 import { useEmployees } from "./useEmploye";
 import {
   AddEmployees,
@@ -10,6 +9,7 @@ import {
   EmployeeTable,
 } from "./blocks";
 import { ROLE_STYLES } from "./constants";
+import { ReuseableDialog } from "@/components";
 
 const Employees = () => {
   const {

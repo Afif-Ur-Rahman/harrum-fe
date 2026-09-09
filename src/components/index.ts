@@ -15,3 +15,4 @@ export * from "./ui/table";
 export * from "./ui/empty-state";
 export * from "./inputs";
 export * from "./comming-soon";
+export * from "./ui/dialog";

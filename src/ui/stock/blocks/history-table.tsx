@@ -1,10 +1,9 @@
 "use client";
 
-import { Table } from "@/components";
+import { ReuseableDialog, Table } from "@/components";
 import { StockHistory, StockVariant } from "@/types";
 import { Flex } from "@radix-ui/themes";
 import { formatDateTime, formatPrice } from "@/utils";
-import ReuseableDialog from "@/components/ui/dialog";
 import { ColorsDetails } from "./colors-details";
 import { Palette } from "lucide-react";
 

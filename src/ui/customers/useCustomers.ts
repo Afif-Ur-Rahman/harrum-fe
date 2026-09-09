@@ -18,6 +18,7 @@ const useCustomers = () => {
   const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
 
   const fetchCustomers = async () => {
+    setLoading(true);
     const res = await getAllCustomers();
 
     if (res?.error) {
@@ -48,8 +49,17 @@ const useCustomers = () => {
     setSaving(true);
 
     const response = editingCustomer
-      ? await updateCustomer(editingCustomer._id, data)
-      : await createCustomer(data);
+      ? await updateCustomer(editingCustomer._id, {
+          name: data.name,
+          phone: data.phone,
+          email: data.email,
+        })
+      : await createCustomer({
+          name: data.name,
+          phone: data.phone,
+          email: data.email,
+          remainingAmount: Number(data.remainingAmount) || 0,
+        });
 
     setSaving(false);
 

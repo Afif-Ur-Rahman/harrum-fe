@@ -2,7 +2,7 @@ import { Dialog } from "@radix-ui/themes";
 import React from "react";
 import { VscChromeClose } from "react-icons/vsc";
 
-const ReuseableDialog = ({
+export const ReuseableDialog = ({
   title,
   content,
   triggerButton,
@@ -62,5 +62,3 @@ const ReuseableDialog = ({
     </Dialog.Root>
   );
 };
-
-export default ReuseableDialog;

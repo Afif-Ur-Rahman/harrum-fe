@@ -1,5 +1,4 @@
-import { Table } from "@/components";
-import ReuseableDialog from "@/components/ui/dialog";
+import { ReuseableDialog, Table } from "@/components";
 import { Stock, StockVariant } from "@/types";
 import { Flex } from "@radix-ui/themes";
 import { History, Palette } from "lucide-react";
