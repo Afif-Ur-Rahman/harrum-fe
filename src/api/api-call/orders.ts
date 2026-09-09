@@ -6,12 +6,14 @@ export const getAllOrders = async (params?: {
   page?: number;
   limit?: number;
   search?: string;
+  customerId?: string;
 }) => {
   try {
     const query = new URLSearchParams();
     if (params?.page) query.set("page", String(params.page));
     if (params?.limit) query.set("limit", String(params.limit));
     if (params?.search) query.set("search", params.search);
+    if (params?.customerId) query.set("customerId", params.customerId);
 
     const response = await serverAction({
       url: `/orders?${query.toString()}`,

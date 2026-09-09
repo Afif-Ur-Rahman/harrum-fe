@@ -1,26 +1,22 @@
 "use client";
 
 import { Flex } from "@radix-ui/themes";
-import { Pen, Trash2, Users } from "lucide-react";
-import { Table } from "@/components";
-import { ConfirmationDialog } from "@/components/confirmation-dialog";
+import { Pen, Eye, Users } from "lucide-react";
+import { ReuseableDialog, Table } from "@/components";
 import { Customer } from "@/types";
 import { formatPrice } from "@/utils";
+import { CustomerOrders } from "./customer-orders";
 
 interface CustomerTableProps {
   filtered: Customer[];
   loading: boolean;
   onEdit: (customer: Customer) => void;
-  onDelete: (
-    id: string,
-  ) => Promise<{ state: boolean; message?: string; error?: string }>;
 }
 
 export const CustomerTable: React.FC<CustomerTableProps> = ({
   filtered,
   loading,
   onEdit,
-  onDelete,
 }) => {
   const columns = [
     {
@@ -78,16 +74,19 @@ export const CustomerTable: React.FC<CustomerTableProps> = ({
             <Pen className="h-3.5 w-3.5" />
           </button>
 
-          <ConfirmationDialog
-            title="Delete Customer"
-            description="Are you sure you want to delete this customer? This action cannot be undone."
-            saveButtonTitle="Delete"
-            confirmAction={() => onDelete(row._id)}
-            trigger={
-              <button className="rounded-xl border border-white/10 bg-white/5 p-2 text-slate-300 transition hover:border-rose-400/30 hover:bg-rose-500/10 hover:text-rose-200">
-                <Trash2 className="h-4 w-4" />
+          <ReuseableDialog
+            title={`${row.name} — Orders`}
+            triggerButton={
+              <button
+                type="button"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-cyan-300/20 bg-cyan-400/10 px-3 py-1.5 text-xs font-semibold text-cyan-300 transition hover:bg-cyan-400/15 hover:text-cyan-200 active:scale-[0.98]"
+              >
+                <Eye className="h-3.5 w-3.5" />
+                Orders
               </button>
             }
+            content={<CustomerOrders customerId={row._id} />}
+            contentStyle="max-w-2xl!"
           />
         </Flex>
       ),
