@@ -1,7 +1,6 @@
 export * from "./inputs";
 export * from "./quantity-control";
 export * from "./OnboardingLayout";
-export * from "./PageLayout";
 export * from "./badge";
 export * from "./block-label";
 export * from "./confirmation-dialog";

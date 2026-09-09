@@ -5,6 +5,7 @@ import { useCustomers } from "./useCustomers";
 import { CustomerTable, CustomersSearch } from "./blocks";
 import { ReuseableDialog } from "@/components";
 import { CustomerForm } from "./form";
+import { PageLayout } from "@/components/layout";
 
 const Customers = () => {
   const {
@@ -24,8 +25,7 @@ const Customers = () => {
   } = useCustomers();
 
   return (
-    <div className="pb-12 md:mt-6.25 lg:mt-7.5">
-      {/* Title */}
+    <PageLayout>
       <div className="mb-6 flex items-center gap-3">
         <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/8">
           <Contact className="h-5 w-5 text-cyan-300" />
@@ -75,7 +75,7 @@ const Customers = () => {
         onEdit={openEditDialog}
         onDelete={onDeleteCustomer}
       />
-    </div>
+    </PageLayout>
   );
 };
 

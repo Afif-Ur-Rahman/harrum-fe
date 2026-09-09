@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowDownToLine, Package, Boxes } from "lucide-react";
 import { StockVariant } from "@/types";
 import { EmptyState } from "@/components";
+import { PageLayout } from "@/components/layout";
 
 const getTotalQuantity = (variants: StockVariant[] = []) => {
   return variants.reduce(
@@ -27,7 +28,7 @@ export const Stocks = () => {
   ).length;
 
   return (
-    <div className="mt-12.5 pb-12 md:mt-6.25 lg:mt-7.5">
+    <PageLayout>
       <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
         <div>
           <div className="mb-2 flex items-center gap-3">
@@ -74,6 +75,6 @@ export const Stocks = () => {
       ) : (
         <StockTable stockData={stocks} />
       )}
-    </div>
+    </PageLayout>
   );
 };
