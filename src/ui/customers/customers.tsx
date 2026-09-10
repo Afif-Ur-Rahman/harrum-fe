@@ -21,6 +21,7 @@ const Customers = () => {
     openAddDialog,
     openEditDialog,
     onSubmitCustomer,
+    updateCustomerInList,
   } = useCustomers();
 
   return (
@@ -41,7 +42,6 @@ const Customers = () => {
         </div>
       </div>
 
-      {/* Controls */}
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <CustomersSearch value={search} onChange={setSearch} />
 
@@ -72,6 +72,7 @@ const Customers = () => {
         filtered={filtered}
         loading={loading}
         onEdit={openEditDialog}
+        onCustomerUpdated={updateCustomerInList}
       />
     </PageLayout>
   );

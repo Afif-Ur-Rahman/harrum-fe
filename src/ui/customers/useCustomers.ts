@@ -98,6 +98,12 @@ const useCustomers = () => {
     return { state: true, message: res.data.message };
   };
 
+  const updateCustomerInList = (updated: Customer) => {
+    setCustomers((prev) =>
+      prev.map((c) => (c._id === updated._id ? updated : c)),
+    );
+  };
+
   const filtered = useMemo(() => {
     const query = search.toLowerCase().trim();
 
@@ -125,6 +131,7 @@ const useCustomers = () => {
     openEditDialog,
     onSubmitCustomer,
     onDeleteCustomer,
+    updateCustomerInList,
   };
 };
 

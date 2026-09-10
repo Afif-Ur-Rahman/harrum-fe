@@ -10,7 +10,14 @@ import { FormFieldError } from "../form";
 interface FormInputProps {
   field: string;
   label?: string;
-  type?: "text" | "number" | "password" | "email" | "select" | "date";
+  type?:
+    | "text"
+    | "number"
+    | "password"
+    | "email"
+    | "select"
+    | "date"
+    | "textarea";
   placeholder: string;
   icon?: React.ElementType;
   rules?: RegisterOptions;
@@ -22,6 +29,7 @@ interface FormInputProps {
   required?: boolean;
   onValueChange?: (value: string) => void;
   max?: number;
+  rows?: number;
 }
 
 const FormInput = ({
@@ -35,6 +43,7 @@ const FormInput = ({
   required = false,
   onValueChange,
   max,
+  rows = 3,
 }: FormInputProps) => {
   const { register, control } = useFormContext();
   const [show, setShow] = useState(false);
@@ -43,6 +52,7 @@ const FormInput = ({
   const isNumber = type === "number";
   const isSelect = type === "select";
   const isDate = type === "date";
+  const isTextarea = type === "textarea";
 
   const inputType = isPassword ? (show ? "text" : "password") : type;
 
@@ -94,8 +104,16 @@ const FormInput = ({
         </label>
       )}
 
-      <div className="flex items-center gap-2.5 rounded-2xl border border-white/10 bg-white/8 px-4 py-3 text-sm shadow-lg shadow-black/10 backdrop-blur-xl transition-all focus-within:border-cyan-300/60 focus-within:bg-white/12 focus-within:ring-2 focus-within:ring-cyan-300/10">
-        {Icon && <Icon className="h-4 w-4 shrink-0 text-slate-300" />}
+      <div
+        className={`flex ${
+          isTextarea ? "items-start" : "items-center"
+        } gap-2.5 rounded-2xl border border-white/10 bg-white/8 px-4 py-3 text-sm shadow-lg shadow-black/10 backdrop-blur-xl transition-all focus-within:border-cyan-300/60 focus-within:bg-white/12 focus-within:ring-2 focus-within:ring-cyan-300/10`}
+      >
+        {Icon && (
+          <Icon
+            className={`h-4 w-4 shrink-0 text-slate-300 ${isTextarea ? "mt-1" : ""}`}
+          />
+        )}
 
         {isSelect ? (
           <Controller
@@ -178,6 +196,14 @@ const FormInput = ({
                 />
               );
             }}
+          />
+        ) : isTextarea ? (
+          <textarea
+            {...registerRest}
+            onChange={registerOnChange}
+            placeholder={placeholder}
+            rows={rows}
+            className="min-w-0 flex-1 resize-none bg-transparent text-sm text-white outline-none placeholder:text-slate-300"
           />
         ) : (
           <>

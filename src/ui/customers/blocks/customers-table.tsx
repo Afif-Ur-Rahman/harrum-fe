@@ -1,22 +1,23 @@
 "use client";
 
-import { Flex } from "@radix-ui/themes";
-import { Pen, Eye, Users } from "lucide-react";
-import { ReuseableDialog, Table } from "@/components";
+import { Users } from "lucide-react";
+import { Table } from "@/components";
 import { Customer } from "@/types";
 import { formatPrice } from "@/utils";
-import { CustomerOrders } from "./customer-orders";
+import { Actions } from "./actions";
 
 interface CustomerTableProps {
   filtered: Customer[];
   loading: boolean;
   onEdit: (customer: Customer) => void;
+  onCustomerUpdated: (customer: Customer) => void;
 }
 
 export const CustomerTable: React.FC<CustomerTableProps> = ({
   filtered,
   loading,
   onEdit,
+  onCustomerUpdated,
 }) => {
   const columns = [
     {
@@ -64,31 +65,11 @@ export const CustomerTable: React.FC<CustomerTableProps> = ({
       key: "_id" as const,
       header: "Actions",
       render: (row: Customer) => (
-        <Flex justify="end" align="center" gap="2">
-          <button
-            type="button"
-            onClick={() => onEdit(row)}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-white/8 text-slate-300 transition hover:bg-white/12 hover:text-white active:scale-[0.98]"
-            aria-label="Edit customer"
-          >
-            <Pen className="h-3.5 w-3.5" />
-          </button>
-
-          <ReuseableDialog
-            title={`${row.name} — Orders`}
-            triggerButton={
-              <button
-                type="button"
-                className="inline-flex items-center gap-1.5 rounded-xl border border-cyan-300/20 bg-cyan-400/10 px-3 py-1.5 text-xs font-semibold text-cyan-300 transition hover:bg-cyan-400/15 hover:text-cyan-200 active:scale-[0.98]"
-              >
-                <Eye className="h-3.5 w-3.5" />
-                Orders
-              </button>
-            }
-            content={<CustomerOrders customerId={row._id} />}
-            contentStyle="max-w-2xl!"
-          />
-        </Flex>
+        <Actions
+          customer={row}
+          onEdit={onEdit}
+          onCustomerUpdated={onCustomerUpdated}
+        />
       ),
     },
   ];
