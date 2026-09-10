@@ -51,7 +51,7 @@ export const ReuseableDialog = ({
           </div>
 
           {/* Content */}
-          <div className="flex-1 overflow-y-auto overscroll-contain px-5 py-5 pr-4">
+          <div className="flex-1 min-w-0 overflow-x-hidden overflow-y-auto overscroll-contain px-5 py-5 pr-4">
             {content}
           </div>
 

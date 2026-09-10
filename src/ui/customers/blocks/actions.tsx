@@ -20,6 +20,14 @@ interface ActionsProps {
   onCustomerUpdated: (customer: Customer) => void;
 }
 
+type ActionButton = {
+  label: string;
+  icon: React.ElementType;
+  disabled?: boolean;
+  onSelect: () => void;
+  hoverClass: string;
+};
+
 export const Actions: React.FC<ActionsProps> = ({
   customer,
   onEdit,
@@ -30,6 +38,41 @@ export const Actions: React.FC<ActionsProps> = ({
   const [ordersOpen, setOrdersOpen] = useState(false);
 
   const hasBalance = customer.remainingAmount > 0;
+
+  const actionButtons: ActionButton[] = [
+    {
+      label: "Edit Customer",
+      icon: Pen,
+      disabled: false,
+      onSelect: () => onEdit(customer),
+      hoverClass:
+        "data-highlighted:bg-cyan-400/20! data-highlighted:text-cyan-200!",
+    },
+    {
+      label: "Record Payment",
+      icon: Wallet,
+      disabled: !hasBalance,
+      onSelect: () => setPaymentOpen(true),
+      hoverClass:
+        "data-highlighted:bg-emerald-400/20! data-highlighted:text-emerald-200!",
+    },
+    {
+      label: "Payment History",
+      icon: ReceiptIcon,
+      disabled: false,
+      onSelect: () => setHistoryOpen(true),
+      hoverClass:
+        "data-highlighted:bg-amber-400/20! data-highlighted:text-amber-200!",
+    },
+    {
+      label: "View Orders",
+      icon: Eye,
+      disabled: false,
+      onSelect: () => setOrdersOpen(true),
+      hoverClass:
+        "data-highlighted:bg-cyan-400/20! data-highlighted:text-cyan-200!",
+    },
+  ];
 
   return (
     <>
@@ -48,38 +91,25 @@ export const Actions: React.FC<ActionsProps> = ({
           align="end"
           className="rounded-2xl! border! border-white/10! bg-slate-900/95! backdrop-blur-xl! shadow-2xl! shadow-black/40!"
         >
-          <DropdownMenu.Item
-            onSelect={() => onEdit(customer)}
-            className="cursor-pointer! gap-2! rounded-xl! text-white transition-colors! data-highlighted:bg-cyan-400/20! data-highlighted:text-cyan-200!"
-          >
-            <Pen className="h-3.5 w-3.5" />
-            Edit Customer
-          </DropdownMenu.Item>
+          {actionButtons.map((action) => {
+            const Icon = action.icon;
 
-          <DropdownMenu.Item
-            disabled={!hasBalance}
-            onSelect={() => setPaymentOpen(true)}
-            className="cursor-pointer! gap-2! rounded-xl! text-white transition-colors! data-highlighted:bg-emerald-400/20! data-highlighted:text-emerald-200!"
-          >
-            <Wallet className="h-3.5 w-3.5" />
-            Record Payment
-          </DropdownMenu.Item>
-
-          <DropdownMenu.Item
-            onSelect={() => setHistoryOpen(true)}
-            className="cursor-pointer! gap-2! rounded-xl! text-white transition-colors! data-highlighted:bg-white/10!"
-          >
-            <ReceiptIcon className="h-3.5 w-3.5" />
-            Payment History
-          </DropdownMenu.Item>
-
-          <DropdownMenu.Item
-            onSelect={() => setOrdersOpen(true)}
-            className="cursor-pointer! gap-2! rounded-xl! text-white transition-colors! data-highlighted:bg-cyan-400/20! data-highlighted:text-cyan-200!"
-          >
-            <Eye className="h-3.5 w-3.5" />
-            View Orders
-          </DropdownMenu.Item>
+            return (
+              <DropdownMenu.Item
+                key={action.label}
+                disabled={action.disabled}
+                onSelect={action.onSelect}
+                className={`gap-2! rounded-xl! transition-colors! ${
+                  action.disabled
+                    ? "cursor-not-allowed! text-slate-300! opacity-50!"
+                    : `cursor-pointer! text-white! ${action.hoverClass}`
+                }`}
+              >
+                <Icon className="h-3.5 w-3.5" />
+                {action.label}
+              </DropdownMenu.Item>
+            );
+          })}
         </DropdownMenu.Content>
       </DropdownMenu.Root>
 
