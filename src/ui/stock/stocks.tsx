@@ -31,16 +31,16 @@ export const Stocks = () => {
     <PageLayout>
       <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <div className="mb-2 flex items-center gap-3">
+          <div className="flex items-center gap-3">
             <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/8 shadow-lg shadow-cyan-950/20 backdrop-blur-xl">
               <Boxes className="h-5 w-5 text-cyan-300" />
             </div>
 
             <div>
-              <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+              <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">
                 Stocks
               </h1>
-              <p className="mt-1 text-sm text-slate-400">
+              <p className="mt-1 text-xs text-slate-400">
                 {stocks.length} item{stocks.length !== 1 ? "s" : ""} in
                 inventory
               </p>
@@ -51,7 +51,7 @@ export const Stocks = () => {
         <div className="flex items-center gap-2">
           <Link
             href="/super-admin/stocks/stock-in"
-            className="flex items-center gap-2 rounded-2xl bg-linear-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-cyan-950/30 transition hover:opacity-95 active:scale-[0.98]"
+            className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/8 px-4 py-2.5 text-sm font-medium text-slate-300 shadow-lg shadow-black/10 backdrop-blur-xl transition hover:bg-white/12 hover:text-white active:scale-[0.98]"
           >
             <ArrowDownToLine className="h-4 w-4" />
             <span className="hidden sm:inline">Stock In</span>

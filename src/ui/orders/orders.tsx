@@ -32,10 +32,10 @@ const Orders = () => {
               </div>
 
               <div className="flex flex-1 flex-col">
-                <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+                <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">
                   Create Order
                 </h1>
-                <p className="mt-1 text-sm text-slate-400">
+                <p className="mt-1 text-xs text-slate-400">
                   Add customer details and select items to create a new order
                 </p>
               </div>

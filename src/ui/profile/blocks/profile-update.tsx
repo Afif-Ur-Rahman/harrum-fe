@@ -10,21 +10,21 @@ export const ProfileUpdate = () => {
 
   return (
     <div className="overflow-hidden rounded-[28px] border border-white/10 bg-white/8 p-5 shadow-2xl shadow-black/25 backdrop-blur-xl sm:p-6">
-      <div className="mb-8 flex items-start justify-between gap-4">
+      <div className="mb-6 flex items-start justify-between gap-4">
         <div>
-          <p className="text-sm uppercase tracking-[0.2em] text-fuchsia-200">
+          <p className="text-xs uppercase tracking-[0.2em] text-fuchsia-200">
             Password Settings
           </p>
-          <h2 className="mt-2 text-2xl font-semibold text-white">
+          <h2 className="mt-2 text-lg font-semibold text-white">
             Change Password
           </h2>
-          <p className="mt-2 text-sm leading-6 text-slate-400">
+          <p className="mt-2 text-xs leading-6 text-slate-400">
             Use a strong password with at least 8 characters.
           </p>
         </div>
 
         <div className="rounded-2xl bg-linear-to-br from-cyan-500 via-fuchsia-500 to-indigo-600 p-3 text-white shadow-lg shadow-fuchsia-500/20">
-          <KeyRound className="h-6 w-6" />
+          <KeyRound className="h-5 w-5" />
         </div>
       </div>
 
