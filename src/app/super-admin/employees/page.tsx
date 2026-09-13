@@ -1,4 +1,4 @@
-import { Employees } from "@/ui/super-admin/employees";
+import { Employees } from "@/ui/employees";
 
 const EmployeePage = () => {
   return <Employees />;

@@ -1,7 +1,7 @@
 import { serverAction } from "../server-action";
 import { SimpleResponse } from "@/types/auth";
 import { CreateEmployeeResponse, ResponseForEmployee } from "@/types/employees";
-import { EmployeeFormType } from "@/ui/super-admin/employees/schema";
+import { EmployeeFormType } from "@/ui/employees/schema";
 
 export const getAllEmployees = async () => {
   try {
