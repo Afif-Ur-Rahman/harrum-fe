@@ -65,6 +65,46 @@ export const STOCK_ITEM_FIELDS: StockItemField[] = [
         label: "Wash & Wear",
         value: "wash_and_wear",
       },
+      {
+        label: "Latha",
+        value: "latha",
+      },
+      {
+        label: "Towel",
+        value: "towel",
+      },
+      {
+        label: "Ahram",
+        value: "ahram",
+      },
+      {
+        label: "Handkerchief",
+        value: "handkerchief",
+      },
+      {
+        label: "Perfume",
+        value: "perfume",
+      },
+      {
+        label: "Undershirt",
+        value: "undershirt",
+      },
+      {
+        label: "Kirti",
+        value: "kirti",
+      },
+      {
+        label: "Lungi",
+        value: "lungi",
+      },
+      {
+        label: "Shawl",
+        value: "shawl",
+      },
+      {
+        label: "Body Spray",
+        value: "body_spray",
+      },
     ],
     icon: Shapes,
     required: true,
@@ -82,6 +122,10 @@ export const STOCK_ITEM_FIELDS: StockItemField[] = [
       {
         label: "Pieces",
         value: "pcs",
+      },
+      {
+        label: "Gaz",
+        value: "gz",
       },
     ],
     icon: Ruler,

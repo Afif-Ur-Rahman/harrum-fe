@@ -9,7 +9,9 @@ export const orderItemVariantSchema = z.object({
 export const orderItemSchema = z.object({
   stockId: z.string().min(1, "Item is required"),
   name: z.string().min(1),
-  priceType: z.enum(["purchase", "wholesale", "sale"]).default("sale"),
+  priceType: z
+    .enum(["purchase", "wholesale", "sale", "custom"])
+    .default("sale"),
   variants: z
     .array(orderItemVariantSchema)
     .min(1, "At least one color is required"),

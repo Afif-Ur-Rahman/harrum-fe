@@ -5,15 +5,21 @@ import * as Popover from "@radix-ui/react-popover";
 import { formatPrice } from "@/utils";
 import { Stock } from "@/types";
 
-export type PriceType = "purchase" | "wholesale" | "sale";
+export type PriceType = "purchase" | "wholesale" | "sale" | "custom";
 
 const PRICE_OPTIONS: { value: PriceType; label: string }[] = [
   { value: "purchase", label: "Purchase" },
   { value: "wholesale", label: "Wholesale" },
   { value: "sale", label: "Sale" },
+  { value: "custom", label: "Custom" },
 ];
 
-export const getUnitPrice = (stock: Stock | undefined, type: PriceType) => {
+export const getUnitPrice = (
+  stock: Stock | undefined,
+  type: PriceType,
+  customPrice?: string,
+) => {
+  if (type === "custom") return Number(customPrice) || 0;
   if (!stock) return 0;
 
   if (type === "purchase") return Number(stock.purchasePrice) || 0;
@@ -26,16 +32,20 @@ interface PriceSelectorProps {
   stock?: Stock;
   totalQuantity: number;
   value: PriceType;
+  customPrice: string;
   onChange: (value: PriceType) => void;
+  onCustomPriceChange: (value: string) => void;
 }
 
 export const PriceSelector = ({
   stock,
   totalQuantity,
   value,
+  customPrice,
   onChange,
+  onCustomPriceChange,
 }: PriceSelectorProps) => {
-  const total = getUnitPrice(stock, value) * (totalQuantity || 0);
+  const total = getUnitPrice(stock, value, customPrice) * (totalQuantity || 0);
 
   return (
     <Popover.Root>
@@ -55,7 +65,7 @@ export const PriceSelector = ({
           align="end"
           sideOffset={8}
           collisionPadding={8}
-          className="z-50 w-52 max-w-[calc(100vw-16px)] overflow-hidden rounded-2xl border border-white/10 bg-slate-950 shadow-2xl shadow-black/40 backdrop-blur-xl"
+          className="z-50 w-56 max-w-[calc(100vw-16px)] overflow-hidden rounded-2xl border border-white/10 bg-slate-950 shadow-2xl shadow-black/40 backdrop-blur-xl"
         >
           <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.98)_0%,rgba(15,23,42,0.96)_100%)]" />
 
@@ -82,9 +92,28 @@ export const PriceSelector = ({
                     {option.label}
                   </span>
 
-                  <span className="font-semibold">
-                    {getUnitPrice(stock, option.value)}
-                  </span>
+                  {option.value === "custom" ? (
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      value={customPrice}
+                      onChange={(e) => {
+                        const rawValue = e.target.value.replace(/,/g, "");
+
+                        if (!/^\d*$/.test(rawValue)) return;
+
+                        onCustomPriceChange(rawValue);
+                        onChange("custom");
+                      }}
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder="0"
+                      className="ml-auto min-w-6 max-w-24 rounded-lg border border-white/10 bg-white/8 px-2 py-1 text-right text-sm text-white outline-none placeholder:text-slate-500 focus:border-cyan-300/60"
+                    />
+                  ) : (
+                    <span className="font-semibold">
+                      {getUnitPrice(stock, option.value)}
+                    </span>
+                  )}
                 </button>
               );
             })}

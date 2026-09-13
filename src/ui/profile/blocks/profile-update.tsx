@@ -9,7 +9,7 @@ export const ProfileUpdate = () => {
   const { form, loading, submit } = useProfile();
 
   return (
-    <div className="overflow-hidden rounded-[28px] border border-white/10 bg-white/8 p-5 shadow-2xl shadow-black/25 backdrop-blur-xl sm:p-6">
+    <div className="overflow-hidden rounded-[28px] border border-white/10 bg-white/8 p-5 sm:p-6">
       <div className="mb-6 flex items-start justify-between gap-4">
         <div>
           <p className="text-xs uppercase tracking-[0.2em] text-fuchsia-200">

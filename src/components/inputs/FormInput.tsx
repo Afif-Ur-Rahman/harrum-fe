@@ -30,7 +30,13 @@ interface FormInputProps {
   onValueChange?: (value: string) => void;
   max?: number;
   rows?: number;
+  capitalizeFirst?: boolean;
 }
+
+const capitalizeFirstLetter = (value: string) => {
+  if (!value) return value;
+  return value.charAt(0).toUpperCase() + value.slice(1);
+};
 
 const FormInput = ({
   field,
@@ -44,6 +50,7 @@ const FormInput = ({
   onValueChange,
   max,
   rows = 3,
+  capitalizeFirst = true,
 }: FormInputProps) => {
   const { register, control } = useFormContext();
   const [show, setShow] = useState(false);
@@ -53,6 +60,14 @@ const FormInput = ({
   const isSelect = type === "select";
   const isDate = type === "date";
   const isTextarea = type === "textarea";
+  const isEmail = type === "email";
+  const shouldCapitalize =
+    capitalizeFirst &&
+    !isNumber &&
+    !isPassword &&
+    !isSelect &&
+    !isDate &&
+    !isEmail;
 
   const inputType = isPassword ? (show ? "text" : "password") : type;
 
@@ -94,6 +109,26 @@ const FormInput = ({
     field,
     numberRules,
   );
+
+  const handleCapitalizedChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    if (shouldCapitalize) {
+      const el = e.target;
+      const cursorStart = el.selectionStart;
+      const cursorEnd = el.selectionEnd;
+      const capitalized = capitalizeFirstLetter(el.value);
+
+      if (capitalized !== el.value) {
+        el.value = capitalized;
+        if (cursorStart !== null && cursorEnd !== null) {
+          el.setSelectionRange(cursorStart, cursorEnd);
+        }
+      }
+    }
+
+    registerOnChange(e);
+  };
 
   const inputClassName =
     "block w-0 min-w-0 max-w-full flex-1 border-0 bg-transparent p-0 text-sm text-white outline-none placeholder:text-slate-300";
@@ -213,7 +248,7 @@ const FormInput = ({
             <textarea
               id={field}
               {...registerRest}
-              onChange={registerOnChange}
+              onChange={handleCapitalizedChange}
               placeholder={placeholder}
               rows={rows}
               className={`${inputClassName} resize-none`}
@@ -232,7 +267,11 @@ const FormInput = ({
                     }
                   }
 
-                  registerOnChange(e);
+                  if (shouldCapitalize) {
+                    handleCapitalizedChange(e);
+                  } else {
+                    registerOnChange(e);
+                  }
                 }}
                 type={inputType}
                 min={isNumber ? 0 : undefined}

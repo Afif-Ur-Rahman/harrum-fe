@@ -6,7 +6,7 @@ import { User } from "@/types";
 
 export const ProfileCard = ({ user }: { user: User }) => {
   return (
-    <div className="overflow-hidden rounded-[28px] border border-white/10 bg-white/8 p-5 shadow-2xl shadow-black/25 backdrop-blur-xl sm:p-6">
+    <div className="overflow-hidden rounded-[28px] border border-white/10 bg-white/8 p-5 sm:p-6">
       <div className="flex flex-col items-center text-center">
         <div className="relative flex h-24 w-24 items-center justify-center rounded-full border border-white/10 bg-white/10 shadow-2xl shadow-cyan-500/20">
           <Image

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { Trash2, Package, Plus, Palette } from "lucide-react";
 import { Stock } from "@/types";
@@ -25,6 +25,8 @@ export const ItemRow = ({
 }: ItemRowProps) => {
   const { control, watch, setValue } = useFormContext<OrderFormType>();
 
+  const [customPrice, setCustomPrice] = useState("");
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: `items.${index}.variants`,
@@ -41,7 +43,7 @@ export const ItemRow = ({
   const quantitiesKey = selectedVariants.map((v) => v.quantity).join("|");
 
   useEffect(() => {
-    const unitPrice = getUnitPrice(stock, priceType);
+    const unitPrice = getUnitPrice(stock, priceType, customPrice);
 
     selectedVariants.forEach((variant, variantIdx) => {
       const qty = Number(variant.quantity) || 0;
@@ -54,7 +56,7 @@ export const ItemRow = ({
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [quantitiesKey, priceType, stock, index]);
+  }, [quantitiesKey, priceType, customPrice, stock, index]);
 
   const getColorOptions = (variantIdx: number) => {
     const currentColor = selectedVariants[variantIdx]?.color;
@@ -101,11 +103,13 @@ export const ItemRow = ({
             stock={stock}
             totalQuantity={totalQuantity}
             value={priceType}
+            customPrice={customPrice}
             onChange={(value) =>
               setValue(`items.${index}.priceType`, value, {
                 shouldValidate: true,
               })
             }
+            onCustomPriceChange={setCustomPrice}
           />
 
           <button

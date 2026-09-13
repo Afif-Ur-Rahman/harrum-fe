@@ -19,7 +19,7 @@ export interface OrderItem {
   _id?: string;
   stockId: string;
   name: string;
-  priceType: "purchase" | "wholesale" | "sale";
+  priceType: "purchase" | "wholesale" | "sale" | "custom";
   variants: OrderVariant[];
 }
 
