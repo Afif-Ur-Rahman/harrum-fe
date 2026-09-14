@@ -3,3 +3,4 @@ export * from "./date";
 export * from "./formData";
 export * from "./guest-id";
 export * from "./price-format";
+export * from "./colors";

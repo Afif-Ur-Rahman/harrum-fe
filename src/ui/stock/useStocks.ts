@@ -1,6 +1,7 @@
 import { createStock, getAllStocks } from "@/api/api-call";
 import { Stock } from "@/types";
 import { useEffect, useMemo } from "react";
+import { useState } from "react";
 import { useStockForm, StockFormType } from "./form";
 import { useFieldArray, useWatch } from "react-hook-form";
 import { showToast } from "@/utils/toast";
@@ -8,6 +9,7 @@ import { usePersistStore } from "@/store/presistStore";
 
 const useStocks = () => {
   const { stocks, stocksLoaded, setStocks } = usePersistStore();
+  const [search, setSearch] = useState("");
 
   const initialValues: StockFormType = {
     stockItems: [],
@@ -24,6 +26,22 @@ const useStocks = () => {
         }))
       : [];
   }, [stocks]);
+
+  const filteredStocks = useMemo(() => {
+    const query = search.trim().toLowerCase();
+
+    if (!query) return stocks;
+
+    return stocks.filter((stock) => {
+      const matchesName = stock.name?.toLowerCase().includes(query);
+      const matchesBrand = stock.brand?.toLowerCase().includes(query);
+      const matchesColor = stock.variants?.some((variant) =>
+        variant.color?.toLowerCase().includes(query),
+      );
+
+      return matchesName || matchesBrand || matchesColor;
+    });
+  }, [stocks, search]);
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -157,6 +175,9 @@ const useStocks = () => {
 
   return {
     stocks,
+    filteredStocks,
+    search,
+    setSearch,
     form,
     fields,
     stockOptions,

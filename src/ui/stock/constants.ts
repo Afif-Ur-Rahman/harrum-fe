@@ -70,40 +70,20 @@ export const STOCK_ITEM_FIELDS: StockItemField[] = [
         value: "latha",
       },
       {
-        label: "Towel",
-        value: "towel",
-      },
-      {
-        label: "Ahram",
-        value: "ahram",
-      },
-      {
-        label: "Handkerchief",
-        value: "handkerchief",
+        label: "Shawl",
+        value: "shawl",
       },
       {
         label: "Perfume",
         value: "perfume",
       },
       {
-        label: "Undershirt",
-        value: "undershirt",
-      },
-      {
-        label: "Kirti",
-        value: "kirti",
-      },
-      {
-        label: "Lungi",
-        value: "lungi",
-      },
-      {
-        label: "Shawl",
-        value: "shawl",
-      },
-      {
         label: "Body Spray",
         value: "body_spray",
+      },
+      {
+        label: "Accessories",
+        value: "accessories",
       },
     ],
     icon: Shapes,

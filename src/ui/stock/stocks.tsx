@@ -3,7 +3,7 @@
 import { useStocks } from "./useStocks";
 import { StockStats, StockTable } from "./blocks";
 import Link from "next/link";
-import { ArrowDownToLine, Package, Boxes } from "lucide-react";
+import { ArrowDownToLine, Package, Boxes, Search } from "lucide-react";
 import { StockVariant } from "@/types";
 import { EmptyState } from "@/components";
 import { PageLayout } from "@/components/layout";
@@ -16,14 +16,14 @@ const getTotalQuantity = (variants: StockVariant[] = []) => {
 };
 
 export const Stocks = () => {
-  const { stocks } = useStocks();
+  const { stocks, filteredStocks, search, setSearch } = useStocks();
 
-  const totalValue = stocks.reduce((acc, stock) => {
+  const totalValue = filteredStocks.reduce((acc, stock) => {
     const totalQty = getTotalQuantity(stock.variants);
     return acc + Number(stock.salePrice) * totalQty;
   }, 0);
 
-  const outOfStock = stocks.filter(
+  const outOfStock = filteredStocks.filter(
     (stock) => getTotalQuantity(stock.variants) <= 0,
   ).length;
 
@@ -41,17 +41,29 @@ export const Stocks = () => {
                 Stocks
               </h1>
               <p className="mt-1 text-xs text-slate-400">
-                {stocks.length} item{stocks.length !== 1 ? "s" : ""} in
-                inventory
+                {filteredStocks.length} item
+                {filteredStocks.length !== 1 ? "s" : ""} in inventory
+                {search ? ` · ${filteredStocks.length} matching` : ""}
               </p>
             </div>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
+          <div className="relative min-w-0 flex-1 sm:w-64 sm:flex-none">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Search by name, brand or color"
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              className="w-full rounded-2xl border border-white/10 bg-slate-950/50 py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+            />
+          </div>
+
           <Link
             href="/super-admin/stocks/stock-in"
-            className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/8 px-4 py-2.5 text-sm font-medium text-slate-300 shadow-lg shadow-black/10 backdrop-blur-xl transition hover:bg-white/12 hover:text-white active:scale-[0.98]"
+            className="flex shrink-0 items-center gap-2 rounded-2xl border border-white/10 bg-white/8 px-4 py-2.5 text-sm font-medium text-slate-300 shadow-lg shadow-black/10 backdrop-blur-xl transition hover:bg-white/12 hover:text-white active:scale-[0.98]"
           >
             <ArrowDownToLine className="h-4 w-4" />
             <span className="hidden sm:inline">Stock In</span>
@@ -60,7 +72,7 @@ export const Stocks = () => {
       </div>
 
       <StockStats
-        totalStocks={stocks.length}
+        totalStocks={filteredStocks.length}
         totalValue={totalValue}
         outOfStock={outOfStock}
       />
@@ -72,8 +84,14 @@ export const Stocks = () => {
           title="No stock items yet"
           description="Add your first stock item using Stock In."
         />
+      ) : filteredStocks.length === 0 ? (
+        <EmptyState
+          icon={Search}
+          title="No matching stocks"
+          description="Try a different name, brand, or color."
+        />
       ) : (
-        <StockTable stockData={stocks} />
+        <StockTable stockData={filteredStocks} />
       )}
     </PageLayout>
   );

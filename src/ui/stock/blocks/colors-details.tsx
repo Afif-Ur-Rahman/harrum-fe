@@ -1,7 +1,11 @@
+"use client";
+
+import { useMemo, useState } from "react";
 import { Table } from "@/components";
 import { StockVariant } from "@/types";
 import { Flex } from "@radix-ui/themes";
-import { Palette } from "lucide-react";
+import { Palette, Search } from "lucide-react";
+import { getColorValue } from "@/utils";
 
 interface ColorsDetailsProps {
   colors: StockVariant[];
@@ -19,12 +23,30 @@ export const ColorsDetails: React.FC<ColorsDetailsProps> = ({
   colors = [],
   size = "",
 }) => {
+  const [search, setSearch] = useState("");
+
+  const filteredColors = useMemo(() => {
+    const query = search.trim().toLowerCase();
+
+    if (!query) return colors;
+
+    return colors.filter((color) => color.color?.toLowerCase().includes(query));
+  }, [colors, search]);
+
   const columns = [
     {
       key: "color" as const,
       header: "Color",
       render: (row: StockVariant) => (
-        <span className="font-semibold text-slate-300">{row.color}</span>
+        <div className="flex items-center gap-2">
+          <span
+            className="h-3 w-4 shrink-0 rounded-xs border border-white/40 shadow-inner"
+            style={{ backgroundColor: getColorValue(row.color) }}
+          />
+          <span className="font-semibold capitalize text-slate-300">
+            {row.color}
+          </span>
+        </div>
       ),
     },
     {
@@ -61,7 +83,18 @@ export const ColorsDetails: React.FC<ColorsDetailsProps> = ({
         </div>
       </div>
 
-      <Table title="Color Variants" data={colors} columns={columns} />
+      <div className="relative w-full">
+        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+        <input
+          type="text"
+          placeholder="Search colors..."
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          className="w-full rounded-2xl border border-white/10 bg-slate-950/50 py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+        />
+      </div>
+
+      <Table title="Color Variants" data={filteredColors} columns={columns} />
     </Flex>
   );
 };
