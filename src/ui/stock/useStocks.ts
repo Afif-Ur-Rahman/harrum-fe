@@ -6,6 +6,7 @@ import { useStockForm, StockFormType } from "./form";
 import { useFieldArray, useWatch } from "react-hook-form";
 import { showToast } from "@/utils/toast";
 import { usePersistStore } from "@/store/presistStore";
+import { NO_COLOR_VARIANT_TYPES } from "./constants";
 
 const useStocks = () => {
   const { stocks, stocksLoaded, setStocks } = usePersistStore();
@@ -73,12 +74,13 @@ const useStocks = () => {
         isNaN(salePrice);
 
       const invalidVariants =
-        !item.variants?.length ||
-        item.variants.some((variant) => {
-          const qty = Number(variant.quantity);
+        !NO_COLOR_VARIANT_TYPES.includes(item.type) &&
+        (!item.variants?.length ||
+          item.variants.some((variant) => {
+            const qty = Number(variant.quantity);
 
-          return !variant.color?.trim() || qty <= 0 || isNaN(qty);
-        });
+            return !variant.color?.trim() || qty <= 0 || isNaN(qty);
+          }));
 
       return invalidBasicFields || invalidPrices || invalidVariants;
     });

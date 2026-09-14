@@ -7,6 +7,7 @@ import {
   ShoppingCart,
   Store,
   BadgeDollarSign,
+  Hash,
 } from "lucide-react";
 
 type FieldType = "text" | "number" | "select";
@@ -25,6 +26,7 @@ interface StockItemField {
   icon?: React.ElementType;
   required?: boolean;
   options?: FieldOption[];
+  showWhen?: (values: Record<string, string>) => boolean;
 }
 
 interface VariantField {
@@ -33,6 +35,8 @@ interface VariantField {
   placeholder: string;
   icon?: React.ElementType;
 }
+
+export const NO_COLOR_VARIANT_TYPES = ["perfume", "body_spray", "accessories"];
 
 export const STOCK_ITEM_FIELDS: StockItemField[] = [
   {
@@ -110,6 +114,15 @@ export const STOCK_ITEM_FIELDS: StockItemField[] = [
     ],
     icon: Ruler,
     required: true,
+  },
+  {
+    name: "quantity",
+    label: "Quantity",
+    type: "number",
+    placeholder: "0",
+    icon: Hash,
+    required: true,
+    showWhen: (values) => NO_COLOR_VARIANT_TYPES.includes(values.type),
   },
   {
     name: "purchasePrice",

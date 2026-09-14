@@ -41,8 +41,8 @@ export const Stocks = () => {
                 Stocks
               </h1>
               <p className="mt-1 text-xs text-slate-400">
-                {filteredStocks.length} item
-                {filteredStocks.length !== 1 ? "s" : ""} in inventory
+                {stocks.length} item
+                {stocks.length !== 1 ? "s" : ""} in inventory
                 {search ? ` · ${filteredStocks.length} matching` : ""}
               </p>
             </div>

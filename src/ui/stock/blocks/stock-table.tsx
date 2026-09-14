@@ -37,7 +37,9 @@ export const StockTable: React.FC<StockTableProps> = ({ stockData = [] }) => {
       key: "quantity" as const,
       header: "Total Qty",
       render: (row: Stock) => {
-        const totalQuantity = getTotalQuantity(row.variants);
+        const totalQuantity = row.quantity
+          ? row.quantity
+          : getTotalQuantity(row.variants);
 
         return (
           <span className="inline-flex items-center rounded-full border border-white/10 bg-white/8 px-2.5 py-1 text-xs font-semibold text-cyan-300">
@@ -76,19 +78,24 @@ export const StockTable: React.FC<StockTableProps> = ({ stockData = [] }) => {
     {
       key: "totalValue" as const,
       header: "Total Sale Value",
-      render: (row: Stock) => (
-        <span className="font-semibold text-cyan-300">
-          {formatPrice(
-            Number(row.salePrice) * getTotalQuantity(row.variants),
-          ) || 0}
-        </span>
-      ),
+      render: (row: Stock) => {
+        const quantity = row.quantity
+          ? row.quantity
+          : getTotalQuantity(row.variants);
+        return (
+          <span className="font-semibold text-cyan-300">
+            {formatPrice(Number(row.salePrice) * quantity) || 0}
+          </span>
+        );
+      },
     },
     {
       key: "status" as const,
       header: "Status",
       render: (row: Stock) => {
-        const totalQuantity = getTotalQuantity(row.variants);
+        const totalQuantity = row.quantity
+          ? row.quantity
+          : getTotalQuantity(row.variants);
 
         return (
           <span

@@ -1,12 +1,16 @@
 "use client";
 
-import React from "react";
-import { useFieldArray, useFormContext } from "react-hook-form";
+import React, { useEffect } from "react";
+import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import { StockItemType } from "../form/schema";
 import { Plus, Trash2, Package, Palette, X } from "lucide-react";
 import { StockFormType } from "../form";
 import { FormInput } from "@/components";
-import { STOCK_ITEM_FIELDS, VARIANT_FIELDS } from "../constants";
+import {
+  NO_COLOR_VARIANT_TYPES,
+  STOCK_ITEM_FIELDS,
+  VARIANT_FIELDS,
+} from "../constants";
 
 interface StockInTableProps {
   stockData: StockItemType[];
@@ -24,12 +28,28 @@ const StockRow = ({
   removeField: (id: string | number) => void;
   isLast: boolean;
 }) => {
-  const { control } = useFormContext<StockFormType>();
+  const { control, setValue } = useFormContext<StockFormType>();
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: `stockItems.${idx}.variants`,
   });
+
+  const type = useWatch({
+    control,
+    name: `stockItems.${idx}.type`,
+  });
+
+  const hasColorVariants = !NO_COLOR_VARIANT_TYPES.includes(type);
+
+  useEffect(() => {
+    if (!hasColorVariants && fields.length > 0) {
+      setValue(`stockItems.${idx}.variants`, [], {
+        shouldValidate: true,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasColorVariants]);
 
   return (
     <div
@@ -60,75 +80,87 @@ const StockRow = ({
         </div>
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
-          {STOCK_ITEM_FIELDS.map((item) => (
-            <FormInput
-              key={item.name}
-              field={`stockItems.${idx}.${item.name}`}
-              label={item.label}
-              type={item.type}
-              placeholder={item.placeholder}
-              icon={item.icon}
-              options={"options" in item ? item.options : []}
-              required={item.required}
-            />
-          ))}
+          {STOCK_ITEM_FIELDS.map((item) => {
+            const shouldShow =
+              !item.showWhen ||
+              item.showWhen({
+                type: type ?? "",
+              });
+
+            if (!shouldShow) return null;
+
+            return (
+              <FormInput
+                key={item.name}
+                field={`stockItems.${idx}.${item.name}`}
+                label={item.label}
+                type={item.type}
+                placeholder={item.placeholder}
+                icon={item.icon}
+                options={"options" in item ? item.options : []}
+                required={item.required}
+              />
+            );
+          })}
         </div>
       </div>
 
-      <div className="mt-5 overflow-hidden rounded-3xl border border-white/10 bg-white/5">
-        <div className="grid grid-cols-[1fr_140px_44px] gap-3 border-b border-white/10 bg-white/8 px-4 py-3 max-sm:grid-cols-1">
-          <div className="flex items-center gap-2">
-            <Palette className="h-4 w-4 text-cyan-300" />
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">
-              Color Variants
+      {hasColorVariants && (
+        <div className="mt-5 overflow-hidden rounded-3xl border border-white/10 bg-white/5">
+          <div className="grid grid-cols-[1fr_140px_44px] gap-3 border-b border-white/10 bg-white/8 px-4 py-3 max-sm:grid-cols-1">
+            <div className="flex items-center gap-2">
+              <Palette className="h-4 w-4 text-cyan-300" />
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">
+                Color Variants
+              </p>
+            </div>
+
+            <p className="text-center text-[11px] font-semibold uppercase tracking-widest text-slate-400 max-sm:hidden">
+              Quantity
             </p>
+
+            <span className="max-sm:hidden" />
           </div>
 
-          <p className="text-center text-[11px] font-semibold uppercase tracking-widest text-slate-400 max-sm:hidden">
-            Quantity
-          </p>
-
-          <span className="max-sm:hidden" />
-        </div>
-
-        <div className="divide-y divide-white/10">
-          {fields.map((field, variantIdx) => (
-            <div
-              key={field.id}
-              className="grid grid-cols-[1fr_140px_44px] items-center gap-3 bg-white/3 px-4 py-4 transition hover:bg-white/5 max-sm:grid-cols-1"
-            >
-              {VARIANT_FIELDS.map(({ name, type, placeholder, icon }) => (
-                <FormInput
-                  key={name}
-                  field={`stockItems.${idx}.variants.${variantIdx}.${name}`}
-                  type={type}
-                  placeholder={placeholder}
-                  icon={icon}
-                />
-              ))}
-
-              <button
-                type="button"
-                onClick={() => remove(variantIdx)}
-                disabled={fields.length === 1}
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-red-300/20 bg-white/5 text-red-300 transition hover:bg-red-400/10 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-30 max-sm:w-full"
-                aria-label="Remove color variant"
+          <div className="divide-y divide-white/10">
+            {fields.map((field, variantIdx) => (
+              <div
+                key={field.id}
+                className="grid grid-cols-[1fr_140px_44px] items-center gap-3 bg-white/3 px-4 py-4 transition hover:bg-white/5 max-sm:grid-cols-1"
               >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-          ))}
-        </div>
+                {VARIANT_FIELDS.map(({ name, type, placeholder, icon }) => (
+                  <FormInput
+                    key={name}
+                    field={`stockItems.${idx}.variants.${variantIdx}.${name}`}
+                    type={type}
+                    placeholder={placeholder}
+                    icon={icon}
+                  />
+                ))}
 
-        <button
-          type="button"
-          onClick={() => append({ color: "", quantity: "" })}
-          className="flex w-full items-center justify-center gap-2 border-t border-white/10 px-4 py-3 text-xs font-semibold text-cyan-300 transition hover:bg-cyan-400/10 hover:text-cyan-200"
-        >
-          <Plus className="h-3.5 w-3.5" />
-          Add another color
-        </button>
-      </div>
+                <button
+                  type="button"
+                  onClick={() => remove(variantIdx)}
+                  disabled={fields.length === 1}
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-red-300/20 bg-white/5 text-red-300 transition hover:bg-red-400/10 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-30 max-sm:w-full"
+                  aria-label="Remove color variant"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+            ))}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => append({ color: "", quantity: "" })}
+            className="flex w-full items-center justify-center gap-2 border-t border-white/10 px-4 py-3 text-xs font-semibold text-cyan-300 transition hover:bg-cyan-400/10 hover:text-cyan-200"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            Add another color
+          </button>
+        </div>
+      )}
     </div>
   );
 };

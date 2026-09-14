@@ -36,7 +36,7 @@ export const HistoryTable: React.FC<HistoryTableProps> = ({
       header: "Added Qty",
       render: (row: StockHistory) => (
         <span className="inline-flex items-center rounded-full border border-white/10 bg-white/8 px-2.5 py-1 text-xs font-semibold text-cyan-300">
-          {getTotalQuantity(row.variants)} {size}
+          {row.quantity ? row.quantity : getTotalQuantity(row.variants)} {size}
         </span>
       ),
     },
@@ -70,13 +70,16 @@ export const HistoryTable: React.FC<HistoryTableProps> = ({
     {
       key: "totalValue" as const,
       header: "Total Sale Value",
-      render: (row: StockHistory) => (
-        <span className="font-semibold text-cyan-300">
-          {formatPrice(
-            Number(row.salePrice) * getTotalQuantity(row.variants),
-          ) || 0}
-        </span>
-      ),
+      render: (row: StockHistory) => {
+        const quantity = row.quantity
+          ? row.quantity
+          : getTotalQuantity(row.variants);
+        return (
+          <span className="font-semibold text-cyan-300">
+            {formatPrice(Number(row.salePrice) * quantity) || 0}
+          </span>
+        );
+      },
     },
     {
       key: "_id" as const,

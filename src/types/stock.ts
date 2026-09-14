@@ -8,6 +8,7 @@ export interface StockHistory {
   purchasePrice: number;
   wholesalePrice: number;
   salePrice: number;
+  quantity?: number;
   variants: StockVariant[];
   date: string;
 }
@@ -20,6 +21,7 @@ export interface Stock {
   purchasePrice: number;
   wholesalePrice: number;
   salePrice: number;
+  quantity?: number;
   variants: StockVariant[];
   size: string;
   history: StockHistory[];
@@ -31,6 +33,7 @@ export interface AddStockPayload {
   purchasePrice: number;
   wholesalePrice: number;
   salePrice: number;
+  quantity?: number;
   variants: StockVariant[];
 }
 
