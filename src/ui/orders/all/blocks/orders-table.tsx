@@ -20,21 +20,28 @@ interface OrdersTableProps {
     itemId: string,
     variantId: string,
   ) => Promise<{ state: boolean; message?: string; error?: string }>;
+  onReturn: (
+    orderId: string,
+    itemId: string,
+  ) => Promise<{ state: boolean; message?: string; error?: string }>;
 }
 
 const getTotalItemsQty = (order: Order) =>
-  order.items.reduce(
-    (sum, item) =>
-      sum +
-      item.variants.reduce((vSum, v) => vSum + Number(v.quantity || 0), 0),
-    0,
-  );
+  order.items.reduce((sum, item) => {
+    const itemQty =
+      item.variants.length === 0
+        ? Number(item.quantity)
+        : item.variants.reduce((vSum, v) => vSum + Number(v.quantity || 0), 0);
+
+    return sum + itemQty;
+  }, 0);
 
 export const OrdersTable: React.FC<OrdersTableProps> = ({
   orders,
   loading,
   onClaimItem,
   onReturnItem,
+  onReturn,
 }) => {
   const columns = [
     {
@@ -57,12 +64,14 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
     {
       key: "items" as const,
       header: "Items",
-      render: (row: Order) => (
-        <span className="inline-flex items-center rounded-full border border-white/10 bg-white/8 px-2.5 py-1 text-xs font-semibold text-cyan-300">
-          {row.items.length} item{row.items.length !== 1 ? "s" : ""} ·{" "}
-          {getTotalItemsQty(row)} pcs
-        </span>
-      ),
+      render: (row: Order) => {
+        return (
+          <span className="inline-flex items-center rounded-full border border-white/10 bg-white/8 px-2.5 py-1 text-xs font-semibold text-cyan-300">
+            {row.items.length} item{row.items.length !== 1 ? "s" : ""} ·{" "}
+            {getTotalItemsQty(row)} pcs
+          </span>
+        );
+      },
     },
     {
       key: "discount" as const,
@@ -108,6 +117,7 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
                 order={row}
                 onClaimItem={onClaimItem}
                 onReturnItem={onReturnItem}
+                onReturn={onReturn}
               />
             }
           />

@@ -57,6 +57,19 @@ export const returnOrderItem = async (
   }
 };
 
+export const returnOrder = async (orderId: string, itemId: string) => {
+  try {
+    const response = await serverAction({
+      url: `/orders/return-item/${orderId}/${itemId}`,
+      method: "PUT",
+    });
+    return response as ResponseForOrder;
+  } catch (error) {
+    console.error("Failed to return order item:", (error as Error).message);
+    return null;
+  }
+};
+
 export const claimOrderItem = async (
   orderId: string,
   itemId: string,

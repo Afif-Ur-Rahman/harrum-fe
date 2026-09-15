@@ -20,6 +20,9 @@ export interface OrderItem {
   stockId: string;
   name: string;
   priceType: "purchase" | "wholesale" | "sale" | "custom";
+  quantity?: number;
+  price?: number;
+  isReturned?: boolean;
   variants: OrderVariant[];
 }
 

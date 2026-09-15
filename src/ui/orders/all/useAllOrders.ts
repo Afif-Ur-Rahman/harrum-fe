@@ -3,6 +3,7 @@ import {
   getAllOrders,
   claimOrderItem,
   returnOrderItem,
+  returnOrder,
 } from "@/api/api-call/orders";
 import { showToast } from "@/utils/toast";
 import { usePersistStore } from "@/store/presistStore";
@@ -148,6 +149,31 @@ const useAllOrders = () => {
     };
   };
 
+  const onReturn = async (
+    orderId: string,
+    itemId: string,
+  ): Promise<{ state: boolean; message?: string; error?: string }> => {
+    const res = await returnOrder(orderId, itemId);
+
+    if (res?.error || !res?.data) {
+      return {
+        state: false,
+        error: res?.error || "Failed to return item",
+      };
+    }
+
+    updateOrderById(res.data.data);
+
+    if (res.data.updatedStock) {
+      updateStockById(res.data.updatedStock);
+    }
+
+    return {
+      state: true,
+      message: res.data.message,
+    };
+  };
+
   useEffect(() => {
     const loadInitialOrders = async () => {
       await fetchOrders(1, "", false);
@@ -167,6 +193,7 @@ const useAllOrders = () => {
     loadMore,
     onClaimItem,
     onReturnItem,
+    onReturn,
   };
 };
 

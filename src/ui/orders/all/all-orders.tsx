@@ -19,6 +19,7 @@ export const AllOrders = () => {
     loadMore,
     onClaimItem,
     onReturnItem,
+    onReturn,
   } = useAllOrders();
 
   const sentinelRef = useRef<HTMLDivElement>(null);
@@ -76,6 +77,7 @@ export const AllOrders = () => {
         loading={loading}
         onClaimItem={onClaimItem}
         onReturnItem={onReturnItem}
+        onReturn={onReturn}
       />
 
       {!loading && hasMore && (
