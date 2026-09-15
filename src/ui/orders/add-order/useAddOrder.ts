@@ -9,6 +9,7 @@ import { useOrderForm, OrderFormType } from "./form";
 import { showToast } from "@/utils/toast";
 import { createOrder } from "@/api/api-call";
 import { usePersistStore } from "@/store/presistStore";
+import { NO_COLOR_VARIANT_TYPES } from "@/ui/stock/constants";
 
 const useAddOrder = () => {
   const {
@@ -48,6 +49,10 @@ const useAddOrder = () => {
     }) || [];
 
   const orderTotal = items.reduce((sum, item) => {
+    if (item?.hasVariants === false) {
+      return sum + (Number(item?.price) || 0);
+    }
+
     const itemTotal = (item?.variants || []).reduce(
       (vSum, v) => vSum + (Number(v?.price) || 0),
       0,
@@ -117,15 +122,29 @@ const useAddOrder = () => {
   };
 
   const addOrderItem = (stock: Stock) => {
-    const color = stock.variants?.[0]?.color || "";
+    const isNoColorType = NO_COLOR_VARIANT_TYPES.includes(stock.type);
+
+    if (isNoColorType) {
+      append({
+        stockId: stock._id,
+        name: `${stock.name} - ${stock.brand}`,
+        priceType: "sale",
+        hasVariants: false,
+        quantity: "",
+        price: "0",
+        variants: [],
+      });
+      return;
+    }
 
     append({
       stockId: stock._id,
       name: `${stock.name} - ${stock.brand}`,
       priceType: "sale",
+      hasVariants: true,
       variants: [
         {
-          color,
+          color: stock.variants?.[0]?.color || "",
           quantity: "",
           price: "0",
         },

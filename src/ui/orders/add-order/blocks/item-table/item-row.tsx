@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { Trash2, Package, Plus, Palette } from "lucide-react";
+import { Trash2, Package, Plus, Palette, Hash } from "lucide-react";
 import { Stock } from "@/types";
 import { VariantRow } from "./variant-row";
 import { OrderFormType, OrderItemFormType } from "../../form";
 import { getUnitPrice, PriceSelector, PriceType } from "../price-selector";
+import { FormInput } from "@/components";
+import { NO_COLOR_VARIANT_TYPES } from "@/ui/stock/constants";
 
 interface ItemRowProps {
   item: OrderItemFormType;
@@ -27,22 +29,43 @@ export const ItemRow = ({
 
   const [customPrice, setCustomPrice] = useState("");
 
+  const isNoColorType = stock
+    ? NO_COLOR_VARIANT_TYPES.includes(stock.type)
+    : false;
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: `items.${index}.variants`,
   });
 
   const selectedVariants = watch(`items.${index}.variants`) || [];
+  const itemQuantity = watch(`items.${index}.quantity`) || "";
   const priceType = (watch(`items.${index}.priceType`) || "sale") as PriceType;
 
-  const totalQuantity = selectedVariants.reduce(
-    (sum, v) => sum + (Number(v.quantity) || 0),
-    0,
-  );
+  const totalQuantity = isNoColorType
+    ? Number(itemQuantity) || 0
+    : selectedVariants.reduce((sum, v) => sum + (Number(v.quantity) || 0), 0);
 
-  const quantitiesKey = selectedVariants.map((v) => v.quantity).join("|");
+  const quantitiesKey = isNoColorType
+    ? itemQuantity
+    : selectedVariants.map((v) => v.quantity).join("|");
 
+  // No-color stock: compute price at the item level
   useEffect(() => {
+    if (!isNoColorType) return;
+
+    const unitPrice = getUnitPrice(stock, priceType, customPrice);
+    const qty = Number(itemQuantity) || 0;
+    const computedPrice = String(unitPrice * qty);
+
+    setValue(`items.${index}.price`, computedPrice, { shouldDirty: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isNoColorType, quantitiesKey, priceType, customPrice, stock, index]);
+
+  // Color-variant stock: compute price per variant
+  useEffect(() => {
+    if (isNoColorType) return;
+
     const unitPrice = getUnitPrice(stock, priceType, customPrice);
 
     selectedVariants.forEach((variant, variantIdx) => {
@@ -56,7 +79,7 @@ export const ItemRow = ({
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [quantitiesKey, priceType, customPrice, stock, index]);
+  }, [isNoColorType, quantitiesKey, priceType, customPrice, stock, index]);
 
   const getColorOptions = (variantIdx: number) => {
     const currentColor = selectedVariants[variantIdx]?.color;
@@ -123,46 +146,66 @@ export const ItemRow = ({
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/5">
-        <div className="grid grid-cols-[1fr_140px_44px] gap-3 border-b border-white/10 bg-white/8 px-4 py-3 max-sm:grid-cols-1">
-          <div className="flex items-center gap-2">
-            <Palette className="h-4 w-4 text-cyan-300" />
+      {isNoColorType ? (
+        <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/5">
+          <div className="flex items-center gap-2 border-b border-white/10 bg-white/8 px-4 py-3">
+            <Hash className="h-4 w-4 text-cyan-300" />
             <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">
-              Colors
+              Quantity
             </p>
           </div>
 
-          <p className="text-center text-[11px] font-semibold uppercase tracking-widest text-slate-400 max-sm:hidden">
-            Quantity
-          </p>
-
-          <span className="max-sm:hidden" />
-        </div>
-
-        <div className="divide-y divide-white/10">
-          {fields.map((field, variantIdx) => (
-            <VariantRow
-              key={field.id}
-              itemIndex={index}
-              variantIndex={variantIdx}
-              colorOptions={getColorOptions(variantIdx)}
-              maxQuantity={getMaxQuantity(variantIdx)}
-              onRemove={() => remove(variantIdx)}
-              removeDisabled={fields.length === 1}
+          <div className="px-4 py-4">
+            <FormInput
+              field={`items.${index}.quantity`}
+              type="number"
+              placeholder="0"
+              max={stock?.quantity}
             />
-          ))}
+          </div>
         </div>
+      ) : (
+        <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/5">
+          <div className="grid grid-cols-[1fr_140px_44px] gap-3 border-b border-white/10 bg-white/8 px-4 py-3 max-sm:grid-cols-1">
+            <div className="flex items-center gap-2">
+              <Palette className="h-4 w-4 text-cyan-300" />
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">
+                Colors
+              </p>
+            </div>
 
-        <button
-          type="button"
-          onClick={() => append({ color: "", quantity: "", price: "0" })}
-          disabled={!canAddMoreColors}
-          className="flex w-full items-center justify-center gap-2 border-t border-white/10 px-4 py-3 text-xs font-semibold text-cyan-300 transition hover:bg-cyan-400/10 hover:text-cyan-200 disabled:cursor-not-allowed disabled:opacity-30"
-        >
-          <Plus className="h-3.5 w-3.5" />
-          {canAddMoreColors ? "Add color" : "All available colors added"}
-        </button>
-      </div>
+            <p className="text-center text-[11px] font-semibold uppercase tracking-widest text-slate-400 max-sm:hidden">
+              Quantity
+            </p>
+
+            <span className="max-sm:hidden" />
+          </div>
+
+          <div className="divide-y divide-white/10">
+            {fields.map((field, variantIdx) => (
+              <VariantRow
+                key={field.id}
+                itemIndex={index}
+                variantIndex={variantIdx}
+                colorOptions={getColorOptions(variantIdx)}
+                maxQuantity={getMaxQuantity(variantIdx)}
+                onRemove={() => remove(variantIdx)}
+                removeDisabled={fields.length === 1}
+              />
+            ))}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => append({ color: "", quantity: "", price: "0" })}
+            disabled={!canAddMoreColors}
+            className="flex w-full items-center justify-center gap-2 border-t border-white/10 px-4 py-3 text-xs font-semibold text-cyan-300 transition hover:bg-cyan-400/10 hover:text-cyan-200 disabled:cursor-not-allowed disabled:opacity-30"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            {canAddMoreColors ? "Add color" : "All available colors added"}
+          </button>
+        </div>
+      )}
     </div>
   );
 };
