@@ -23,9 +23,10 @@ export const Stocks = () => {
     return acc + Number(stock.salePrice) * totalQty;
   }, 0);
 
-  const outOfStock = filteredStocks.filter(
-    (stock) => getTotalQuantity(stock.variants) <= 0,
-  ).length;
+  const outOfStock = filteredStocks.filter((stock) => {
+    const total = stock.quantity ?? getTotalQuantity(stock.variants);
+    return total <= 0;
+  }).length;
 
   return (
     <PageLayout>

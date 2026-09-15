@@ -86,7 +86,7 @@ export const HistoryTable: React.FC<HistoryTableProps> = ({
       header: "Actions",
       render: (row: StockHistory) => (
         <Flex justify="end" align="center" gap="2">
-          {row.variants?.length > 0 && (
+          {row.variants?.length > 0 ? (
             <ReuseableDialog
               title={`Colors${size ? ` - ${size}` : ""}`}
               triggerButton={
@@ -102,6 +102,8 @@ export const HistoryTable: React.FC<HistoryTableProps> = ({
                 <ColorsDetails colors={row.variants || []} size={size} />
               }
             />
+          ) : (
+            "-"
           )}
         </Flex>
       ),
