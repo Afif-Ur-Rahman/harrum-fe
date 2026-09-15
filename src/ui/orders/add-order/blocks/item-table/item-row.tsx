@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { Trash2, Package, Plus, Palette, Hash } from "lucide-react";
+import { Trash2, Plus, Palette, Hash } from "lucide-react";
 import { Stock } from "@/types";
 import { VariantRow } from "./variant-row";
 import { OrderFormType, OrderItemFormType } from "../../form";
@@ -15,7 +15,7 @@ interface ItemRowProps {
   index: number;
   stock?: Stock;
   removeItem: (index: number) => void;
-  isLast: boolean;
+  showBorder: number;
 }
 
 export const ItemRow = ({
@@ -23,7 +23,7 @@ export const ItemRow = ({
   index,
   stock,
   removeItem,
-  isLast,
+  showBorder,
 }: ItemRowProps) => {
   const { control, watch, setValue } = useFormContext<OrderFormType>();
 
@@ -108,18 +108,10 @@ export const ItemRow = ({
 
   return (
     <div
-      className={`relative px-4 py-5 ${!isLast ? "border-b border-white/10" : ""}`}
+      className={`${showBorder ? "sm:border-r sm:border-white/10 sm:pr-2" : ""}`}
     >
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex min-w-0 items-center gap-2">
-          <div className="hidden sm:flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/8">
-            <Package className="h-4 w-4 text-cyan-300" />
-          </div>
-
-          <p className="truncate text-sm font-semibold text-white">
-            {item.name}
-          </p>
-        </div>
+      <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
+        <p className="truncate text-sm font-semibold text-white">{item.name}</p>
 
         <div className="flex flex-1 items-center justify-between gap-2 sm:justify-center sm:flex-0">
           <PriceSelector
@@ -138,47 +130,51 @@ export const ItemRow = ({
           <button
             type="button"
             onClick={() => removeItem(index)}
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-red-300/20 bg-red-400/10 text-red-300 transition hover:bg-red-400/15 hover:text-red-200 active:scale-[0.98]"
+            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl border border-red-300/20 bg-red-400/10 text-red-300 transition hover:bg-red-400/15 hover:text-red-200 active:scale-[0.98]"
             aria-label="Remove item"
           >
-            <Trash2 className="h-4 w-4" />
+            <Trash2 className="h-3 w-3" />
           </button>
         </div>
       </div>
 
       {isNoColorType ? (
-        <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/5">
-          <div className="flex items-center gap-2 border-b border-white/10 bg-white/8 px-4 py-3">
-            <Hash className="h-4 w-4 text-cyan-300" />
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">
-              Quantity
-            </p>
+        <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/5">
+          <div className="flex items-center justify-between gap-2 border-b border-white/10 bg-white/8 px-3 py-2">
+            <div className="flex items-center gap-2">
+              <Hash className="h-3.5 w-3.5 text-cyan-300" />
+              <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+                Quantity
+              </span>
+            </div>
+            <span className="text-[11px]">
+              {stock?.quantity} {stock?.size}
+            </span>
           </div>
 
-          <div className="px-4 py-4">
+          <div className="px-3 py-2.5">
             <FormInput
               field={`items.${index}.quantity`}
               type="number"
               placeholder="0"
               max={stock?.quantity}
+              compact
             />
           </div>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/5">
-          <div className="grid grid-cols-[1fr_140px_44px] gap-3 border-b border-white/10 bg-white/8 px-4 py-3 max-sm:grid-cols-1">
+        <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/5">
+          <div className="grid grid-cols-[1fr_130px_40px] gap-2 border-b border-white/10 bg-white/8 px-3 py-2 max-sm:grid-cols-1">
             <div className="flex items-center gap-2">
-              <Palette className="h-4 w-4 text-cyan-300" />
-              <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">
+              <Palette className="h-3.5 w-3.5 text-cyan-300" />
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
                 Colors
               </p>
             </div>
 
-            <p className="text-center text-[11px] font-semibold uppercase tracking-widest text-slate-400 max-sm:hidden">
-              Quantity
+            <p className="text-center text-[10px] font-semibold uppercase tracking-widest text-slate-400 max-sm:hidden">
+              Qty
             </p>
-
-            <span className="max-sm:hidden" />
           </div>
 
           <div className="divide-y divide-white/10">
@@ -199,10 +195,10 @@ export const ItemRow = ({
             type="button"
             onClick={() => append({ color: "", quantity: "", price: "0" })}
             disabled={!canAddMoreColors}
-            className="flex w-full items-center justify-center gap-2 border-t border-white/10 px-4 py-3 text-xs font-semibold text-cyan-300 transition hover:bg-cyan-400/10 hover:text-cyan-200 disabled:cursor-not-allowed disabled:opacity-30"
+            className="flex w-full items-center justify-center gap-1.5 border-t border-white/10 px-3 py-2 text-[11px] font-semibold text-cyan-300 transition hover:bg-cyan-400/10 hover:text-cyan-200 disabled:cursor-not-allowed disabled:opacity-30"
           >
-            <Plus className="h-3.5 w-3.5" />
-            {canAddMoreColors ? "Add color" : "All available colors added"}
+            <Plus className="h-3 w-3" />
+            {canAddMoreColors ? "Add color" : "All colors added"}
           </button>
         </div>
       )}

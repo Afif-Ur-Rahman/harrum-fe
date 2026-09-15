@@ -46,45 +46,40 @@ export const OrderForm = ({
 }: OrderFormProps) => {
   return (
     <FormProvider {...form}>
-      <section className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/8 p-5 shadow-2xl shadow-black/25 backdrop-blur-xl sm:p-6">
-        <p className="mb-5 text-sm uppercase tracking-[0.2em] text-cyan-200">
-          Customer Details
-        </p>
-
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      <section className="relative sm:pt-3">
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-3">
           {CUSTOMER_FORM_FIELDS.map((item) => (
             <FormInput
               key={item.field}
               field={item.field}
-              label={item.label}
               placeholder={item.placeholder}
               icon={item.icon}
               type={item.type}
               required={item.required}
               options={item.options}
+              compact
             />
           ))}
 
           <FormInput
             field="salesmanId"
-            label="Salesman"
             type="select"
-            placeholder="Select salesman"
+            placeholder="Select Salesman"
             icon={UserCheck}
             required
             options={salesmanOptions}
+            compact
+          />
+
+          <ItemSearch
+            stockOptions={stockOptions}
+            selectedStockIds={fields.map((item) => item.stockId)}
+            onSelectItem={addOrderItem}
           />
         </div>
       </section>
-      <div className="mt-6">
-        <ItemSearch
-          stockOptions={stockOptions}
-          selectedStockIds={fields.map((item) => item.stockId)}
-          onSelectItem={addOrderItem}
-        />
-      </div>
 
-      <div className="mt-4">
+      <div className="mt-3">
         {fields.length === 0 ? (
           <EmptyState
             icon={PackagePlus}
@@ -100,7 +95,7 @@ export const OrderForm = ({
         )}
       </div>
 
-      <div className="mt-6 flex w-full flex-wrap items-center justify-between gap-4">
+      <div className="mt-5 flex w-full flex-wrap items-center justify-between gap-4">
         <div className="flex flex-wrap items-center gap-5">
           <OrderTotal orderTotal={orderTotal} />
           <PaidCheckbox />
@@ -110,12 +105,10 @@ export const OrderForm = ({
           type="button"
           onClick={form.handleSubmit(onSubmitOrder)}
           disabled={fields.length === 0 || submitting}
-          className="flex items-center justify-center gap-2 rounded-2xl bg-linear-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-cyan-950/30 transition hover:opacity-95 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
+          className="w-full sm:w-fit flex items-center justify-center gap-2 rounded-2xl bg-linear-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-cyan-950/30 transition hover:opacity-95 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
         >
           <Save className="h-4 w-4" />
-          <span className="hidden sm:block">
-            {submitting ? "Saving…" : "Create Order"}
-          </span>
+          <span>{submitting ? "Saving…" : "Create Order"}</span>
         </button>
       </div>
     </FormProvider>

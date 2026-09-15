@@ -31,6 +31,7 @@ interface FormInputProps {
   max?: number;
   rows?: number;
   capitalizeFirst?: boolean;
+  compact?: boolean;
 }
 
 const capitalizeFirstLetter = (value: string) => {
@@ -51,6 +52,7 @@ const FormInput = ({
   max,
   rows = 3,
   capitalizeFirst = true,
+  compact = false,
 }: FormInputProps) => {
   const { register, control } = useFormContext();
   const [show, setShow] = useState(false);
@@ -133,6 +135,8 @@ const FormInput = ({
   const inputClassName =
     "block w-0 min-w-0 max-w-full flex-1 border-0 bg-transparent p-0 text-sm text-white outline-none placeholder:text-slate-300";
 
+  const wrapperPaddingY = compact ? "py-1.5" : "py-3";
+
   return (
     <div className="w-full min-w-0 max-w-full">
       <div className="flex w-full min-w-0 max-w-full flex-col gap-1.5">
@@ -149,7 +153,7 @@ const FormInput = ({
         <div
           className={`flex w-full min-w-0 max-w-full ${
             isTextarea ? "items-start" : "items-center"
-          } gap-2.5 overflow-hidden rounded-2xl border border-white/10 bg-white/8 px-4 py-3 text-sm shadow-lg shadow-black/10 backdrop-blur-xl transition-all focus-within:border-cyan-300/60 focus-within:bg-white/12 focus-within:ring-2 focus-within:ring-cyan-300/10`}
+          } gap-2.5 overflow-hidden rounded-2xl border border-white/10 bg-white/8 px-4 ${wrapperPaddingY} text-sm shadow-lg shadow-black/10 backdrop-blur-xl transition-all focus-within:border-cyan-300/60 focus-within:bg-white/12 focus-within:ring-2 focus-within:ring-cyan-300/10`}
         >
           {Icon && (
             <Icon

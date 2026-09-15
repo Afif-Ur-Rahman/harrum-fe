@@ -3,7 +3,6 @@ import { OrderFormType } from "./form";
 
 interface CustomerFormField {
   field: keyof Pick<OrderFormType, "customerName" | "email" | "phone">;
-  label: string;
   placeholder: string;
   icon: React.ElementType;
   type?: "text" | "number" | "email" | "date" | "select";
@@ -14,23 +13,20 @@ interface CustomerFormField {
 export const CUSTOMER_FORM_FIELDS: CustomerFormField[] = [
   {
     field: "customerName",
-    label: "Customer Name",
-    placeholder: "John Doe",
+    placeholder: "Customer Name",
     icon: User,
     required: true,
   },
   {
     field: "email",
-    label: "Email",
-    placeholder: "customer@example.com",
+    placeholder: "Email",
     icon: Mail,
     type: "email",
     required: false,
   },
   {
     field: "phone",
-    label: "Phone",
-    placeholder: "0300 1234567",
+    placeholder: "Phone",
     icon: Phone,
     required: true,
   },

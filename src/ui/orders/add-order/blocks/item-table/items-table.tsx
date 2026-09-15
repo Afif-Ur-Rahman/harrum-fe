@@ -20,27 +20,30 @@ export const ItemsTable: React.FC<ItemsTableProps> = ({
   useFormContext<OrderFormType>();
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/8 shadow-2xl shadow-black/20 backdrop-blur-xl">
+    <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/8 shadow-2xl shadow-black/20 backdrop-blur-xl">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.10),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(244,114,182,0.08),transparent_36%)]" />
 
-      <div className="relative z-10">
-        <div className="hidden grid-cols-[1fr_44px] gap-5 border-b border-white/10 bg-white/8 px-4 py-3 xl:grid">
-          <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">
+      <div className="relative">
+        <div className="border-b border-white/10 bg-white/8 px-3 py-2">
+          <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
             Order Items
           </p>
           <span />
         </div>
 
-        {items.map((item, idx) => (
-          <ItemRow
-            key={item.stockId || idx}
-            item={item}
-            index={idx}
-            stock={stocks.find((s) => s._id === item.stockId)}
-            removeItem={removeItem}
-            isLast={idx === items.length - 1}
-          />
-        ))}
+        <div className="columns-1 gap-2 p-2 sm:columns-2 lg:columns-3">
+          {items.map((item, idx) => (
+            <div key={item.stockId || idx} className="mb-2 break-inside-avoid">
+              <ItemRow
+                item={item}
+                index={idx}
+                stock={stocks.find((s) => s._id === item.stockId)}
+                removeItem={removeItem}
+                showBorder={(idx + 1) % 3}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
