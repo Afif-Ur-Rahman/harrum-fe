@@ -6,7 +6,7 @@ interface LoaderProps {
   loaderColor?: string;
 }
 
-const Loader = ({
+export const Loader = ({
   label = "",
   labelColor = "text-slate-300",
   loaderColor = "text-cyan-300",
@@ -23,5 +23,3 @@ const Loader = ({
     </div>
   );
 };
-
-export default Loader;

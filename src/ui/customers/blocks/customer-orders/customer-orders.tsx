@@ -1,7 +1,7 @@
 "use client";
 
 import { ShoppingBag } from "lucide-react";
-import Loader from "@/components/ui/loader";
+import { Loader } from "@/components/ui/loader";
 import { EmptyState } from "@/components";
 import { OrderCard } from "@/ui/orders/all/blocks";
 import { useCustomerOrders } from "./useCustomerOrders";

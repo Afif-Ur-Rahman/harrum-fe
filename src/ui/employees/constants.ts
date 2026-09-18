@@ -1,4 +1,4 @@
-import { Home, Lock, Mail, MapPin, Pen, Phone, UserRound } from "lucide-react";
+import { Home, Lock, Mail, MapPin, Phone, Type, UserRound } from "lucide-react";
 
 export const ROLE_STYLES: Record<string, string> = {
   Worker:
@@ -25,55 +25,48 @@ export const ROLE_PANEL_STYLES: Record<
 export const EMPLOYEE_FORM_INPUTS = [
   {
     field: "username",
-    label: "Username",
     type: "text",
-    placeholder: "username",
-    icon: Pen,
+    placeholder: "Username",
+    icon: Type,
     required: true,
   },
   {
     field: "email",
-    label: "Email",
     type: "email",
-    placeholder: "employee@example.com",
+    placeholder: "Email",
     icon: Mail,
     required: true,
   },
   {
     field: "phone",
-    label: "Phone Number",
     type: "text",
-    placeholder: "0300 1234567",
+    placeholder: "Phone Number",
     icon: Phone,
     required: true,
   },
   {
     field: "password",
-    label: "Password",
     type: "password",
-    placeholder: "Min. 8 characters",
+    placeholder: "Password Min. 8 characters",
     icon: Lock,
     required: false,
   },
   {
     field: "guardianName",
-    label: "Father / Guardian Name",
     type: "text",
-    placeholder: "Father or guardian name",
+    placeholder: "Father / Guardian name",
     icon: UserRound,
     required: true,
   },
   {
     field: "guardianPhone",
-    label: "Father / Guardian Number",
     type: "text",
-    placeholder: "0300 1234567",
+    placeholder: "Father / Guardian Number",
     icon: Phone,
     required: true,
   },
   {
     field: "permanentAddress",
-    label: "Permanent Address",
     type: "textarea",
     placeholder: "Permanent address",
     icon: MapPin,
@@ -81,7 +74,6 @@ export const EMPLOYEE_FORM_INPUTS = [
   },
   {
     field: "currentAddress",
-    label: "Current Address",
     type: "textarea",
     placeholder: "Current address",
     icon: Home,

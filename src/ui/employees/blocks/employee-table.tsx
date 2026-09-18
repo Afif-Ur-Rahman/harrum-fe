@@ -13,7 +13,6 @@ export type EmployeeType = Employee & {
 
 interface EmployeeTableProps {
   filtered: EmployeeType[];
-  loading: boolean;
   onDeleteEmployee: (
     id: string,
   ) => Promise<{ state: boolean; message?: string; error?: string }>;
@@ -23,7 +22,6 @@ interface EmployeeTableProps {
 
 export const EmployeeTable: React.FC<EmployeeTableProps> = ({
   filtered,
-  loading,
   onDeleteEmployee,
   onEditEmployee,
   roleStyles = {},
@@ -179,12 +177,5 @@ export const EmployeeTable: React.FC<EmployeeTableProps> = ({
     [onDeleteEmployee, onEditEmployee, roleStyles],
   );
 
-  return (
-    <Table
-      data={filtered}
-      columns={columns}
-      isLoading={loading}
-      title="employees"
-    />
-  );
+  return <Table data={filtered} columns={columns} title="employees" />;
 };

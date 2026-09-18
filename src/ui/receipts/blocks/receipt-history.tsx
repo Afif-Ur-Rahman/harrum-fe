@@ -1,7 +1,7 @@
 "use client";
 
 import { Receipt as ReceiptIcon } from "lucide-react";
-import Loader from "@/components/ui/loader";
+import { Loader } from "@/components/ui/loader";
 import { EmptyState } from "@/components";
 import { useReceipts } from "../useReceipts";
 import { ReceiptRow } from "./receipt-row";

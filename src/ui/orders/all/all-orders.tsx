@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { ArrowLeft, ClipboardList } from "lucide-react";
-import Loader from "@/components/ui/loader";
+import { Loader } from "@/components/ui/loader";
 import { useAllOrders } from "./useAllOrders";
 import { OrdersTable, OrdersSearch } from "./blocks";
 

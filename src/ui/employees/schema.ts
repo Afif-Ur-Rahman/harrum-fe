@@ -16,12 +16,14 @@ export const EmployeeSchema = z.object({
 
 export type EmployeeFormType = z.infer<typeof EmployeeSchema>;
 
-export const AddEmployeeSchema = EmployeeSchema.superRefine((data, context) => {
-  if (!data.password || data.password.length < 8) {
-    context.addIssue({
-      code: "custom",
-      path: ["password"],
-      message: "Password must be at least 8 characters",
-    });
-  }
-});
+export const CreateEmployeeSchema = EmployeeSchema.superRefine(
+  (data, context) => {
+    if (!data.password || data.password.length < 8) {
+      context.addIssue({
+        code: "custom",
+        path: ["password"],
+        message: "Password must be at least 8 characters",
+      });
+    }
+  },
+);

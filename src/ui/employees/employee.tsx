@@ -2,15 +2,11 @@
 
 import { Plus, Users } from "lucide-react";
 import { useEmployees } from "./useEmployee";
-import {
-  AddEmployees,
-  EditEmployee,
-  EmployeesSearch,
-  EmployeeTable,
-} from "./blocks";
+import { EmployeeForm, EmployeesSearch, EmployeeTable } from "./blocks";
 import { ROLE_STYLES } from "./constants";
 import { ReuseableDialog } from "@/components";
 import { PageLayout } from "@/components/layout";
+import { Loader } from "@/components/ui/loader";
 
 const Employees = () => {
   const {
@@ -67,9 +63,7 @@ const Employees = () => {
               Add Employee
             </button>
           }
-          content={
-            <AddEmployees onAddEmployee={onAddEmployee} loading={loading} />
-          }
+          content={<EmployeeForm loading={loading} onSubmit={onAddEmployee} />}
         />
 
         <ReuseableDialog
@@ -78,10 +72,10 @@ const Employees = () => {
           setOpen={setEditOpen}
           content={
             selectedEmployee ? (
-              <EditEmployee
+              <EmployeeForm
                 employee={selectedEmployee}
                 loading={loading}
-                onUpdateEmployee={(data) =>
+                onSubmit={(data) =>
                   onUpdateEmployee(selectedEmployee._id, data)
                 }
               />
@@ -90,16 +84,21 @@ const Employees = () => {
         />
       </div>
 
-      <EmployeeTable
-        filtered={filtered}
-        loading={loading}
-        onDeleteEmployee={onDeleteEmployee}
-        onEditEmployee={(employee) => {
-          setSelectedEmployee(employee);
-          setEditOpen(true);
-        }}
-        roleStyles={ROLE_STYLES}
-      />
+      {loading ? (
+        <div className="flex min-h-70 items-center justify-center rounded-2xl border border-white/10 bg-white/8 px-6 py-16 shadow-2xl shadow-black/20 backdrop-blur-xl">
+          <Loader label="employees" />
+        </div>
+      ) : (
+        <EmployeeTable
+          filtered={filtered}
+          onDeleteEmployee={onDeleteEmployee}
+          onEditEmployee={(employee) => {
+            setSelectedEmployee(employee);
+            setEditOpen(true);
+          }}
+          roleStyles={ROLE_STYLES}
+        />
+      )}
     </PageLayout>
   );
 };

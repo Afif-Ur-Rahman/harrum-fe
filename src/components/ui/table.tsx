@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Box, Table as RadixTable } from "@radix-ui/themes";
-import Loader from "@/components/ui/loader";
+import { Loader } from "@/components/ui/loader";
 import { PackageSearch } from "lucide-react";
 import { EmptyState } from "./empty-state";
 
