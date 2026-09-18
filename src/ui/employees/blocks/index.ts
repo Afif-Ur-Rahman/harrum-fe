@@ -1,3 +1,4 @@
 export * from "./employee-table";
-export * from "./employee-add";
+export * from "./add-employee";
 export * from "./employee-search";
+export * from "./edit-employee";

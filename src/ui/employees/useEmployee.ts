@@ -2,31 +2,34 @@ import {
   createEmployees,
   deleteEmployee,
   getAllEmployees,
+  updateEmployee,
 } from "@/api/api-call/employee";
 import { EmployeeFormType } from "./schema";
-import { Employees } from "@/types/employees";
+import { Employee, Employees } from "@/types/employees";
 import { useEffect, useMemo, useState } from "react";
 import { showToast } from "@/utils/toast";
-import { User } from "@/types";
 import { usePersistStore } from "@/store/presistStore";
 
-type EmployeeRoleKey = keyof Employees;
-
-interface EmployeeSection {
-  key: EmployeeRoleKey;
-  roleLabel: string;
-}
-
-const EMPLOYEE_SECTIONS: EmployeeSection[] = [
-  { key: "worker", roleLabel: "Worker" },
-  { key: "accountant", roleLabel: "Accountant" },
+const EMPLOYEE_SECTIONS = [
+  { key: "worker" as const, roleLabel: "Worker" },
+  { key: "accountant" as const, roleLabel: "Accountant" },
 ];
+
+type EmployeeRole = keyof Employees;
+
+const isEmployeeRole = (type: unknown): type is EmployeeRole => {
+  return type === "worker" || type === "accountant";
+};
 
 const useEmployees = () => {
   const { employees, employeesLoaded, setEmployees } = usePersistStore();
 
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(
+    null,
+  );
   const [loading, setLoading] = useState<boolean>(!employeesLoaded);
 
   useEffect(() => {
@@ -34,16 +37,19 @@ const useEmployees = () => {
       if (employeesLoaded) return;
 
       setLoading(true);
+
       const res = await getAllEmployees();
+
       if (res?.error) {
         showToast("error", res.error);
       }
+
       setEmployees(res?.data?.data || { worker: [], accountant: [] });
       setLoading(false);
     };
+
     fetchAllEmployees();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [employeesLoaded, setEmployees]);
 
   const onAddEmployee = async (data: EmployeeFormType) => {
     try {
@@ -57,28 +63,78 @@ const useEmployees = () => {
       }
 
       const newEmployee = res?.data?.data;
+
       if (!newEmployee) return;
 
       setEmployees({
         ...employees,
         [newEmployee.type]: [
-          ...(employees[newEmployee.type as keyof Employees] || []),
+          ...(employees[newEmployee.type] || []),
           newEmployee,
         ],
       });
-      showToast("success", "Employee added successfully");
 
+      showToast("success", "Employee added successfully");
       setOpen(false);
-    } catch (err) {
-      showToast("error", (err as Error).message || "Failed to add employee");
+    } catch (error) {
+      showToast("error", (error as Error).message || "Failed to add employee");
     } finally {
       setLoading(false);
     }
   };
 
-  const onDeleteEmployee = async (
-    id: string,
-  ): Promise<{ state: boolean; message?: string; error?: string }> => {
+  const onUpdateEmployee = async (id: string, data: EmployeeFormType) => {
+    try {
+      setLoading(true);
+
+      const res = await updateEmployee(id, data);
+
+      if (res?.error) {
+        showToast("error", res.error);
+        return;
+      }
+
+      const updatedEmployee = res?.data?.data;
+
+      if (!updatedEmployee) {
+        showToast("error", "Updated employee was not returned by the server");
+        return;
+      }
+
+      if (!isEmployeeRole(updatedEmployee.type)) {
+        showToast("error", "Invalid employee type returned by server");
+        return;
+      }
+
+      const nextEmployees: Employees = {
+        worker: [],
+        accountant: [],
+      };
+
+      for (const employee of [...employees.worker, ...employees.accountant]) {
+        if (employee._id !== id) {
+          nextEmployees[employee.type].push(employee);
+        }
+      }
+
+      nextEmployees[updatedEmployee.type].push(updatedEmployee);
+
+      setEmployees(nextEmployees);
+      setSelectedEmployee(null);
+      setEditOpen(false);
+
+      showToast("success", "Employee updated successfully");
+    } catch (error) {
+      showToast(
+        "error",
+        (error as Error).message || "Failed to update employee",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onDeleteEmployee = async (id: string) => {
     try {
       const res = await deleteEmployee(id);
 
@@ -89,27 +145,30 @@ const useEmployees = () => {
         };
       }
 
-      const updatedEmployees = { ...employees };
-      for (const role in updatedEmployees) {
-        updatedEmployees[role as keyof Employees] =
-          updatedEmployees[role as keyof Employees]?.filter(
-            (emp) => emp._id !== id,
-          ) || [];
-      }
+      const updatedEmployees: Employees = {
+        worker: employees.worker.filter((employee) => employee._id !== id),
+        accountant: employees.accountant.filter(
+          (employee) => employee._id !== id,
+        ),
+      };
+
       setEmployees(updatedEmployees);
 
-      return { state: true, message: res?.data?.message };
-    } catch (err) {
+      return {
+        state: true,
+        message: res?.data?.message,
+      };
+    } catch (error) {
       return {
         state: false,
-        error: (err as Error).message || "Failed to delete employee",
+        error: (error as Error).message || "Failed to delete employee",
       };
     }
   };
 
   const flatEmployees = useMemo(() => {
     return EMPLOYEE_SECTIONS.flatMap((section) =>
-      (employees[section.key] || []).map((employee: User) => ({
+      (employees[section.key] || []).map((employee) => ({
         ...employee,
         roleLabel: section.roleLabel,
       })),
@@ -121,10 +180,17 @@ const useEmployees = () => {
 
     if (!query) return flatEmployees;
 
-    return flatEmployees.filter(
-      (employee) =>
-        employee.username?.toLowerCase().includes(query) ||
-        employee.email?.toLowerCase().includes(query),
+    return flatEmployees.filter((employee) =>
+      [
+        employee.username,
+        employee.email,
+        employee.phone,
+        employee.guardianName,
+        employee.guardianPhone,
+        employee.permanentAddress,
+        employee.currentAddress,
+        employee.roleLabel,
+      ].some((value) => value?.toLowerCase().includes(query)),
     );
   }, [flatEmployees, search]);
 
@@ -132,7 +198,12 @@ const useEmployees = () => {
     loading,
     open,
     setOpen,
+    editOpen,
+    setEditOpen,
+    selectedEmployee,
+    setSelectedEmployee,
     onAddEmployee,
+    onUpdateEmployee,
     onDeleteEmployee,
     flatEmployees,
     search,

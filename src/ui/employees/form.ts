@@ -1,15 +1,13 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { EmployeeFormType, EmployeeSchema } from "./schema";
+import { AddEmployeeSchema, EmployeeFormType, EmployeeSchema } from "./schema";
 
-const useEmployeeForm = (initialValues?: EmployeeFormType) => {
-  const form = useForm({
-    resolver: zodResolver(EmployeeSchema),
-    reValidateMode: "onChange",
+export const useEmployeeForm = (
+  initialValues: Partial<EmployeeFormType>,
+  isEdit = false,
+) => {
+  return useForm<EmployeeFormType>({
+    resolver: zodResolver(isEdit ? EmployeeSchema : AddEmployeeSchema),
     defaultValues: initialValues,
   });
-
-  return form;
 };
-
-export { useEmployeeForm };

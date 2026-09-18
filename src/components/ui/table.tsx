@@ -6,7 +6,7 @@ import Loader from "@/components/ui/loader";
 import { PackageSearch } from "lucide-react";
 import { EmptyState } from "./empty-state";
 
-type Column<T> =
+export type Column<T> =
   | {
       key: keyof T;
       header: React.ReactNode;

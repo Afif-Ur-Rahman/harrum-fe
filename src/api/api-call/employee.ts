@@ -1,6 +1,10 @@
 import { serverAction } from "../server-action";
 import { SimpleResponse } from "@/types/auth";
-import { CreateEmployeeResponse, ResponseForEmployee } from "@/types/employees";
+import {
+  CreateEmployeeResponse,
+  EmployeeMutationResponse,
+  ResponseForEmployee,
+} from "@/types/employees";
 import { EmployeeFormType } from "@/ui/employees/schema";
 
 export const getAllEmployees = async () => {
@@ -19,13 +23,31 @@ export const getAllEmployees = async () => {
 export const createEmployees = async (data: EmployeeFormType) => {
   try {
     const response = await serverAction({
-      url: `/employee/create-employee`,
+      url: `/employee`,
       method: "POST",
       body: data,
     });
     return response as CreateEmployeeResponse;
   } catch (error) {
     console.error("Failed to create employee:", (error as Error).message);
+    return null;
+  }
+};
+
+export const updateEmployee = async (
+  id: string,
+  data: Partial<EmployeeFormType>,
+) => {
+  try {
+    const response = await serverAction({
+      url: `/employee/${id}`,
+      method: "PUT",
+      body: data,
+    });
+
+    return response as EmployeeMutationResponse;
+  } catch (error) {
+    console.error("Failed to update employee:", (error as Error).message);
     return null;
   }
 };

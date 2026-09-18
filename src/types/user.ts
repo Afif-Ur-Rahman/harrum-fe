@@ -11,6 +11,11 @@ export interface User {
   updatedAt: string;
   username: string;
   token: string;
+  phone?: string;
+  guardianName?: string;
+  guardianPhone?: string;
+  permanentAddress?: string;
+  currentAddress?: string;
 }
 export interface UserResponse {
   message: string;
