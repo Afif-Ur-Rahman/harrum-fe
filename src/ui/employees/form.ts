@@ -16,7 +16,7 @@ const EMPTY_EMPLOYEE_VALUES: EmployeeFormType = {
   guardianPhone: "",
   permanentAddress: "",
   currentAddress: "",
-  type: "worker",
+  type: "salesman",
 };
 
 export const useEmployeeForm = (isEdit = false) => {

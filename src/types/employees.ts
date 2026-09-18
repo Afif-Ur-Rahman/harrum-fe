@@ -1,4 +1,4 @@
-export type EmployeeRole = "worker" | "accountant";
+export type EmployeeRole = "salesman" | "accountant";
 
 export interface Employee {
   _id: string;
@@ -13,7 +13,7 @@ export interface Employee {
 }
 
 export interface Employees {
-  worker: Employee[];
+  salesman: Employee[];
   accountant: Employee[];
 }
 

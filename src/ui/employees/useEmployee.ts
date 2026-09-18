@@ -11,14 +11,14 @@ import { showToast } from "@/utils/toast";
 import { usePersistStore } from "@/store/presistStore";
 
 const EMPLOYEE_SECTIONS = [
-  { key: "worker" as const, roleLabel: "Worker" },
+  { key: "salesman" as const, roleLabel: "Salesman" },
   { key: "accountant" as const, roleLabel: "Accountant" },
 ];
 
 type EmployeeRole = keyof Employees;
 
 const isEmployeeRole = (type: unknown): type is EmployeeRole => {
-  return type === "worker" || type === "accountant";
+  return type === "salesman" || type === "accountant";
 };
 
 const useEmployees = () => {
@@ -44,7 +44,7 @@ const useEmployees = () => {
         showToast("error", res.error);
       }
 
-      setEmployees(res?.data?.data || { worker: [], accountant: [] });
+      setEmployees(res?.data?.data || { salesman: [], accountant: [] });
       setLoading(false);
     };
 
@@ -107,11 +107,11 @@ const useEmployees = () => {
       }
 
       const nextEmployees: Employees = {
-        worker: [],
+        salesman: [],
         accountant: [],
       };
 
-      for (const employee of [...employees.worker, ...employees.accountant]) {
+      for (const employee of [...employees.salesman, ...employees.accountant]) {
         if (employee._id !== id) {
           nextEmployees[employee.type].push(employee);
         }
@@ -146,7 +146,7 @@ const useEmployees = () => {
       }
 
       const updatedEmployees: Employees = {
-        worker: employees.worker.filter((employee) => employee._id !== id),
+        salesman: employees.salesman.filter((employee) => employee._id !== id),
         accountant: employees.accountant.filter(
           (employee) => employee._id !== id,
         ),

@@ -49,7 +49,7 @@ const EmployeeForm = ({
         guardianPhone: "",
         permanentAddress: "",
         currentAddress: "",
-        type: "worker",
+        type: "salesman",
       });
     }
   }, [employee, form]);

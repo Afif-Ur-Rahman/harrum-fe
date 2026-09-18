@@ -6,7 +6,7 @@ export interface User {
   email: string;
   otp: string;
   otpExpires: string;
-  type: "owner" | "worker" | "accountant";
+  type: "owner" | "salesman" | "accountant";
   createdAt: string;
   updatedAt: string;
   username: string;

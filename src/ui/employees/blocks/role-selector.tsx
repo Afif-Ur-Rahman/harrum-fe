@@ -6,8 +6,8 @@ import { Calculator, PersonStanding } from "lucide-react";
 
 const ROLES = [
   {
-    value: "worker",
-    label: "Worker",
+    value: "salesman",
+    label: "Salesman",
     icon: PersonStanding,
     description: "Handles orders and serves customers",
     color: "text-emerald-300",

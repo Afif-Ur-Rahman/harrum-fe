@@ -36,7 +36,7 @@ export const EmployeeTable: React.FC<EmployeeTableProps> = ({
         render: (employee) => (
           <div className="flex items-center gap-3">
             <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md ring-1 ring-white/10">
-              {employee.type === "worker" ? (
+              {employee.type === "salesman" ? (
                 <PersonStanding className="h-4 w-4 text-cyan-300" />
               ) : (
                 <Calculator className="h-4 w-4 text-fuchsia-300" />

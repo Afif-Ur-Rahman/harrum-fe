@@ -63,7 +63,7 @@ export const usePersistStore = create<AuthState>()(
           })),
 
         // ── Employees ────────────────────────────────────────
-        employees: { worker: [], accountant: [] },
+        employees: { salesman: [], accountant: [] },
         employeesLoaded: false,
         setEmployees: (employees) => set({ employees, employeesLoaded: true }),
         setEmployeesLoaded: (loaded) => set({ employeesLoaded: loaded }),

@@ -71,7 +71,7 @@ const useAddOrder = () => {
 
   const salesmanOptions = useMemo(() => {
     const allEmployees = [
-      ...(employees.worker || []),
+      ...(employees.salesman || []),
       ...(employees.accountant || []),
     ];
 
@@ -105,14 +105,14 @@ const useAddOrder = () => {
     }
 
     const data = response?.data?.data || {
-      worker: [],
+      salesman: [],
       accountant: [],
     };
 
     setEmployees(data);
 
     const firstEmployee = [
-      ...(data.worker || []),
+      ...(data.salesman || []),
       ...(data.accountant || []),
     ][0];
 
