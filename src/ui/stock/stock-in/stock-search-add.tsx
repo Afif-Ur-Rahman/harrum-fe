@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState, RefObject } from "react";
-import { Search, X, PlusCircle, PackageCheck } from "lucide-react";
+import { useMemo, useRef, useState, RefObject } from "react";
+import { Search, X, PlusCircle, CheckCircle2 } from "lucide-react";
 import { Stock } from "@/types";
 
 interface StockOption {
@@ -12,6 +12,7 @@ interface StockOption {
 
 interface StockSearchAddProps {
   stockOptions: StockOption[];
+  selectedStockIds?: (string | undefined)[];
   onCreateNew: (name: string) => void;
   onSelectExisting: (stock: Stock) => void;
   tableRef?: RefObject<HTMLDivElement | null>;
@@ -19,6 +20,7 @@ interface StockSearchAddProps {
 
 export const StockSearchAdd = ({
   stockOptions,
+  selectedStockIds = [],
   onCreateNew,
   onSelectExisting,
   tableRef,
@@ -33,14 +35,29 @@ export const StockSearchAdd = ({
 
   const trimmedQuery = query.trim();
 
+  const availableOptions = useMemo(
+    () =>
+      stockOptions.filter((option) => !selectedStockIds.includes(option.value)),
+    [stockOptions, selectedStockIds],
+  );
+
+  const matchingAll = useMemo(() => {
+    if (trimmedQuery.length === 0) return [];
+    const q = trimmedQuery.toLowerCase();
+    return stockOptions.filter((option) =>
+      option.label.toLowerCase().includes(q),
+    );
+  }, [stockOptions, trimmedQuery]);
+
   const filtered =
     trimmedQuery.length > 0
-      ? stockOptions.filter((option) =>
-          option.label.toLowerCase().includes(trimmedQuery.toLowerCase()),
-        )
-      : [];
+      ? matchingAll.filter((option) => !selectedStockIds.includes(option.value))
+      : availableOptions;
 
-  const canCreateNew = trimmedQuery.length > 0 && filtered.length === 0;
+  const isAlreadySelected =
+    trimmedQuery.length > 0 && matchingAll.length > 0 && filtered.length === 0;
+
+  const canCreateNew = trimmedQuery.length > 0 && matchingAll.length === 0;
 
   const handleOpen = () => {
     clearTimeout(blurTimer.current);
@@ -78,136 +95,135 @@ export const StockSearchAdd = ({
   };
 
   return (
-    <div className="relative z-50 overflow-visible rounded-3xl border border-white/10 bg-white/8 p-4 shadow-2xl shadow-black/20 backdrop-blur-xl">
-      <div className="pointer-events-none absolute inset-0 rounded-3xl bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.10),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(244,114,182,0.08),transparent_36%)]" />
+    <div className="relative z-50 w-full max-w-72">
+      <div className="relative">
+        <div
+          className={`flex h-8.5 items-center gap-2 rounded-2xl border px-3 shadow-lg shadow-black/10 transition-all ${
+            open
+              ? "border-cyan-300/60 bg-white/12 ring-2 ring-cyan-300/10"
+              : "border-white/10 bg-white/8 hover:bg-white/10"
+          }`}
+        >
+          <Search className="h-4 w-4 shrink-0 text-slate-400" />
 
-      <div className="relative z-10">
-        <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-white">
-          Add Stock
-        </p>
+          <input
+            ref={inputRef}
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setOpen(true);
+            }}
+            onFocus={handleOpen}
+            onBlur={() => {
+              blurTimer.current = setTimeout(() => setOpen(false), 150);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleEnter();
+              } else if (e.key === "Tab") {
+                const firstInput =
+                  tableRef?.current?.querySelector<HTMLInputElement>("input");
 
-        <div className="relative">
-          <div
-            className={`flex h-11 items-center gap-2 rounded-2xl border px-3 shadow-lg shadow-black/10 transition-all ${
-              open
-                ? "border-cyan-300/60 bg-white/12 ring-2 ring-cyan-300/10"
-                : "border-white/10 bg-white/8 hover:bg-white/10"
-            }`}
-          >
-            <Search className="h-4 w-4 shrink-0 text-slate-400" />
-
-            <input
-              ref={inputRef}
-              value={query}
-              onChange={(e) => {
-                setQuery(e.target.value);
-                setOpen(true);
-              }}
-              onFocus={handleOpen}
-              onBlur={() => {
-                blurTimer.current = setTimeout(() => setOpen(false), 150);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
+                if (firstInput) {
                   e.preventDefault();
-                  handleEnter();
-                } else if (e.key === "Tab") {
-                  const firstInput =
-                    tableRef?.current?.querySelector<HTMLInputElement>("input");
-
-                  if (firstInput) {
-                    e.preventDefault();
-                    setOpen(false);
-                    firstInput.focus();
-                  }
+                  setOpen(false);
+                  firstInput.focus();
                 }
-              }}
-              placeholder="Search or add stock item..."
-              className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-white"
-            />
+              }
+            }}
+            placeholder="Search or add stock item..."
+            className="min-w-0 flex-1 bg-transparent text-sm text-white outline-none placeholder:text-white"
+          />
 
-            {open || query ? (
-              <button
-                type="button"
-                onClick={handleClose}
-                className="rounded-lg p-1 text-white transition hover:bg-white/10"
-                aria-label="Clear stock search"
-              >
-                <X className="h-3.5 w-3.5" />
-              </button>
-            ) : null}
-          </div>
-
-          {open && (
-            <div className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-2xl border border-white/10 bg-slate-950 shadow-2xl shadow-black/40 backdrop-blur-xl">
-              <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.98)_0%,rgba(15,23,42,0.96)_100%)]" />
-              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.12),transparent_32%)]" />
-
-              <div className="relative z-10 max-h-60 overflow-y-auto">
-                {canCreateNew ? (
-                  <button
-                    type="button"
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                      handleCreateNew();
-                    }}
-                    className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-cyan-300 transition hover:bg-cyan-400/10"
-                  >
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-cyan-300/20 bg-cyan-400/10">
-                      <PlusCircle className="h-4 w-4 text-cyan-300" />
-                    </div>
-
-                    <span>
-                      <span className="block font-semibold text-white">
-                        No matching stock found
-                      </span>
-
-                      <span className="block text-xs text-slate-400">
-                        Click to add “{trimmedQuery}” as a new stock item
-                      </span>
-                    </span>
-                  </button>
-                ) : filtered.length > 0 ? (
-                  <div className="py-1">
-                    {filtered.map((option) => (
-                      <button
-                        key={option.value}
-                        type="button"
-                        onMouseDown={(e) => {
-                          e.preventDefault();
-                          handleSelectExisting(option.stock);
-                        }}
-                        className="flex w-full items-center gap-3 px-4 py-3 text-left transition hover:bg-white/8"
-                      >
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-emerald-300/20 bg-emerald-400/10">
-                          <PackageCheck className="h-4 w-4 text-emerald-300" />
-                        </div>
-
-                        <span className="min-w-0">
-                          <span className="block truncate text-sm font-semibold text-white">
-                            {option.stock.name}
-                          </span>
-
-                          <span className="block truncate text-xs text-slate-400">
-                            {option.stock.brand}
-                          </span>
-
-                          <span className="block truncate text-xs text-slate-500">
-                            Click to add new stock.
-                          </span>
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="px-4 py-3 text-sm text-slate-400">
-                    Type a stock name to search or create a new item
-                  </p>
-                )}
-              </div>
-            </div>
-          )}
+          {open || query ? (
+            <button
+              type="button"
+              onClick={handleClose}
+              className="rounded-lg p-1 text-white transition hover:bg-white/10"
+              aria-label="Clear stock search"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          ) : null}
         </div>
+
+        {open && (
+          <div className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-2xl border border-white/10 bg-slate-950 shadow-2xl shadow-black/40 backdrop-blur-xl">
+            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.98)_0%,rgba(15,23,42,0.96)_100%)]" />
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.12),transparent_32%)]" />
+
+            <div className="relative z-10 max-h-60 overflow-y-auto">
+              {isAlreadySelected ? (
+                <div className="flex items-center gap-3 px-4 py-3 text-left text-sm text-amber-300">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-amber-300/20 bg-amber-400/10">
+                    <CheckCircle2 className="h-4 w-4 text-amber-300" />
+                  </div>
+
+                  <span>
+                    <span className="block font-semibold text-white">
+                      Already selected
+                    </span>
+
+                    <span className="block text-xs text-slate-400">
+                      “{trimmedQuery}” has already been added to this order
+                    </span>
+                  </span>
+                </div>
+              ) : canCreateNew ? (
+                <button
+                  type="button"
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    handleCreateNew();
+                  }}
+                  className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm text-cyan-300 transition hover:bg-cyan-400/10"
+                >
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-cyan-300/20 bg-cyan-400/10">
+                    <PlusCircle className="h-4 w-4 text-cyan-300" />
+                  </div>
+
+                  <span>
+                    <span className="block font-semibold text-white">
+                      No matching stock found
+                    </span>
+
+                    <span className="block text-xs text-slate-400">
+                      Click to add “{trimmedQuery}” as a new stock item
+                    </span>
+                  </span>
+                </button>
+              ) : filtered.length > 0 ? (
+                <div className="py-1">
+                  {filtered.map((option) => (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        handleSelectExisting(option.stock);
+                      }}
+                      className="flex w-full items-center gap-3 px-4 py-1 text-left transition hover:bg-white/8"
+                    >
+                      <div className="w-full flex justify-between items-center">
+                        <span className="block truncate text-sm text-white">
+                          {option.stock.name}
+                        </span>
+                        <span className="block truncate text-xs text-slate-400">
+                          {option.stock.brand}
+                        </span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <p className="px-4 py-3 text-sm text-slate-400">
+                  All items have been selected
+                </p>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

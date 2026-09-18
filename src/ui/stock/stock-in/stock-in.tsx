@@ -26,7 +26,7 @@ const StockIn = () => {
   return (
     <div className="pb-12 md:mt-6.25 lg:mt-7.5">
       {/* Header */}
-      <div className="mb-8 flex items-center gap-3">
+      <div className="mb-4 flex items-center gap-3">
         <Link
           href="/super-admin/stocks"
           className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/8 text-slate-300 shadow-lg shadow-black/10 backdrop-blur-xl transition hover:bg-white/12 hover:text-white active:scale-[0.98]"
@@ -49,17 +49,18 @@ const StockIn = () => {
       <FormProvider {...form}>
         <div
           data-sticky-target
-          className="sticky top-16 md:top-0 z-50 pb-3 pt-1 backdrop-blur-md"
+          className="sticky -top-5 z-50 -mx-1 bg-slate-950/70 px-1 py-1.5 backdrop-blur-md md:static md:mx-0 md:bg-transparent md:px-0 md:py-0 md:backdrop-blur-none"
         >
           <StockSearchAdd
             stockOptions={stockOptions}
+            selectedStockIds={fields.map((item) => item._id)}
             tableRef={tableRef}
             onCreateNew={addNewStockRow}
             onSelectExisting={addExistingStockRow}
           />
         </div>
 
-        <div ref={tableRef} className="relative z-0 mt-4">
+        <div ref={tableRef} className="relative z-0 mt-2">
           {fields.length === 0 ? (
             <EmptyState
               icon={PackagePlus}
@@ -71,7 +72,7 @@ const StockIn = () => {
           )}
         </div>
 
-        <div className="mt-6 flex w-full justify-end">
+        <div className="mt-4 flex w-full justify-end">
           <button
             type="button"
             onClick={form.handleSubmit(onAddStock)}

@@ -20,7 +20,6 @@ interface FieldOption {
 
 interface StockItemField {
   name: string;
-  label: string;
   type: FieldType;
   placeholder: string;
   icon?: React.ElementType;
@@ -41,7 +40,6 @@ export const NO_COLOR_VARIANT_TYPES = ["perfume", "body_spray", "accessories"];
 export const STOCK_ITEM_FIELDS: StockItemField[] = [
   {
     name: "name",
-    label: "Name",
     type: "text",
     placeholder: "Name",
     icon: Type,
@@ -49,7 +47,6 @@ export const STOCK_ITEM_FIELDS: StockItemField[] = [
   },
   {
     name: "brand",
-    label: "Brand",
     type: "text",
     placeholder: "Brand",
     icon: Building2,
@@ -57,7 +54,6 @@ export const STOCK_ITEM_FIELDS: StockItemField[] = [
   },
   {
     name: "type",
-    label: "Type",
     type: "select",
     placeholder: "Type",
     options: [
@@ -95,7 +91,6 @@ export const STOCK_ITEM_FIELDS: StockItemField[] = [
   },
   {
     name: "size",
-    label: "Size",
     type: "select",
     placeholder: "Size",
     options: [
@@ -117,7 +112,6 @@ export const STOCK_ITEM_FIELDS: StockItemField[] = [
   },
   {
     name: "quantity",
-    label: "Quantity",
     type: "number",
     placeholder: "0",
     icon: Hash,
@@ -126,7 +120,6 @@ export const STOCK_ITEM_FIELDS: StockItemField[] = [
   },
   {
     name: "purchasePrice",
-    label: "Purchase Price",
     type: "number",
     placeholder: "Purchase price",
     icon: ShoppingCart,
@@ -134,7 +127,6 @@ export const STOCK_ITEM_FIELDS: StockItemField[] = [
   },
   {
     name: "wholesalePrice",
-    label: "Wholesale",
     type: "number",
     placeholder: "Wholesale price",
     icon: Store,
@@ -142,7 +134,6 @@ export const STOCK_ITEM_FIELDS: StockItemField[] = [
   },
   {
     name: "salePrice",
-    label: "Sale",
     type: "number",
     placeholder: "Sale price",
     icon: BadgeDollarSign,
