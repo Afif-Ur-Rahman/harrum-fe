@@ -6,6 +6,7 @@ import { Calculator, Edit, PersonStanding, Trash2 } from "lucide-react";
 import { ConfirmationDialog } from "@/components/confirmation-dialog";
 import { Table, Column } from "@/components/ui/table";
 import { Employee } from "@/types";
+import { Tooltip } from "@/components";
 
 export type EmployeeType = Employee & {
   roleLabel: string;
@@ -32,24 +33,19 @@ export const EmployeeTable: React.FC<EmployeeTableProps> = ({
         key: "username",
         header: "Employee",
         align: "left",
-        className: "min-w-52",
         render: (employee) => (
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ring-1 ring-white/10">
+            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md ring-1 ring-white/10">
               {employee.type === "worker" ? (
-                <PersonStanding className="h-5 w-5 text-cyan-300" />
+                <PersonStanding className="h-4 w-4 text-cyan-300" />
               ) : (
-                <Calculator className="h-5 w-5 text-fuchsia-300" />
+                <Calculator className="h-4 w-4 text-fuchsia-300" />
               )}
             </div>
 
             <div className="min-w-0">
               <p className="truncate font-semibold text-white">
                 {employee.username}
-              </p>
-
-              <p className="mt-1 truncate text-xs text-slate-500">
-                {employee._id}
               </p>
             </div>
           </div>
@@ -59,8 +55,7 @@ export const EmployeeTable: React.FC<EmployeeTableProps> = ({
       {
         key: "email",
         header: "Email",
-        align: "left",
-        className: "min-w-60",
+        align: "center",
         render: (employee: Employee) => (
           <span className="block max-w-64 truncate" title={employee.email}>
             {employee.email || "—"}
@@ -71,8 +66,7 @@ export const EmployeeTable: React.FC<EmployeeTableProps> = ({
       {
         key: "phone",
         header: "Phone",
-        align: "left",
-        className: "min-w-40",
+        align: "center",
         render: (employee) => employee.phone || "—",
       },
 
@@ -80,7 +74,6 @@ export const EmployeeTable: React.FC<EmployeeTableProps> = ({
         key: "roleLabel",
         header: "Role",
         align: "center",
-        className: "min-w-32",
         render: (employee) => (
           <span
             className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-semibold ${
@@ -96,16 +89,14 @@ export const EmployeeTable: React.FC<EmployeeTableProps> = ({
       {
         key: "guardianName",
         header: "Guardian",
-        align: "left",
-        className: "min-w-48",
+        align: "center",
         render: (employee) => employee.guardianName || "—",
       },
 
       {
         key: "guardianPhone",
         header: "Guardian Phone",
-        align: "left",
-        className: "min-w-44",
+        align: "center",
         render: (employee) => employee.guardianPhone || "—",
       },
 
@@ -113,14 +104,18 @@ export const EmployeeTable: React.FC<EmployeeTableProps> = ({
         key: "permanentAddress",
         header: "Permanent Address",
         align: "left",
-        className: "min-w-72",
+        className: "min-w-72 max-w-80",
         render: (employee) => (
-          <span
-            className="block max-w-80 truncate"
-            title={employee.permanentAddress}
+          <Tooltip
+            content={employee.permanentAddress || "No permanent address"}
           >
-            {employee.permanentAddress || "—"}
-          </span>
+            <span
+              className="block max-w-80 cursor-help truncate"
+              title={employee.permanentAddress || undefined}
+            >
+              {employee.permanentAddress || "—"}
+            </span>
+          </Tooltip>
         ),
       },
 
@@ -128,14 +123,16 @@ export const EmployeeTable: React.FC<EmployeeTableProps> = ({
         key: "currentAddress",
         header: "Current Address",
         align: "left",
-        className: "min-w-72",
+        className: "min-w-72 max-w-80",
         render: (employee) => (
-          <span
-            className="block max-w-80 truncate"
-            title={employee.currentAddress}
-          >
-            {employee.currentAddress || "—"}
-          </span>
+          <Tooltip content={employee.currentAddress || "No current address"}>
+            <span
+              className="block max-w-80 cursor-help truncate"
+              title={employee.currentAddress || undefined}
+            >
+              {employee.currentAddress || "—"}
+            </span>
+          </Tooltip>
         ),
       },
 
@@ -143,7 +140,6 @@ export const EmployeeTable: React.FC<EmployeeTableProps> = ({
         key: "actions",
         header: "Action",
         align: "right",
-        className: "min-w-28",
         render: (employee) => (
           <div className="inline-flex items-center gap-2">
             <button

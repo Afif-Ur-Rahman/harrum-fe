@@ -73,18 +73,21 @@ const EmployeeForm = ({
 
         <div className="relative z-10 flex w-full flex-col gap-2">
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-            {EMPLOYEE_FORM_INPUTS.map((input) => {
+            {EMPLOYEE_FORM_INPUTS.filter(
+              (input) => !isEdit || input.field !== "password",
+            ).map((input) => {
               const Icon = input.icon;
 
               return (
-                <FormInput
-                  key={input.field}
-                  field={input.field}
-                  type={input.type}
-                  placeholder={input.placeholder}
-                  icon={Icon}
-                  compact
-                />
+                <div key={input.field} className={input.className}>
+                  <FormInput
+                    field={input.field}
+                    type={input.type}
+                    placeholder={input.placeholder}
+                    icon={Icon}
+                    compact
+                  />
+                </div>
               );
             })}
           </div>

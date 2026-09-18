@@ -29,6 +29,7 @@ export const EMPLOYEE_FORM_INPUTS = [
     placeholder: "Username",
     icon: Type,
     required: true,
+    className: "",
   },
   {
     field: "email",
@@ -36,6 +37,7 @@ export const EMPLOYEE_FORM_INPUTS = [
     placeholder: "Email",
     icon: Mail,
     required: true,
+    className: "",
   },
   {
     field: "phone",
@@ -43,6 +45,7 @@ export const EMPLOYEE_FORM_INPUTS = [
     placeholder: "Phone Number",
     icon: Phone,
     required: true,
+    className: "",
   },
   {
     field: "password",
@@ -50,6 +53,7 @@ export const EMPLOYEE_FORM_INPUTS = [
     placeholder: "Password Min. 8 characters",
     icon: Lock,
     required: false,
+    className: "",
   },
   {
     field: "guardianName",
@@ -57,6 +61,7 @@ export const EMPLOYEE_FORM_INPUTS = [
     placeholder: "Father / Guardian name",
     icon: UserRound,
     required: true,
+    className: "",
   },
   {
     field: "guardianPhone",
@@ -64,6 +69,7 @@ export const EMPLOYEE_FORM_INPUTS = [
     placeholder: "Father / Guardian Number",
     icon: Phone,
     required: true,
+    className: "",
   },
   {
     field: "permanentAddress",
@@ -71,6 +77,7 @@ export const EMPLOYEE_FORM_INPUTS = [
     placeholder: "Permanent address",
     icon: MapPin,
     required: true,
+    className: "sm:col-span-2",
   },
   {
     field: "currentAddress",
@@ -78,6 +85,7 @@ export const EMPLOYEE_FORM_INPUTS = [
     placeholder: "Current address",
     icon: Home,
     required: true,
+    className: "sm:col-span-2",
   },
 ] as const;
 
