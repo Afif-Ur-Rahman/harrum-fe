@@ -5,6 +5,7 @@ import {
   User,
   Users,
   Contact,
+  Store,
 } from "lucide-react";
 import { BsEnvelopePlus } from "react-icons/bs";
 
@@ -13,6 +14,7 @@ export const OWNER_NAV_TABS = [
   { href: "/super-admin/orders", label: "Orders", icon: ShoppingBag },
   { href: "/super-admin/customers", label: "Customers", icon: Contact },
   { href: "/super-admin/stocks", label: "Stock", icon: BsEnvelopePlus },
+  { href: "/super-admin/vendors", label: "Vendors", icon: Store },
   { href: "/super-admin/employees", label: "Employees", icon: Users },
   { href: "/super-admin/profile", label: "Profile", icon: User },
 ];
