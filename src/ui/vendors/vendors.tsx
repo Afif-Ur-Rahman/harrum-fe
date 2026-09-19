@@ -21,6 +21,7 @@ const Vendors = () => {
     openAddDialog,
     openEditDialog,
     onSubmitVendor,
+    updateVendorInList,
   } = useVendors();
 
   return (
@@ -71,6 +72,7 @@ const Vendors = () => {
         filtered={filtered}
         loading={loading}
         onEdit={openEditDialog}
+        onVendorUpdated={updateVendorInList}
       />
     </PageLayout>
   );

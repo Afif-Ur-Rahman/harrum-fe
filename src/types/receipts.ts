@@ -1,10 +1,16 @@
 import type { Customer } from "./customers";
+import type { Vendor } from "./vendors";
 
 export type PaymentMethod = "cash" | "online";
 
+export type ReceiptPartyType = "Customer" | "Vendor";
+
+export type ReceiptParty = Customer | Vendor;
+
 export interface Receipt {
   _id: string;
-  customer: Customer | string;
+  party: ReceiptParty | string;
+  type: ReceiptPartyType;
   amount: number;
   note?: string;
   paymentMethod: PaymentMethod;
@@ -16,7 +22,7 @@ export interface Receipt {
 export interface ReceiptResponse {
   message: string;
   data: Receipt;
-  updatedCustomer?: Customer;
+  updatedParty?: ReceiptParty;
 }
 
 export interface ReceiptListData {

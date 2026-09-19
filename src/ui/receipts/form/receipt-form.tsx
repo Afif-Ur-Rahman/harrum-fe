@@ -1,9 +1,9 @@
 "use client";
 
-import { Loader2, User, Phone } from "lucide-react";
+import { Loader2, User, Store, Phone } from "lucide-react";
 import { FormProvider } from "react-hook-form";
 import { FormInput } from "@/components";
-import { Customer } from "@/types";
+import { ReceiptParty, ReceiptPartyType } from "@/types";
 import { formatPrice } from "@/utils";
 import { useReceiptForm } from "../form";
 import { useReceipts } from "../useReceipts";
@@ -13,19 +13,21 @@ const PAYMENT_METHOD_OPTIONS = [
   { label: "Online", value: "online" },
 ];
 
-export const ReceiptForm = ({
-  customer,
+export const ReceiptForm = <T extends ReceiptParty>({
+  party,
+  type,
   onPaymentRecorded,
   onSuccess,
 }: {
-  customer: Customer;
-  onPaymentRecorded?: (customer: Customer) => void;
+  party: T;
+  type: ReceiptPartyType;
+  onPaymentRecorded?: (party: T) => void;
   onSuccess?: () => void;
 }) => {
   const defaults = { amount: "", note: "", paymentMethod: "cash" as const };
   const form = useReceiptForm(defaults);
 
-  const { submitting, onSubmitReceipt } = useReceipts(customer._id, {
+  const { submitting, onSubmitReceipt } = useReceipts<T>(party._id, type, {
     onPaymentRecorded,
   });
 
@@ -37,20 +39,21 @@ export const ReceiptForm = ({
     }
   });
 
-  const hasBalance = customer.remainingAmount > 0;
+  const hasBalance = party.remainingAmount > 0;
+  const PartyIcon = type === "Vendor" ? Store : User;
 
   return (
     <FormProvider {...form}>
       <div className="flex w-full flex-col gap-5">
         <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
           <div className="flex items-center gap-2 text-sm text-slate-300">
-            <User className="h-4 w-4 text-cyan-300" />
-            <span className="font-semibold text-white">{customer.name}</span>
+            <PartyIcon className="h-4 w-4 text-cyan-300" />
+            <span className="font-semibold text-white">{party.name}</span>
           </div>
 
           <div className="mt-1 flex items-center gap-2 text-xs text-slate-400">
             <Phone className="h-3.5 w-3.5" />
-            {customer.phone}
+            {party.phone}
           </div>
 
           <div className="mt-3 flex items-center justify-between rounded-xl bg-black/20 px-3 py-2">
@@ -60,17 +63,17 @@ export const ReceiptForm = ({
                 hasBalance ? "text-rose-300" : "text-emerald-300"
               }`}
             >
-              {formatPrice(customer.remainingAmount)} PKR
+              {formatPrice(party.remainingAmount)} PKR
             </span>
           </div>
         </div>
 
         <FormInput
           field="amount"
-          label="Amount Received"
+          label={type === "Vendor" ? "Amount Paid" : "Amount Received"}
           type="number"
           placeholder="0"
-          max={customer.remainingAmount}
+          max={party.remainingAmount}
           required
         />
 

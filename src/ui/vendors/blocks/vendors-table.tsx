@@ -10,12 +10,14 @@ interface VendorTableProps {
   filtered: Vendor[];
   loading: boolean;
   onEdit: (vendor: Vendor) => void;
+  onVendorUpdated: (vendor: Vendor) => void;
 }
 
 export const VendorTable: React.FC<VendorTableProps> = ({
   filtered,
   loading,
   onEdit,
+  onVendorUpdated,
 }) => {
   const columns = [
     {
@@ -62,7 +64,13 @@ export const VendorTable: React.FC<VendorTableProps> = ({
     {
       key: "_id" as const,
       header: "Actions",
-      render: (row: Vendor) => <Actions vendor={row} onEdit={onEdit} />,
+      render: (row: Vendor) => (
+        <Actions
+          vendor={row}
+          onEdit={onEdit}
+          onVendorUpdated={onVendorUpdated}
+        />
+      ),
     },
   ];
 

@@ -3,11 +3,18 @@
 import { Receipt as ReceiptIcon } from "lucide-react";
 import { Loader } from "@/components/ui/loader";
 import { EmptyState } from "@/components";
+import { ReceiptPartyType } from "@/types";
 import { useReceipts } from "../useReceipts";
 import { ReceiptRow } from "./receipt-row";
 
-export const ReceiptHistory = ({ customerId }: { customerId: string }) => {
-  const { receipts, loading } = useReceipts(customerId, { autoFetch: true });
+export const ReceiptHistory = ({
+  partyId,
+  type,
+}: {
+  partyId: string;
+  type: ReceiptPartyType;
+}) => {
+  const { receipts, loading } = useReceipts(partyId, type, { autoFetch: true });
 
   if (loading) {
     return <Loader label="payments" />;
@@ -18,7 +25,11 @@ export const ReceiptHistory = ({ customerId }: { customerId: string }) => {
       <EmptyState
         icon={ReceiptIcon}
         title="No payments yet"
-        description="This customer hasn't made any payments."
+        description={
+          type === "Vendor"
+            ? "No payments have been made to this vendor."
+            : "This customer hasn't made any payments."
+        }
         showGlow={false}
         className="border-none! bg-transparent! shadow-none! backdrop-blur-none!"
       />

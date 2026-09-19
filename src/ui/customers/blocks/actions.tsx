@@ -119,7 +119,8 @@ export const Actions: React.FC<ActionsProps> = ({
         setOpen={setPaymentOpen}
         content={
           <ReceiptForm
-            customer={customer}
+            party={customer}
+            type="Customer"
             onPaymentRecorded={onCustomerUpdated}
             onSuccess={() => setPaymentOpen(false)}
           />
@@ -130,7 +131,7 @@ export const Actions: React.FC<ActionsProps> = ({
         title={`${customer.name} — Payments`}
         open={historyOpen}
         setOpen={setHistoryOpen}
-        content={<ReceiptHistory customerId={customer._id} />}
+        content={<ReceiptHistory partyId={customer._id} type="Customer" />}
       />
 
       <ReuseableDialog

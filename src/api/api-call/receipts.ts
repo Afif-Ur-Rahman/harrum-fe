@@ -1,8 +1,13 @@
 import { serverAction } from "../server-action";
-import { ResponseForMultipleReceipts, ResponseForReceipt } from "@/types";
+import {
+  ReceiptPartyType,
+  ResponseForMultipleReceipts,
+  ResponseForReceipt,
+} from "@/types";
 
 interface CreateReceiptPayload {
-  customer: string;
+  party: string;
+  type: ReceiptPartyType;
   amount: number;
   note?: string;
   paymentMethod: "cash" | "online";
@@ -11,13 +16,15 @@ interface CreateReceiptPayload {
 export const getAllReceipts = async (params?: {
   page?: number;
   limit?: number;
-  customer?: string;
+  party?: string;
+  type?: ReceiptPartyType;
 }) => {
   try {
     const query = new URLSearchParams();
     if (params?.page) query.set("page", String(params.page));
     if (params?.limit) query.set("limit", String(params.limit));
-    if (params?.customer) query.set("customer", params.customer);
+    if (params?.party) query.set("party", params.party);
+    if (params?.type) query.set("type", params.type);
 
     const response = await serverAction({
       url: `/receipts?${query.toString()}`,

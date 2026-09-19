@@ -3,17 +3,18 @@
 import { useCallback, useEffect, useState } from "react";
 import { createReceipt, getAllReceipts } from "@/api/api-call/receipts";
 import { showToast } from "@/utils/toast";
-import { Customer, Receipt } from "@/types";
+import { Receipt, ReceiptParty, ReceiptPartyType } from "@/types";
 import { ReceiptFormType } from "./form";
 
-interface UseReceiptsOptions {
+interface UseReceiptsOptions<T extends ReceiptParty> {
   autoFetch?: boolean;
-  onPaymentRecorded?: (customer: Customer) => void;
+  onPaymentRecorded?: (party: T) => void;
 }
 
-export const useReceipts = (
-  customerId: string,
-  options: UseReceiptsOptions = {},
+export const useReceipts = <T extends ReceiptParty = ReceiptParty>(
+  partyId: string,
+  type: ReceiptPartyType,
+  options: UseReceiptsOptions<T> = {},
 ) => {
   const { autoFetch = false, onPaymentRecorded } = options;
 
@@ -22,11 +23,11 @@ export const useReceipts = (
   const [submitting, setSubmitting] = useState(false);
 
   const fetchReceipts = useCallback(async () => {
-    if (!customerId) return;
+    if (!partyId) return;
 
     setLoading(true);
 
-    const res = await getAllReceipts({ customer: customerId, limit: 100 });
+    const res = await getAllReceipts({ party: partyId, type, limit: 100 });
 
     if (res?.error) {
       showToast("error", res.error);
@@ -36,18 +37,19 @@ export const useReceipts = (
 
     setReceipts(res?.data?.data?.receipts || []);
     setLoading(false);
-  }, [customerId]);
+  }, [partyId, type]);
 
   useEffect(() => {
     if (autoFetch) (() => fetchReceipts())();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoFetch, customerId]);
+  }, [autoFetch, partyId, type]);
 
   const onSubmitReceipt = async (data: ReceiptFormType) => {
     setSubmitting(true);
 
     const response = await createReceipt({
-      customer: customerId,
+      party: partyId,
+      type,
       amount: Number(data.amount),
       note: data.note || undefined,
       paymentMethod: data.paymentMethod,
@@ -67,8 +69,8 @@ export const useReceipts = (
 
     setReceipts((prev) => [response.data!.data, ...prev]);
 
-    if (response.data.updatedCustomer && onPaymentRecorded) {
-      onPaymentRecorded(response.data.updatedCustomer);
+    if (response.data.updatedParty && onPaymentRecorded) {
+      onPaymentRecorded(response.data.updatedParty as T);
     }
 
     return true;
