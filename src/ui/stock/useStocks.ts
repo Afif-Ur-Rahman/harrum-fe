@@ -1,4 +1,4 @@
-import { createStock, getAllStocks } from "@/api/api-call";
+import { createStock, getAllStocks, getAllVendors } from "@/api/api-call";
 import { Stock } from "@/types";
 import { useEffect, useMemo } from "react";
 import { useState } from "react";
@@ -9,7 +9,14 @@ import { usePersistStore } from "@/store/presistStore";
 import { NO_COLOR_VARIANT_TYPES } from "./constants";
 
 const useStocks = () => {
-  const { stocks, stocksLoaded, setStocks } = usePersistStore();
+  const {
+    stocks,
+    stocksLoaded,
+    setStocks,
+    vendors,
+    setVendors,
+    vendorsLoaded,
+  } = usePersistStore();
   const [search, setSearch] = useState("");
 
   const initialValues: StockFormType = {
@@ -27,6 +34,15 @@ const useStocks = () => {
         }))
       : [];
   }, [stocks]);
+
+  const vendorOptions = useMemo(
+    () =>
+      vendors.map((vendor) => ({
+        label: vendor.name,
+        value: vendor._id,
+      })),
+    [vendors],
+  );
 
   const filteredStocks = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -63,7 +79,10 @@ const useStocks = () => {
       const salePrice = Number(item.salePrice);
 
       const invalidBasicFields =
-        !item.name?.trim() || !item.brand?.trim() || !item.size?.trim();
+        !item.name?.trim() ||
+        !item.brand?.trim() ||
+        !item.vendor?.trim() ||
+        !item.size?.trim();
 
       const invalidPrices =
         purchasePrice < 0 ||
@@ -98,12 +117,26 @@ const useStocks = () => {
     setStocks(response?.data?.data || []);
   };
 
+  const getVendors = async (force = false) => {
+    if (vendorsLoaded && !force) return;
+
+    const response = await getAllVendors();
+
+    if (response?.error) {
+      showToast("error", response.error);
+      return;
+    }
+
+    setVendors(response?.data?.data || []);
+  };
+
   const addNewStockRow = (name: string) => {
     append({
       name,
       brand: "",
-      type: "cotton",
-      size: "meters",
+      vendor: "",
+      type: "",
+      size: "",
       purchasePrice: "",
       wholesalePrice: "",
       salePrice: "",
@@ -130,6 +163,7 @@ const useStocks = () => {
       _id: stock._id,
       name: stock.name || "",
       brand: stock.brand || "",
+      vendor: stock.vendor || "",
       type: stock.type || "",
       size: stock.size || "meters",
       purchasePrice: String(stock.purchasePrice ?? ""),
@@ -172,6 +206,7 @@ const useStocks = () => {
 
   useEffect(() => {
     getStocks();
+    getVendors();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -183,6 +218,7 @@ const useStocks = () => {
     form,
     fields,
     stockOptions,
+    vendorOptions,
     addNewStockRow,
     addExistingStockRow,
     removeStockRow,

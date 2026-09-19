@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { zustandStorage } from "./storage/storage";
-import { User, Stock, Employees, Order } from "@/types";
+import { User, Stock, Employees, Order, Vendor } from "@/types";
 
 interface AuthState {
   token?: string | null;
@@ -30,6 +30,16 @@ interface AuthState {
   appendOrders: (orders: Order[], total: number) => void;
   updateOrderById: (order: Order) => void;
   resetOrders: () => void;
+
+  // ── Vendors ─────────────────────────────────────────────
+  vendors: Vendor[];
+  vendorsLoaded: boolean;
+  setVendors: (vendors: Vendor[]) => void;
+  setVendorsLoaded: (loaded: boolean) => void;
+  addVendor: (vendor: Vendor) => void;
+  updateVendorById: (vendor: Vendor) => void;
+  removeVendorById: (id: string) => void;
+  resetVendors: () => void;
 }
 
 export const usePersistStore = create<AuthState>()(
@@ -82,6 +92,25 @@ export const usePersistStore = create<AuthState>()(
             orders: state.orders.map((o) => (o._id === order._id ? order : o)),
           })),
         resetOrders: () => set({ orders: [], ordersTotal: 0 }),
+
+        // ── Vendors ─────────────────────────────────────────
+        vendors: [],
+        vendorsLoaded: false,
+        setVendors: (vendors) => set({ vendors, vendorsLoaded: true }),
+        setVendorsLoaded: (loaded) => set({ vendorsLoaded: loaded }),
+        addVendor: (vendor) =>
+          set((state) => ({ vendors: [vendor, ...state.vendors] })),
+        updateVendorById: (vendor) =>
+          set((state) => ({
+            vendors: state.vendors.map((v) =>
+              v._id === vendor._id ? vendor : v,
+            ),
+          })),
+        removeVendorById: (id) =>
+          set((state) => ({
+            vendors: state.vendors.filter((v) => v._id !== id),
+          })),
+        resetVendors: () => set({ vendors: [], vendorsLoaded: false }),
       };
     },
     {

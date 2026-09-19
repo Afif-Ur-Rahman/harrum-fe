@@ -8,6 +8,7 @@ import {
   Store,
   BadgeDollarSign,
   Hash,
+  Truck,
 } from "lucide-react";
 
 type FieldType = "text" | "number" | "select";
@@ -51,6 +52,14 @@ export const STOCK_ITEM_FIELDS: StockItemField[] = [
     placeholder: "Brand",
     icon: Building2,
     required: true,
+  },
+  {
+    name: "vendor",
+    type: "select",
+    placeholder: "Select vendor",
+    icon: Truck,
+    required: true,
+    options: [],
   },
   {
     name: "type",

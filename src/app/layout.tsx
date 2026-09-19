@@ -50,7 +50,9 @@ export default async function RootLayout({
               },
             }}
           />
-          <Theme>{children}</Theme>
+          <Theme appearance="dark" accentColor="cyan" grayColor="slate">
+            {children}
+          </Theme>
         </ToastProvider>
 
         {MODE === "dev" && <DevLogger />}

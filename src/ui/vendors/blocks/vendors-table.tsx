@@ -1,6 +1,5 @@
 "use client";
 
-import { Users } from "lucide-react";
 import { Table } from "@/components";
 import { Vendor } from "@/types";
 import { formatPrice } from "@/utils";
@@ -25,9 +24,6 @@ export const VendorTable: React.FC<VendorTableProps> = ({
       header: "Name",
       render: (row: Vendor) => (
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-white/8">
-            <Users className="h-4 w-4 text-cyan-300" />
-          </div>
           <span className="font-semibold text-slate-200">{row.name}</span>
         </div>
       ),

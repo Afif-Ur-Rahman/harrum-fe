@@ -11,6 +11,7 @@ export const stockItemSchema = z
     _id: z.string().optional(),
     name: z.string().min(1, "Name is required"),
     brand: z.string().min(1, "Brand is required"),
+    vendor: z.string().min(1, "Vendor is required"),
     type: z.string().default("cotton"),
     size: z.string().default("meters"),
 

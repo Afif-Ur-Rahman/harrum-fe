@@ -12,19 +12,27 @@ import {
   VARIANT_FIELDS,
 } from "../constants";
 
+interface VendorOption {
+  label: string;
+  value: string;
+}
+
 interface StockInTableProps {
   stockData: StockItemType[];
   removeField: (id: string | number) => void;
+  vendorOptions?: VendorOption[];
 }
 
 const StockRow = ({
   row,
   idx,
   removeField,
+  vendorOptions = [],
 }: {
   row: StockItemType;
   idx: number;
   removeField: (id: string | number) => void;
+  vendorOptions?: VendorOption[];
 }) => {
   const { control, setValue } = useFormContext<StockFormType>();
 
@@ -79,6 +87,13 @@ const StockRow = ({
 
           if (!shouldShow) return null;
 
+          const options =
+            item.name === "vendor"
+              ? vendorOptions
+              : "options" in item
+                ? item.options
+                : [];
+
           return (
             <FormInput
               key={item.name}
@@ -86,7 +101,7 @@ const StockRow = ({
               type={item.type}
               placeholder={item.placeholder}
               icon={item.icon}
-              options={"options" in item ? item.options : []}
+              options={options}
               required={item.required}
               compact
             />
@@ -156,6 +171,7 @@ const StockRow = ({
 export const StockInTable: React.FC<StockInTableProps> = ({
   stockData,
   removeField,
+  vendorOptions = [],
 }) => {
   return (
     <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/8 shadow-2xl shadow-black/20 backdrop-blur-xl">
@@ -171,7 +187,12 @@ export const StockInTable: React.FC<StockInTableProps> = ({
         <div className="columns-1 gap-2 p-2 sm:columns-2 lg:columns-3">
           {stockData.map((row, idx) => (
             <div key={row._id || idx} className="mb-2 break-inside-avoid">
-              <StockRow row={row} idx={idx} removeField={removeField} />
+              <StockRow
+                row={row}
+                idx={idx}
+                removeField={removeField}
+                vendorOptions={vendorOptions}
+              />
             </div>
           ))}
         </div>

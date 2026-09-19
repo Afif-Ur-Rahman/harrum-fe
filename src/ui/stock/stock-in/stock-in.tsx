@@ -19,6 +19,7 @@ const StockIn = () => {
     form,
     fields,
     isSaveDisabled,
+    vendorOptions,
   } = useStocks();
 
   const tableRef = useRef<HTMLDivElement>(null);
@@ -68,7 +69,11 @@ const StockIn = () => {
               description="Type a stock name above to create a new item"
             />
           ) : (
-            <StockInTable stockData={fields} removeField={removeStockRow} />
+            <StockInTable
+              stockData={fields}
+              removeField={removeStockRow}
+              vendorOptions={vendorOptions}
+            />
           )}
         </div>
 

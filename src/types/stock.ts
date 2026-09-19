@@ -5,6 +5,7 @@ export interface StockVariant {
 
 export interface StockHistory {
   _id: string;
+  vendor?: string;
   purchasePrice: number;
   wholesalePrice: number;
   salePrice: number;
@@ -17,6 +18,7 @@ export interface Stock {
   _id: string;
   name: string;
   brand: string;
+  vendor?: string;
   type: string;
   purchasePrice: number;
   wholesalePrice: number;
