@@ -213,12 +213,13 @@ const useStocks = () => {
       vendor: stock.vendor || "",
       type: stock.type || "",
       size: stock.size || "meters",
+      quantity: "",
       purchasePrice: String(stock.purchasePrice ?? ""),
       wholesalePrice: String(stock.wholesalePrice ?? ""),
       salePrice: String(stock.salePrice ?? ""),
       variants: stock.variants?.map((variant) => ({
         color: variant.color || "",
-        quantity: String(variant.quantity ?? ""),
+        quantity: "",
       })),
     });
   };

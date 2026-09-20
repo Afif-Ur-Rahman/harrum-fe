@@ -11,6 +11,7 @@ import {
   STOCK_ITEM_FIELDS,
   VARIANT_FIELDS,
 } from "../constants";
+import { usePersistStore } from "@/store/presistStore";
 
 interface VendorOption {
   label: string;
@@ -22,6 +23,17 @@ interface StockInTableProps {
   removeField: (id: string | number) => void;
   vendorOptions?: VendorOption[];
 }
+
+const existingQtyPlaceholder = (
+  current: number | string | undefined | null,
+  fallback: string,
+) => {
+  if (current === undefined || current === null || current === "") {
+    return fallback;
+  }
+
+  return String(current);
+};
 
 const StockRow = ({
   row,
@@ -35,6 +47,11 @@ const StockRow = ({
   vendorOptions?: VendorOption[];
 }) => {
   const { control, setValue } = useFormContext<StockFormType>();
+  const { stocks } = usePersistStore();
+
+  const existingStock = row._id
+    ? stocks.find((stock) => stock._id === row._id)
+    : undefined;
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -94,12 +111,20 @@ const StockRow = ({
                 ? item.options
                 : [];
 
+          const placeholder =
+            item.name === "quantity"
+              ? existingQtyPlaceholder(
+                  existingStock?.quantity,
+                  item.placeholder,
+                )
+              : item.placeholder;
+
           return (
             <FormInput
               key={item.name}
               field={`stockItems.${idx}.${item.name}`}
               type={item.type}
-              placeholder={item.placeholder}
+              placeholder={placeholder}
               icon={item.icon}
               options={options}
               required={item.required}
@@ -125,33 +150,48 @@ const StockRow = ({
           </div>
 
           <div className="divide-y divide-white/10">
-            {fields.map((field, variantIdx) => (
-              <div
-                key={field.id}
-                className="grid grid-cols-[1fr_130px_40px] items-center gap-2 bg-white/3 px-3 py-2 transition hover:bg-white/5 max-sm:grid-cols-1"
-              >
-                {VARIANT_FIELDS.map(({ name, type, placeholder, icon }) => (
-                  <FormInput
-                    key={name}
-                    field={`stockItems.${idx}.variants.${variantIdx}.${name}`}
-                    type={type}
-                    placeholder={placeholder}
-                    icon={icon}
-                    compact
-                  />
-                ))}
+            {fields.map((field, variantIdx) => {
+              const existingVariantQty = field.color
+                ? existingStock?.variants?.find(
+                    (variant) => variant.color === field.color,
+                  )?.quantity
+                : undefined;
 
-                <button
-                  type="button"
-                  onClick={() => remove(variantIdx)}
-                  disabled={fields.length === 1}
-                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl border border-red-300/20 bg-white/5 text-red-300 transition hover:bg-red-400/10 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-30 max-sm:w-full"
-                  aria-label="Remove color variant"
+              return (
+                <div
+                  key={field.id}
+                  className="grid grid-cols-[1fr_130px_40px] items-center gap-2 bg-white/3 px-3 py-2 transition hover:bg-white/5 max-sm:grid-cols-1"
                 >
-                  <X className="h-3.5 w-3.5" />
-                </button>
-              </div>
-            ))}
+                  {VARIANT_FIELDS.map(({ name, type, placeholder, icon }) => (
+                    <FormInput
+                      key={name}
+                      field={`stockItems.${idx}.variants.${variantIdx}.${name}`}
+                      type={type}
+                      placeholder={
+                        name === "quantity"
+                          ? existingQtyPlaceholder(
+                              existingVariantQty,
+                              placeholder,
+                            )
+                          : placeholder
+                      }
+                      icon={icon}
+                      compact
+                    />
+                  ))}
+
+                  <button
+                    type="button"
+                    onClick={() => remove(variantIdx)}
+                    disabled={fields.length === 1}
+                    className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl border border-red-300/20 bg-white/5 text-red-300 transition hover:bg-red-400/10 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-30 max-sm:w-full"
+                    aria-label="Remove color variant"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              );
+            })}
           </div>
 
           <button
