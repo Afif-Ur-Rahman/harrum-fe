@@ -1,7 +1,7 @@
 "use client";
 
 import { useStocks } from "./useStocks";
-import { StockStats, StockTable } from "./blocks";
+import { StockFilterDialog, StockStats, StockTable } from "./blocks";
 import Link from "next/link";
 import { ArrowDownToLine, Package, Boxes, Search } from "lucide-react";
 import { StockVariant } from "@/types";
@@ -16,10 +16,21 @@ const getTotalQuantity = (variants: StockVariant[] = []) => {
 };
 
 export const Stocks = () => {
-  const { stocks, filteredStocks, search, setSearch } = useStocks();
+  const {
+    stocks,
+    filteredStocks,
+    search,
+    setSearch,
+    filters,
+    setFilters,
+    brandOptions,
+    activeFilterCount,
+  } = useStocks();
+
+  const hasActiveQuery = Boolean(search.trim()) || activeFilterCount > 0;
 
   const totalValue = filteredStocks.reduce((acc, stock) => {
-    const totalQty = getTotalQuantity(stock.variants);
+    const totalQty = stock.quantity ?? getTotalQuantity(stock.variants);
     return acc + Number(stock.salePrice) * totalQty;
   }, 0);
 
@@ -44,7 +55,7 @@ export const Stocks = () => {
               <p className="mt-1 text-xs text-slate-400">
                 {stocks.length} item
                 {stocks.length !== 1 ? "s" : ""} in inventory
-                {search ? ` · ${filteredStocks.length} matching` : ""}
+                {hasActiveQuery ? ` · ${filteredStocks.length} matching` : ""}
               </p>
             </div>
           </div>
@@ -61,6 +72,13 @@ export const Stocks = () => {
               className="w-full rounded-2xl border border-white/10 bg-slate-950/50 py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
             />
           </div>
+
+          <StockFilterDialog
+            filters={filters}
+            brands={brandOptions}
+            activeCount={activeFilterCount}
+            onApply={setFilters}
+          />
 
           <Link
             href="/super-admin/stocks/stock-in"
@@ -89,7 +107,7 @@ export const Stocks = () => {
         <EmptyState
           icon={Search}
           title="No matching stocks"
-          description="Try a different name, brand, or color."
+          description="Try a different name, brand, or color, or adjust the filters."
         />
       ) : (
         <StockTable stockData={filteredStocks} />

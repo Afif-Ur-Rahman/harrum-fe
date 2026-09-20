@@ -164,3 +164,14 @@ export const VARIANT_FIELDS: VariantField[] = [
     icon: undefined,
   },
 ];
+
+export const STOCK_TYPE_OPTIONS: FieldOption[] =
+  STOCK_ITEM_FIELDS.find((field) => field.name === "type")?.options ?? [];
+
+export const PRICE_TYPE_OPTIONS = [
+  { label: "Purchase price", value: "purchase" },
+  { label: "Wholesale price", value: "wholesale" },
+  { label: "Sale price", value: "sale" },
+] as const;
+
+export type PriceFilterType = (typeof PRICE_TYPE_OPTIONS)[number]["value"];

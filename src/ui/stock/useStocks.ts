@@ -7,6 +7,7 @@ import { useFieldArray, useWatch } from "react-hook-form";
 import { showToast } from "@/utils/toast";
 import { usePersistStore } from "@/store/presistStore";
 import { NO_COLOR_VARIANT_TYPES } from "./constants";
+import { EMPTY_STOCK_FILTERS, type StockFilters } from "./blocks/stock-filters";
 
 const useStocks = () => {
   const {
@@ -18,6 +19,7 @@ const useStocks = () => {
     vendorsLoaded,
   } = usePersistStore();
   const [search, setSearch] = useState("");
+  const [filters, setFilters] = useState<StockFilters>(EMPTY_STOCK_FILTERS);
 
   const initialValues: StockFormType = {
     stockItems: [],
@@ -44,12 +46,57 @@ const useStocks = () => {
     [vendors],
   );
 
+  // Unique brands from the loaded stocks, used as filter options
+  const brandOptions = useMemo(() => {
+    const unique = new Set(
+      (Array.isArray(stocks) ? stocks : [])
+        .map((stock) => stock.brand)
+        .filter(Boolean),
+    );
+
+    return Array.from(unique).sort((a, b) => a.localeCompare(b));
+  }, [stocks]);
+
+  // Price type alone is not a filter — it only matters once a min or max is set
+  const hasPriceRange = filters.minPrice !== "" || filters.maxPrice !== "";
+
+  const activeFilterCount = [
+    filters.brands.length > 0,
+    filters.types.length > 0,
+    hasPriceRange,
+  ].filter(Boolean).length;
+
   const filteredStocks = useMemo(() => {
     const query = search.trim().toLowerCase();
 
-    if (!query) return stocks;
+    const parsedMin =
+      filters.minPrice !== "" ? Number(filters.minPrice) : Number.NaN;
+    const parsedMax =
+      filters.maxPrice !== "" ? Number(filters.maxPrice) : Number.NaN;
+
+    const min = Number.isNaN(parsedMin) ? null : parsedMin;
+    const max = Number.isNaN(parsedMax) ? null : parsedMax;
+
+    const priceKey = `${filters.priceType}Price` as const;
 
     return stocks.filter((stock) => {
+      if (filters.brands.length > 0 && !filters.brands.includes(stock.brand)) {
+        return false;
+      }
+
+      if (filters.types.length > 0 && !filters.types.includes(stock.type)) {
+        return false;
+      }
+
+      if (min !== null || max !== null) {
+        const price = Number(stock[priceKey]) || 0;
+
+        if (min !== null && price < min) return false;
+        if (max !== null && price > max) return false;
+      }
+
+      if (!query) return true;
+
       const matchesName = stock.name?.toLowerCase().includes(query);
       const matchesBrand = stock.brand?.toLowerCase().includes(query);
       const matchesColor = stock.variants?.some((variant) =>
@@ -58,7 +105,7 @@ const useStocks = () => {
 
       return matchesName || matchesBrand || matchesColor;
     });
-  }, [stocks, search]);
+  }, [stocks, search, filters]);
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -215,6 +262,10 @@ const useStocks = () => {
     filteredStocks,
     search,
     setSearch,
+    filters,
+    setFilters,
+    brandOptions,
+    activeFilterCount,
     form,
     fields,
     stockOptions,
