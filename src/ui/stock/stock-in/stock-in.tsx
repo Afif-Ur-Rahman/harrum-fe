@@ -8,6 +8,7 @@ import Link from "next/link";
 import { StockInTable } from "./stock-in-table";
 import { StockSearchAdd } from "./stock-search-add";
 import { EmptyState } from "@/components";
+import { PageLayout } from "@/components/layout";
 
 const StockIn = () => {
   const {
@@ -25,7 +26,7 @@ const StockIn = () => {
   const tableRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="pb-12 md:mt-6.25 lg:mt-7.5">
+    <PageLayout>
       {/* Header */}
       <div className="mb-4 flex items-center gap-3">
         <Link
@@ -89,7 +90,7 @@ const StockIn = () => {
           </button>
         </div>
       </FormProvider>
-    </div>
+    </PageLayout>
   );
 };
 

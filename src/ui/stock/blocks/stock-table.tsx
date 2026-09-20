@@ -1,3 +1,5 @@
+"use client";
+
 import { ReuseableDialog, Table } from "@/components";
 import { Stock, StockVariant } from "@/types";
 import { Flex } from "@radix-ui/themes";

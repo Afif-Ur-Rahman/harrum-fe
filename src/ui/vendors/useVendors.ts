@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useMemo, useState } from "react";
 import {
   createVendor,
@@ -22,17 +24,19 @@ const useVendors = () => {
 
   const [loading, setLoading] = useState(!vendorsLoaded);
   const [saving, setSaving] = useState(false);
+
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const [editingVendor, setEditingVendor] = useState<Vendor | null>(null);
 
-  const fetchVendors = async (force = true) => {
+  const fetchVendors = async (force = false) => {
     if (vendorsLoaded && !force) {
       setLoading(false);
       return;
     }
 
     setLoading(true);
+
     const res = await getAllVendors();
 
     if (res?.error) {
@@ -103,12 +107,18 @@ const useVendors = () => {
     const res = await deleteVendor(id);
 
     if (res?.error || !res?.data) {
-      return { state: false, error: res?.error || "Failed to delete vendor" };
+      return {
+        state: false,
+        error: res?.error || "Failed to delete vendor",
+      };
     }
 
     removeVendorById(id);
 
-    return { state: true, message: res.data.message };
+    return {
+      state: true,
+      message: res.data.message,
+    };
   };
 
   const updateVendorInList = (updated: Vendor) => {

@@ -1,8 +1,8 @@
 import { serverAction } from "../server-action";
 import {
+  ResponseForMultipleStocks,
   ResponseForMultipleVendors,
   ResponseForSingleVendor,
-  ResponseForVendorStocks,
 } from "@/types";
 
 interface CreateVendorPayload {
@@ -37,7 +37,7 @@ export const getVendorStocks = async (id: string) => {
       url: `/vendors/${id}/stocks`,
       method: "GET",
     });
-    return response as ResponseForVendorStocks;
+    return response as ResponseForMultipleStocks;
   } catch (error) {
     console.error("Failed to get vendor stocks:", (error as Error).message);
     return null;

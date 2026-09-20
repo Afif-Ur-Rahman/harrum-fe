@@ -70,7 +70,7 @@ const FilterForm = ({ filters, brands, onApply, onClose }: FilterFormProps) => {
 
   return (
     <FormProvider {...form}>
-      <div className="flex w-full flex-col gap-5">
+      <div className="flex w-full flex-col gap-2">
         <Controller
           name="brands"
           control={form.control}
