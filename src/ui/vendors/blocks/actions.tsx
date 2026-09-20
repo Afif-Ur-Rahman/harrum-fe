@@ -7,10 +7,12 @@ import {
   Pen,
   Wallet,
   Receipt as ReceiptIcon,
+  PackageSearch,
 } from "lucide-react";
 import { ReuseableDialog } from "@/components";
 import { Vendor } from "@/types";
 import { ReceiptForm, ReceiptHistory } from "@/ui/receipts";
+import { VendorStocks } from "./vendor-stocks";
 
 interface ActionsProps {
   vendor: Vendor;
@@ -33,6 +35,7 @@ export const Actions: React.FC<ActionsProps> = ({
 }) => {
   const [paymentOpen, setPaymentOpen] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [ordersOpen, setOrdersOpen] = useState(false);
 
   const hasBalance = vendor.remainingAmount > 0;
 
@@ -61,7 +64,14 @@ export const Actions: React.FC<ActionsProps> = ({
       hoverClass:
         "data-highlighted:bg-amber-400/20! data-highlighted:text-amber-200!",
     },
-    // Later: View Orders
+    {
+      label: "View Orders",
+      icon: PackageSearch,
+      disabled: false,
+      onSelect: () => setOrdersOpen(true),
+      hoverClass:
+        "data-highlighted:bg-fuchsia-400/20! data-highlighted:text-fuchsia-200!",
+    },
   ];
 
   return (
@@ -122,6 +132,13 @@ export const Actions: React.FC<ActionsProps> = ({
         open={historyOpen}
         setOpen={setHistoryOpen}
         content={<ReceiptHistory partyId={vendor._id} type="Vendor" />}
+      />
+
+      <ReuseableDialog
+        title={`${vendor.name} — Orders`}
+        open={ordersOpen}
+        setOpen={setOrdersOpen}
+        content={<VendorStocks vendorId={vendor._id} />}
       />
     </>
   );
