@@ -8,19 +8,10 @@ interface CreateBillPayload {
   note?: string;
 }
 
-export const getAllBills = async (params?: {
-  page?: number;
-  limit?: number;
-  vendor?: string;
-}) => {
+export const getAllBills = async (vendorId: string) => {
   try {
-    const query = new URLSearchParams();
-    if (params?.page) query.set("page", String(params.page));
-    if (params?.limit) query.set("limit", String(params.limit));
-    if (params?.vendor) query.set("vendor", params.vendor);
-
     const response = await serverAction({
-      url: `/bills?${query.toString()}`,
+      url: `/bills?vendor=${vendorId}`,
       method: "GET",
     });
     return response as ResponseForMultipleBills;

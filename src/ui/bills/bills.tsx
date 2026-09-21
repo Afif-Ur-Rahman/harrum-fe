@@ -5,14 +5,21 @@ import { ArrowLeft, FileText, Plus } from "lucide-react";
 import { EmptyState, ReuseableDialog } from "@/components";
 import { PageLayout } from "@/components/layout";
 import { Loader } from "@/components/ui/loader";
-import { formatPrice } from "@/utils";
-import { BillCard } from "./blocks";
+import { BillCard, BillsSummary } from "./blocks";
 import { BillForm } from "./form";
 import { useBills } from "./useBills";
 
 export const VendorBills = ({ vendorId }: { vendorId: string }) => {
-  const { vendor, bills, loading, saving, open, setOpen, onSubmitBill } =
-    useBills(vendorId);
+  const {
+    vendor,
+    bills,
+    summary,
+    loading,
+    saving,
+    open,
+    setOpen,
+    onSubmitBill,
+  } = useBills(vendorId);
 
   return (
     <PageLayout>
@@ -27,6 +34,10 @@ export const VendorBills = ({ vendorId }: { vendorId: string }) => {
           </Link>
 
           <div className="flex items-center gap-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/8">
+              <FileText className="h-5 w-5 text-cyan-300" />
+            </div>
+
             <div>
               <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">
                 Bills
@@ -56,21 +67,7 @@ export const VendorBills = ({ vendorId }: { vendorId: string }) => {
         />
       </div>
 
-      {vendor && (
-        <div className="mb-6 inline-flex items-center gap-3 rounded-2xl border border-white/10 bg-white/8 px-4 py-3 shadow-lg shadow-black/10 backdrop-blur-xl">
-          <span className="text-xs font-semibold uppercase tracking-widest text-slate-400">
-            Remaining
-          </span>
-          <span
-            className={`text-lg font-semibold ${
-              vendor.remainingAmount > 0 ? "text-rose-300" : "text-emerald-300"
-            }`}
-          >
-            {formatPrice(vendor.remainingAmount)}{" "}
-            <span className="text-xs font-normal text-slate-400">PKR</span>
-          </span>
-        </div>
-      )}
+      {!loading && <BillsSummary summary={summary} />}
 
       {loading ? (
         <Loader label="bills" />
