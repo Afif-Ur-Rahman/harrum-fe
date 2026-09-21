@@ -9,6 +9,7 @@ import {
   Wallet,
   Receipt as ReceiptIcon,
   PackageSearch,
+  FileText,
 } from "lucide-react";
 import { ReuseableDialog } from "@/components";
 import { Vendor } from "@/types";
@@ -48,6 +49,14 @@ export const Actions: React.FC<ActionsProps> = ({
       onSelect: () => onEdit(vendor),
       hoverClass:
         "data-highlighted:bg-cyan-400/20! data-highlighted:text-cyan-200!",
+    },
+    {
+      label: "View Bills",
+      icon: FileText,
+      disabled: false,
+      onSelect: () => router.push(`/super-admin/vendors/${vendor._id}/bills`),
+      hoverClass:
+        "data-highlighted:bg-rose-400/20! data-highlighted:text-rose-200!",
     },
     {
       label: "Record Payment",
