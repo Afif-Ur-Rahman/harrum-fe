@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { DropdownMenu } from "@radix-ui/themes";
 import {
@@ -10,14 +9,13 @@ import {
   Receipt as ReceiptIcon,
   PackageSearch,
 } from "lucide-react";
-import { ReuseableDialog } from "@/components";
 import { Vendor } from "@/types";
-import { ReceiptForm, ReceiptHistory } from "@/ui/receipts";
 
 interface ActionsProps {
   vendor: Vendor;
   onEdit: (vendor: Vendor) => void;
-  onVendorUpdated: (vendor: Vendor) => void;
+  onRecordPayment: (vendor: Vendor) => void;
+  onPaymentHistory: (vendor: Vendor) => void;
 }
 
 type ActionButton = {
@@ -31,14 +29,16 @@ type ActionButton = {
 export const Actions: React.FC<ActionsProps> = ({
   vendor,
   onEdit,
-  onVendorUpdated,
+  onRecordPayment,
+  onPaymentHistory,
 }) => {
   const router = useRouter();
 
-  const [paymentOpen, setPaymentOpen] = useState(false);
-  const [historyOpen, setHistoryOpen] = useState(false);
-
   const hasBalance = vendor.remainingAmount > 0;
+
+  const stopPropagation = (e: React.SyntheticEvent) => {
+    e.stopPropagation();
+  };
 
   const actionButtons: ActionButton[] = [
     {
@@ -53,7 +53,7 @@ export const Actions: React.FC<ActionsProps> = ({
       label: "Record Payment",
       icon: Wallet,
       disabled: !hasBalance,
-      onSelect: () => setPaymentOpen(true),
+      onSelect: () => onRecordPayment(vendor),
       hoverClass:
         "data-highlighted:bg-emerald-400/20! data-highlighted:text-emerald-200!",
     },
@@ -61,7 +61,7 @@ export const Actions: React.FC<ActionsProps> = ({
       label: "Payment History",
       icon: ReceiptIcon,
       disabled: false,
-      onSelect: () => setHistoryOpen(true),
+      onSelect: () => onPaymentHistory(vendor),
       hoverClass:
         "data-highlighted:bg-amber-400/20! data-highlighted:text-amber-200!",
     },
@@ -69,7 +69,7 @@ export const Actions: React.FC<ActionsProps> = ({
       label: "View Stocks",
       icon: PackageSearch,
       disabled: false,
-      onSelect: () => router.push(`/super-admin/vendors/${vendor._id}`),
+      onSelect: () => router.push(`/super-admin/vendors/${vendor._id}/stocks`),
       hoverClass:
         "data-highlighted:bg-fuchsia-400/20! data-highlighted:text-fuchsia-200!",
     },
@@ -82,6 +82,7 @@ export const Actions: React.FC<ActionsProps> = ({
           <button
             type="button"
             aria-label="Vendor actions"
+            onPointerDown={(e) => e.stopPropagation()}
             onClick={(e) => e.stopPropagation()}
             className="ml-auto inline-flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-white/8 text-slate-300 transition hover:bg-white/12 hover:text-white active:scale-[0.98]"
           >
@@ -91,7 +92,8 @@ export const Actions: React.FC<ActionsProps> = ({
 
         <DropdownMenu.Content
           align="end"
-          onClick={(e) => e.stopPropagation()}
+          onPointerDown={stopPropagation}
+          onClick={stopPropagation}
           className="rounded-2xl! border! border-white/10! bg-slate-900/95! backdrop-blur-xl! shadow-2xl! shadow-black/40!"
         >
           {actionButtons.map((action) => {
@@ -101,7 +103,10 @@ export const Actions: React.FC<ActionsProps> = ({
               <DropdownMenu.Item
                 key={action.label}
                 disabled={action.disabled}
-                onSelect={action.onSelect}
+                onSelect={(e) => {
+                  e.stopPropagation();
+                  action.onSelect();
+                }}
                 className={`gap-2! rounded-xl! transition-colors! ${
                   action.disabled
                     ? "cursor-not-allowed! text-slate-300! opacity-50!"
@@ -115,27 +120,6 @@ export const Actions: React.FC<ActionsProps> = ({
           })}
         </DropdownMenu.Content>
       </DropdownMenu.Root>
-
-      <ReuseableDialog
-        title="Record Payment"
-        open={paymentOpen}
-        setOpen={setPaymentOpen}
-        content={
-          <ReceiptForm
-            party={vendor}
-            type="Vendor"
-            onPaymentRecorded={onVendorUpdated}
-            onSuccess={() => setPaymentOpen(false)}
-          />
-        }
-      />
-
-      <ReuseableDialog
-        title={`${vendor.name} — Payments`}
-        open={historyOpen}
-        setOpen={setHistoryOpen}
-        content={<ReceiptHistory partyId={vendor._id} type="Vendor" />}
-      />
     </>
   );
 };

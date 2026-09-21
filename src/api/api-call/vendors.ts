@@ -18,18 +18,20 @@ interface UpdateVendorPayload {
   email?: string;
 }
 
-export const getAllVendors = async () => {
-  try {
-    const response = await serverAction({
-      url: "/vendors",
-      method: "GET",
-    });
-    return response as ResponseForMultipleVendors;
-  } catch (error) {
-    console.error("Failed to get vendors:", (error as Error).message);
-    return null;
-  }
-};
+export const getAllVendors =
+  async (): Promise<ResponseForMultipleVendors | null> => {
+    try {
+      const response = await serverAction({
+        url: "/vendors",
+        method: "GET",
+      });
+
+      return response as ResponseForMultipleVendors;
+    } catch (error) {
+      console.error("Failed to get vendors:", (error as Error).message);
+      return null;
+    }
+  };
 
 export const getVendorStocks = async (id: string) => {
   try {
@@ -37,6 +39,7 @@ export const getVendorStocks = async (id: string) => {
       url: `/vendors/${id}/stocks`,
       method: "GET",
     });
+
     return response as ResponseForMultipleStocks;
   } catch (error) {
     console.error("Failed to get vendor stocks:", (error as Error).message);
@@ -51,6 +54,7 @@ export const createVendor = async (data: CreateVendorPayload) => {
       method: "POST",
       body: data,
     });
+
     return response as ResponseForSingleVendor;
   } catch (error) {
     console.error("Failed to create vendor:", (error as Error).message);
@@ -65,6 +69,7 @@ export const updateVendor = async (id: string, data: UpdateVendorPayload) => {
       method: "PUT",
       body: data,
     });
+
     return response as ResponseForSingleVendor;
   } catch (error) {
     console.error("Failed to update vendor:", (error as Error).message);
@@ -78,6 +83,7 @@ export const deleteVendor = async (id: string) => {
       url: `/vendors/${id}`,
       method: "DELETE",
     });
+
     return response as {
       state: boolean;
       data?: { message: string };

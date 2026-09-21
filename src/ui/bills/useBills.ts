@@ -15,8 +15,13 @@ const EMPTY_SUMMARY: BillSummary = {
 };
 
 export const useBills = (vendorId: string) => {
-  const { vendors, vendorsLoaded, setVendors, updateVendorById } =
-    usePersistStore();
+  const {
+    vendors,
+    vendorsLoaded,
+    setVendors,
+    setVendorsSummary,
+    updateVendorById,
+  } = usePersistStore();
 
   const [bills, setBills] = useState<Bill[]>([]);
   const [summary, setSummary] = useState<BillSummary>(EMPTY_SUMMARY);
@@ -36,12 +41,14 @@ export const useBills = (vendorId: string) => {
         showToast("error", res.error);
         return;
       }
-
-      setVendors(res?.data?.data || []);
+      const vendorsData = res?.data?.data.vendors;
+      const summary = res?.data?.data.summary;
+      if (vendorsData) setVendors(vendorsData);
+      if (summary) setVendorsSummary(summary);
     };
 
     loadVendors();
-  }, [vendorsLoaded, setVendors]);
+  }, [vendorsLoaded, setVendors, setVendorsSummary]);
 
   const applyBillsData = useCallback((data?: BillListData) => {
     setBills(data?.bills || []);

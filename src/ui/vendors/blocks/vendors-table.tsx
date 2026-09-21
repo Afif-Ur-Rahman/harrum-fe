@@ -1,10 +1,12 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Table } from "@/components";
+import { ReuseableDialog, Table } from "@/components";
 import { Vendor } from "@/types";
 import { formatPrice } from "@/utils";
 import { Actions } from "./actions";
+import { useState } from "react";
+import { ReceiptForm, ReceiptHistory } from "@/ui/receipts";
 
 interface VendorTableProps {
   filtered: Vendor[];
@@ -20,6 +22,8 @@ export const VendorTable: React.FC<VendorTableProps> = ({
   onVendorUpdated,
 }) => {
   const router = useRouter();
+  const [paymentVendor, setPaymentVendor] = useState<Vendor | null>(null);
+  const [historyVendor, setHistoryVendor] = useState<Vendor | null>(null);
 
   const columns = [
     {
@@ -67,22 +71,60 @@ export const VendorTable: React.FC<VendorTableProps> = ({
         <Actions
           vendor={row}
           onEdit={onEdit}
-          onVendorUpdated={onVendorUpdated}
+          onRecordPayment={setPaymentVendor}
+          onPaymentHistory={setHistoryVendor}
         />
       ),
     },
   ];
 
   return (
-    <Table
-      title="Vendors"
-      data={filtered}
-      columns={columns}
-      isLoading={loading}
-      onRowClick={(vendor) =>
-        router.push(`/super-admin/vendors/${vendor._id}/bills`)
-      }
-      getRowClassName={() => "bg-cyan-400/5 hover:bg-cyan-400/10"}
-    />
+    <>
+      <Table
+        title="Vendors"
+        data={filtered}
+        columns={columns}
+        isLoading={loading}
+        onRowClick={(vendor) =>
+          router.push(`/super-admin/vendors/${vendor._id}/bills`)
+        }
+        getRowClassName={() => "bg-cyan-400/5 hover:bg-cyan-400/10"}
+      />
+
+      <ReuseableDialog
+        title="Record Payment"
+        open={!!paymentVendor}
+        setOpen={(open) => {
+          if (!open) {
+            setPaymentVendor(null);
+          }
+        }}
+        content={
+          paymentVendor ? (
+            <ReceiptForm
+              party={paymentVendor}
+              type="Vendor"
+              onPaymentRecorded={onVendorUpdated}
+              onSuccess={() => setPaymentVendor(null)}
+            />
+          ) : null
+        }
+      />
+
+      <ReuseableDialog
+        title={historyVendor ? `${historyVendor.name} — Payments` : "Payments"}
+        open={!!historyVendor}
+        setOpen={(open) => {
+          if (!open) {
+            setHistoryVendor(null);
+          }
+        }}
+        content={
+          historyVendor ? (
+            <ReceiptHistory partyId={historyVendor._id} type="Vendor" />
+          ) : null
+        }
+      />
+    </>
   );
 };

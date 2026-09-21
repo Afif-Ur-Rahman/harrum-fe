@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { zustandStorage } from "./storage/storage";
-import { User, Stock, Employees, Order, Vendor } from "@/types";
+import { User, Stock, Employees, Order, Vendor, VendorSummary } from "@/types";
 
 interface AuthState {
   token?: string | null;
@@ -33,8 +33,10 @@ interface AuthState {
 
   // ── Vendors ─────────────────────────────────────────────
   vendors: Vendor[];
+  vendorsSummary: VendorSummary;
   vendorsLoaded: boolean;
   setVendors: (vendors: Vendor[]) => void;
+  setVendorsSummary: (vendorsSummary: VendorSummary) => void;
   setVendorsLoaded: (loaded: boolean) => void;
   addVendor: (vendor: Vendor) => void;
   updateVendorById: (vendor: Vendor) => void;
@@ -95,8 +97,14 @@ export const usePersistStore = create<AuthState>()(
 
         // ── Vendors ─────────────────────────────────────────
         vendors: [],
+        vendorsSummary: {
+          totalAmount: 0,
+          paidAmount: 0,
+          remainingAmount: 0,
+        },
         vendorsLoaded: false,
         setVendors: (vendors) => set({ vendors, vendorsLoaded: true }),
+        setVendorsSummary: (vendorsSummary) => set({ vendorsSummary }),
         setVendorsLoaded: (loaded) => set({ vendorsLoaded: loaded }),
         addVendor: (vendor) =>
           set((state) => ({ vendors: [vendor, ...state.vendors] })),

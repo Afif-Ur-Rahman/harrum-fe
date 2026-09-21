@@ -9,14 +9,16 @@ import {
 } from "@/api/api-call/vendors";
 import { Vendor } from "@/types";
 import { showToast } from "@/utils/toast";
-import { usePersistStore } from "@/store/presistStore";
 import { VendorFormType } from "./form";
+import { usePersistStore } from "@/store/presistStore";
 
 const useVendors = () => {
   const {
     vendors,
+    vendorsSummary,
     vendorsLoaded,
     setVendors,
+    setVendorsSummary,
     addVendor,
     updateVendorById,
     removeVendorById,
@@ -45,7 +47,12 @@ const useVendors = () => {
       return;
     }
 
-    setVendors(res?.data?.data || []);
+    const vendorsData = res?.data?.data?.vendors;
+    const summary = res?.data?.data?.summary;
+
+    if (vendorsData) setVendors(vendorsData);
+    if (summary) setVendorsSummary(summary);
+
     setLoading(false);
   };
 
@@ -77,7 +84,6 @@ const useVendors = () => {
           name: data.name,
           phone: data.phone,
           email: data.email,
-          remainingAmount: Number(data.remainingAmount) || 0,
         });
 
     setSaving(false);
@@ -99,6 +105,9 @@ const useVendors = () => {
 
     setOpen(false);
     setEditingVendor(null);
+
+    // Refresh summary because vendor balance may have changed.
+    await fetchVendors(true);
   };
 
   const onDeleteVendor = async (
@@ -115,6 +124,9 @@ const useVendors = () => {
 
     removeVendorById(id);
 
+    // Refresh summary after deleting a vendor.
+    await fetchVendors(true);
+
     return {
       state: true,
       message: res.data.message,
@@ -122,7 +134,23 @@ const useVendors = () => {
   };
 
   const updateVendorInList = (updated: Vendor) => {
+    const oldVendor = vendors.find((vendor) => vendor._id === updated._id);
+
     updateVendorById(updated);
+
+    if (!oldVendor) return;
+
+    const difference = updated.remainingAmount - oldVendor.remainingAmount;
+
+    setVendorsSummary({
+      ...vendorsSummary,
+      remainingAmount: vendorsSummary.remainingAmount + difference,
+      paidAmount: Math.max(
+        vendorsSummary.totalAmount -
+          (vendorsSummary.remainingAmount + difference),
+        0,
+      ),
+    });
   };
 
   const filtered = useMemo(() => {
@@ -141,6 +169,7 @@ const useVendors = () => {
   return {
     vendors,
     filtered,
+    vendorsSummary,
     loading,
     saving,
     search,

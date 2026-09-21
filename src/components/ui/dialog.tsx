@@ -22,12 +22,25 @@ export const ReuseableDialog = ({
       {triggerButton && <Dialog.Trigger>{triggerButton}</Dialog.Trigger>}
 
       <Dialog.Content
+        onClick={(e) => e.stopPropagation()}
+        onPointerDown={(e) => e.stopPropagation()}
+        onPointerDownOutside={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setOpen?.(false);
+        }}
+        onInteractOutside={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setOpen?.(false);
+        }}
         className={`relative flex h-fit max-h-[80vh] w-full max-w-lg flex-col overflow-hidden rounded-3xl! border! border-white/10! bg-slate-950! p-0! shadow-2xl! shadow-black/50! ${
           contentStyle || ""
         }`}
       >
         {/* Background effects */}
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.98)_0%,rgba(15,23,42,0.96)_52%,rgba(17,24,39,0.98)_100%)]" />
+
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.14),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(244,114,182,0.12),transparent_36%)]" />
 
         <div className="relative z-10 flex min-h-0 flex-col">
@@ -51,11 +64,10 @@ export const ReuseableDialog = ({
           </div>
 
           {/* Content */}
-          <div className="flex-1 min-w-0 overflow-x-hidden overflow-y-auto overscroll-contain px-5 py-5 pr-4">
+          <div className="min-w-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-contain px-5 py-5 pr-4">
             {content}
           </div>
 
-          {/* Portal target for dropdowns — inside Dialog.Content so Radix overlay doesn't intercept clicks */}
           <div id="dialog-dropdown-portal" />
         </div>
       </Dialog.Content>

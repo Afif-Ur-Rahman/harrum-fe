@@ -8,6 +8,12 @@ export interface Vendor {
   updatedAt: string;
 }
 
+export interface VendorSummary {
+  totalAmount: number;
+  paidAmount: number;
+  remainingAmount: number;
+}
+
 export interface VendorResponse {
   message: string;
   data: Vendor;
@@ -15,7 +21,10 @@ export interface VendorResponse {
 
 export interface VendorListResponse {
   message: string;
-  data: Vendor[];
+  data: {
+    vendors: Vendor[];
+    summary: VendorSummary;
+  };
 }
 
 export interface ResponseForSingleVendor {
