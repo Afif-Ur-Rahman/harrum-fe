@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { FormProvider } from "react-hook-form";
-import { User, Mail, Phone, Wallet, Loader2 } from "lucide-react";
+import { User, Mail, Phone, Loader2 } from "lucide-react";
 import { FormInput } from "@/components";
 import { Vendor } from "@/types";
 import { useVendorForm } from "./form";
@@ -23,7 +23,6 @@ export const VendorForm = ({
     name: vendor?.name || "",
     phone: vendor?.phone || "",
     email: vendor?.email || "",
-    remainingAmount: "",
   });
 
   useEffect(() => {
@@ -31,7 +30,6 @@ export const VendorForm = ({
       name: vendor?.name || "",
       phone: vendor?.phone || "",
       email: vendor?.email || "",
-      remainingAmount: "",
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vendor]);
@@ -45,11 +43,12 @@ export const VendorForm = ({
       <div className="flex w-full flex-col gap-5">
         <FormInput
           field="name"
-          label="Vendor Name"
+          label="Name"
           type="text"
           placeholder="John Doe"
           icon={User}
           required
+          compact
         />
 
         <FormInput
@@ -59,6 +58,7 @@ export const VendorForm = ({
           placeholder="0300 1234567"
           icon={Phone}
           required
+          compact
         />
 
         <FormInput
@@ -67,17 +67,8 @@ export const VendorForm = ({
           type="email"
           placeholder="vendor@example.com"
           icon={Mail}
+          compact
         />
-
-        {!isEditing && (
-          <FormInput
-            field="remainingAmount"
-            label="Remaining Amount"
-            type="number"
-            placeholder="0"
-            icon={Wallet}
-          />
-        )}
 
         <button
           type="button"

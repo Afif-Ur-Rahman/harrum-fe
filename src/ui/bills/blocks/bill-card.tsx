@@ -1,6 +1,5 @@
 "use client";
 
-import { FileText } from "lucide-react";
 import { formatDateTime, formatPrice } from "@/utils";
 import { Bill } from "@/types";
 
@@ -9,10 +8,6 @@ export const BillCard = ({ bill }: { bill: Bill }) => {
     <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
       <div className="flex items-start justify-between gap-3">
         <div className="flex min-w-0 items-center gap-2">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-amber-300/20 bg-amber-400/10 text-amber-300">
-            <FileText className="h-4 w-4" />
-          </div>
-
           <div className="min-w-0">
             <p className="truncate text-sm font-semibold text-white">
               {bill.billId}

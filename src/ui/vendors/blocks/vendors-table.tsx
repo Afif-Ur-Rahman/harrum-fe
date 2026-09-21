@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { Table } from "@/components";
 import { Vendor } from "@/types";
 import { formatPrice } from "@/utils";
@@ -18,6 +19,8 @@ export const VendorTable: React.FC<VendorTableProps> = ({
   onEdit,
   onVendorUpdated,
 }) => {
+  const router = useRouter();
+
   const columns = [
     {
       key: "name" as const,
@@ -76,6 +79,9 @@ export const VendorTable: React.FC<VendorTableProps> = ({
       data={filtered}
       columns={columns}
       isLoading={loading}
+      onRowClick={(vendor) =>
+        router.push(`/super-admin/vendors/${vendor._id}/bills`)
+      }
       getRowClassName={() => "bg-cyan-400/5 hover:bg-cyan-400/10"}
     />
   );

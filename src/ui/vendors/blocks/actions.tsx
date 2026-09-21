@@ -9,7 +9,6 @@ import {
   Wallet,
   Receipt as ReceiptIcon,
   PackageSearch,
-  FileText,
 } from "lucide-react";
 import { ReuseableDialog } from "@/components";
 import { Vendor } from "@/types";
@@ -51,14 +50,6 @@ export const Actions: React.FC<ActionsProps> = ({
         "data-highlighted:bg-cyan-400/20! data-highlighted:text-cyan-200!",
     },
     {
-      label: "View Bills",
-      icon: FileText,
-      disabled: false,
-      onSelect: () => router.push(`/super-admin/vendors/${vendor._id}/bills`),
-      hoverClass:
-        "data-highlighted:bg-rose-400/20! data-highlighted:text-rose-200!",
-    },
-    {
       label: "Record Payment",
       icon: Wallet,
       disabled: !hasBalance,
@@ -91,6 +82,7 @@ export const Actions: React.FC<ActionsProps> = ({
           <button
             type="button"
             aria-label="Vendor actions"
+            onClick={(e) => e.stopPropagation()}
             className="ml-auto inline-flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-white/8 text-slate-300 transition hover:bg-white/12 hover:text-white active:scale-[0.98]"
           >
             <MoreVertical className="h-4 w-4" />
@@ -99,6 +91,7 @@ export const Actions: React.FC<ActionsProps> = ({
 
         <DropdownMenu.Content
           align="end"
+          onClick={(e) => e.stopPropagation()}
           className="rounded-2xl! border! border-white/10! bg-slate-900/95! backdrop-blur-xl! shadow-2xl! shadow-black/40!"
         >
           {actionButtons.map((action) => {

@@ -27,17 +27,13 @@ export const VendorBills = ({ vendorId }: { vendorId: string }) => {
         <div className="flex items-center gap-3">
           <Link
             href="/super-admin/vendors"
-            className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/8 text-slate-300 shadow-lg shadow-black/10 backdrop-blur-xl transition hover:bg-white/12 hover:text-white active:scale-[0.98]"
+            className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/8 text-slate-300 shadow-lg shadow-black/10 transition hover:bg-white/12 hover:text-white active:scale-[0.98]"
             aria-label="Back to vendors"
           >
             <ArrowLeft className="h-4 w-4" />
           </Link>
 
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/8">
-              <FileText className="h-5 w-5 text-cyan-300" />
-            </div>
-
             <div>
               <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">
                 Bills
@@ -57,7 +53,7 @@ export const VendorBills = ({ vendorId }: { vendorId: string }) => {
           triggerButton={
             <button
               type="button"
-              className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/8 px-4 py-2.5 text-sm font-medium text-slate-300 shadow-lg shadow-black/10 backdrop-blur-xl transition hover:bg-white/12 hover:text-white active:scale-[0.98]"
+              className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/8 px-4 py-2.5 text-sm font-medium text-slate-300 shadow-lg shadow-black/10 transition hover:bg-white/12 hover:text-white active:scale-[0.98]"
             >
               <Plus className="h-4 w-4" />
               Add Bill

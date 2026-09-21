@@ -43,7 +43,7 @@ export const BillsSummary = ({ summary }: { summary: BillSummary }) => {
         return (
           <div
             key={card.label}
-            className={`relative overflow-hidden rounded-3xl border border-white/10 bg-white/8 p-4 shadow-2xl shadow-black/20 backdrop-blur-xl ${card.className}`}
+            className={`relative overflow-hidden rounded-3xl border border-white/10 bg-white/8 p-4 shadow-2xl shadow-black/20 ${card.className}`}
           >
             <div
               className={`pointer-events-none absolute inset-0 ${card.glow}`}
