@@ -174,7 +174,7 @@ const useStocks = () => {
       return;
     }
 
-    setVendors(response?.data?.data || []);
+    setVendors(response?.data?.data.vendors || []);
   };
 
   const addNewStockRow = (name: string) => {
