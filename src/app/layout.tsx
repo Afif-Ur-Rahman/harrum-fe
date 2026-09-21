@@ -1,5 +1,5 @@
 import "./globals.css";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Toaster } from "react-hot-toast";
 import { Theme } from "@radix-ui/themes";
 import { Poppins } from "next/font/google";
@@ -7,6 +7,10 @@ import { ToastProvider } from "@/utils/toast-provider";
 import { getAuthCookies } from "@/utils/cookies";
 import { DevLogger } from "@/components/dev-logger";
 import { MODE } from "@/constants";
+
+export const viewport: Viewport = {
+  themeColor: "#d946ef",
+};
 
 export async function generateMetadata(): Promise<Metadata> {
   const authCookies = await getAuthCookies();
@@ -17,6 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: `${!user || !token ? "" : `${user.username} - `}Harrum Cloth House`,
     description:
       "A modern clothing store web platform for managing products, customers, orders, and daily operations with ease.",
+    manifest: "/manifest.webmanifest",
   };
 }
 
