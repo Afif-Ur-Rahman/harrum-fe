@@ -11,13 +11,21 @@ const NO_AUTH_PATHS = [
   "/auth/forgot-password",
 ];
 
+const PUBLIC_PWA_FILES = [
+  "/sw.js",
+  "/manifest.webmanifest",
+  "/manifest.json",
+  "/icon.png",
+  "/apple-icon.png",
+  "/favicon.ico",
+];
+
 const isPathMatch = (pathname: string, paths: string[]) =>
   paths.some((path) => pathname.startsWith(path));
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|images/|audio/|assets/|.*\\.png$|.*\\.jpg$|.*\\.jpeg$|.*\\.gif$|.*\\.svg$|.*\\.ico$|.*\\.mp3$|.*\\.mp4$|.*\\.webp$).*)",
-    { source: "/" },
+    "/((?!_next/static|_next/image|favicon.ico|sw.js|manifest.webmanifest|manifest.json|icon.png|apple-icon.png|images/|audio/|assets/|.*\\.png$|.*\\.jpg$|.*\\.jpeg$|.*\\.gif$|.*\\.svg$|.*\\.ico$|.*\\.mp3$|.*\\.mp4$|.*\\.webp$).*)",
   ],
 };
 
@@ -29,6 +37,10 @@ const middleware = async (request: NextRequest) => {
   const user = authCookies?.user;
 
   headers.set("x-current-path", pathname);
+
+  if (PUBLIC_PWA_FILES.includes(pathname)) {
+    return NextResponse.next();
+  }
 
   if (
     request.headers.get("next-action") !== null ||
