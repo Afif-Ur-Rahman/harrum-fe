@@ -7,9 +7,10 @@ import { ToastProvider } from "@/utils/toast-provider";
 import { getAuthCookies } from "@/utils/cookies";
 import { DevLogger } from "@/components/dev-logger";
 import { MODE } from "@/constants";
+import { ServiceWorkerRegister } from "@/lib/sw-register";
 
 export const viewport: Viewport = {
-  themeColor: "#d946ef",
+  themeColor: "#000000",
 };
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -43,6 +44,7 @@ export default async function RootLayout({
         className={`${poppins.variable} antialiased`}
         suppressHydrationWarning
       >
+        <ServiceWorkerRegister />
         <ToastProvider>
           <Toaster
             position="top-center"

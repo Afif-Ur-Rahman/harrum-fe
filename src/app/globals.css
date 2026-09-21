@@ -45,3 +45,9 @@ input:-webkit-autofill:active {
     top: 0%;
   }
 }
+
+@media (display-mode: standalone) {
+  body {
+    padding-top: env(titlebar-area-height, 0px);
+  }
+}
