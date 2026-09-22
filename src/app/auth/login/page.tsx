@@ -7,18 +7,18 @@ import { useLoginForm } from "./form";
 import { FormProvider } from "react-hook-form";
 import { setClientAuthCookies } from "@/utils/client-cookies";
 import { usePersistStore } from "@/store/presistStore";
-import { useRouter } from "next/navigation";
 import PasswordForgotDialog from "@/ui/password-forgot/dialog";
 import { showToast } from "@/utils/toast";
 import { Mail, Lock } from "lucide-react";
 import { FormInput } from "@/components";
+import { useNavigation } from "@/lib/useNavigation";
 
 function Login() {
   const form = useLoginForm();
   const { setUser, setToken } = usePersistStore();
   const [isLoading, setIsLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  const router = useRouter();
+  const router = useNavigation();
 
   useEffect(() => {
     const cookies = document.cookie.split("; ").reduce(

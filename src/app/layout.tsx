@@ -8,6 +8,7 @@ import { getAuthCookies } from "@/utils/cookies";
 import { DevLogger } from "@/components/dev-logger";
 import { MODE } from "@/constants";
 import { ServiceWorkerRegister } from "@/lib/sw-register";
+import { NavigationLoaderProvider } from "@/components/layout";
 
 export const viewport: Viewport = {
   themeColor: "#000000",
@@ -57,9 +58,12 @@ export default async function RootLayout({
               },
             }}
           />
-          <Theme appearance="dark" accentColor="cyan" grayColor="slate">
-            {children}
-          </Theme>
+
+          <NavigationLoaderProvider>
+            <Theme appearance="dark" accentColor="cyan" grayColor="slate">
+              {children}
+            </Theme>
+          </NavigationLoaderProvider>
         </ToastProvider>
 
         {MODE === "dev" && <DevLogger />}

@@ -4,11 +4,11 @@ import { useRef } from "react";
 import { FormProvider } from "react-hook-form";
 import { useStocks } from "../useStocks";
 import { ArrowLeft, Save, PackagePlus } from "lucide-react";
-import Link from "next/link";
 import { StockInTable } from "./stock-in-table";
 import { StockSearchAdd } from "./stock-search-add";
 import { EmptyState } from "@/components";
 import { PageLayout } from "@/components/layout";
+import { NavigationLink } from "@/components/navigation-link";
 
 const StockIn = () => {
   const {
@@ -29,13 +29,13 @@ const StockIn = () => {
     <PageLayout>
       {/* Header */}
       <div className="mb-4 flex items-center gap-3">
-        <Link
+        <NavigationLink
           href="/super-admin/stocks"
           className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/8 text-slate-300 shadow-lg shadow-black/10 backdrop-blur-xl transition hover:bg-white/12 hover:text-white active:scale-[0.98]"
           aria-label="Back to stocks"
         >
           <ArrowLeft className="h-4 w-4" />
-        </Link>
+        </NavigationLink>
 
         <div>
           <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">

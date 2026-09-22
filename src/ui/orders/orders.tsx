@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { ShoppingBag, ClipboardList } from "lucide-react";
 import { OrderForm, useAddOrder } from "./add-order";
+import { NavigationLink } from "@/components/navigation-link";
 
 const Orders = () => {
   const {
@@ -41,13 +41,13 @@ const Orders = () => {
               </div>
             </div>
 
-            <Link
+            <NavigationLink
               href="/super-admin/orders/all"
               className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/8 px-4 py-2.5 text-sm font-medium text-slate-300 shadow-lg shadow-black/10 backdrop-blur-xl transition hover:bg-white/12 hover:text-white active:scale-[0.98]"
             >
               <ClipboardList className="h-4 w-4" />
               <span>View All Orders</span>
-            </Link>
+            </NavigationLink>
           </div>
 
           <OrderForm

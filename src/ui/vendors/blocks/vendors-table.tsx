@@ -1,12 +1,12 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { ReuseableDialog, Table } from "@/components";
 import { Vendor } from "@/types";
 import { formatPrice } from "@/utils";
 import { Actions } from "./actions";
 import { useState } from "react";
 import { ReceiptForm, ReceiptHistory } from "@/ui/receipts";
+import { useNavigation } from "@/lib/useNavigation";
 
 interface VendorTableProps {
   filtered: Vendor[];
@@ -21,7 +21,7 @@ export const VendorTable: React.FC<VendorTableProps> = ({
   onEdit,
   onVendorUpdated,
 }) => {
-  const router = useRouter();
+  const router = useNavigation();
   const [paymentVendor, setPaymentVendor] = useState<Vendor | null>(null);
   const [historyVendor, setHistoryVendor] = useState<Vendor | null>(null);
 

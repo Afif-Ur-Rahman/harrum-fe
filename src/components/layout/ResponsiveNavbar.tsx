@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
 import Image from "next/image";
 import { IoClose } from "react-icons/io5";
 import { Flex, Text } from "@radix-ui/themes";
 import { usePathname } from "next/navigation";
+import { NavigationLink } from "../navigation-link";
 
 interface MobileDrawerProps {
   userFullName?: string;
@@ -97,7 +97,7 @@ const NavRes: React.FC<MobileDrawerProps> = ({
 
                 return (
                   <li key={href}>
-                    <Link
+                    <NavigationLink
                       href={href}
                       onClick={onClose}
                       className={`flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition-all duration-200 ${
@@ -108,7 +108,7 @@ const NavRes: React.FC<MobileDrawerProps> = ({
                     >
                       {Icon && <Icon size={20} className="shrink-0" />}
                       <span>{label}</span>
-                    </Link>
+                    </NavigationLink>
                   </li>
                 );
               })}

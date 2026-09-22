@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { DropdownMenu } from "@radix-ui/themes";
 import {
   MoreVertical,
@@ -10,6 +9,7 @@ import {
   PackageSearch,
 } from "lucide-react";
 import { Vendor } from "@/types";
+import { useNavigation } from "@/lib/useNavigation";
 
 interface ActionsProps {
   vendor: Vendor;
@@ -32,8 +32,7 @@ export const Actions: React.FC<ActionsProps> = ({
   onRecordPayment,
   onPaymentHistory,
 }) => {
-  const router = useRouter();
-
+  const router = useNavigation();
   const hasBalance = vendor.remainingAmount > 0;
 
   const stopPropagation = (e: React.SyntheticEvent) => {

@@ -17,3 +17,4 @@ export * from "./comming-soon";
 export * from "./ui/dialog";
 export * from "./tooltip";
 export * from "./due-amount-pill";
+export * from "./harrum-icon-loader";

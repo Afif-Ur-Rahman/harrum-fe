@@ -1,11 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { ArrowLeft, ClipboardList } from "lucide-react";
 import { Loader } from "@/components/ui/loader";
 import { useAllOrders } from "./useAllOrders";
 import { OrdersTable, OrdersSearch } from "./blocks";
+import { NavigationLink } from "@/components/navigation-link";
 
 export const AllOrders = () => {
   const {
@@ -45,13 +45,13 @@ export const AllOrders = () => {
     <div className="pb-12 md:mt-6.25 lg:mt-7.5">
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <Link
+          <NavigationLink
             href="/super-admin/orders"
             className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/8 text-slate-300 shadow-lg shadow-black/10 backdrop-blur-xl transition hover:bg-white/12 hover:text-white active:scale-[0.98]"
             aria-label="Back to orders"
           >
             <ArrowLeft className="h-4 w-4" />
-          </Link>
+          </NavigationLink>
 
           <div className="flex items-center gap-3">
             <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/8">
