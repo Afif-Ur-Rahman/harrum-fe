@@ -14,10 +14,8 @@ export const StatCard = ({ item }: StatCardProps) => {
     <div
       className={`group relative overflow-hidden rounded-[26px] border border-white/10 bg-white/8 p-5 shadow-2xl ${item.glow} backdrop-blur-xl transition duration-300 hover:-translate-y-1`}
     >
-      <div
-        className={`absolute inset-x-0 top-0 h-1 bg-linear-to-r ${item.accent}`}
-      />
-      <div className="absolute right-0 top-0 h-32 w-32 rounded-full bg-white/5 blur-2xl transition duration-300 group-hover:scale-125" />
+      <div className={`absolute inset-x-0 top-0 h-1 bg-linear-to-r ${item.accent}`} />
+      <div className="absolute top-0 right-0 h-32 w-32 rounded-full bg-white/5 blur-2xl transition duration-300 group-hover:scale-125" />
 
       <div className="relative flex items-start justify-between gap-4">
         <div>
@@ -27,9 +25,7 @@ export const StatCard = ({ item }: StatCardProps) => {
           </p>
         </div>
 
-        <div
-          className={`rounded-2xl bg-linear-to-br ${item.accent} p-3 text-white shadow-lg`}
-        >
+        <div className={`rounded-2xl bg-linear-to-br ${item.accent} p-3 text-white shadow-lg`}>
           <Icon className="h-6 w-6" />
         </div>
       </div>
@@ -37,9 +33,7 @@ export const StatCard = ({ item }: StatCardProps) => {
       <div className="relative mt-6 flex items-center justify-between gap-3">
         <div
           className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium ${
-            isPositive
-              ? "bg-emerald-500/15 text-emerald-200"
-              : "bg-rose-500/15 text-rose-200"
+            isPositive ? "bg-emerald-500/15 text-emerald-200" : "bg-rose-500/15 text-rose-200"
           }`}
         >
           {isPositive ? (

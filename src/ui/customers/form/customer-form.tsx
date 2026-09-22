@@ -1,11 +1,13 @@
 "use client";
 
+import { User, Mail, Phone, Wallet, Loader2 } from "lucide-react";
 import { useEffect } from "react";
 import { FormProvider } from "react-hook-form";
-import { User, Mail, Phone, Wallet, Loader2 } from "lucide-react";
+
 import { FormInput } from "@/components";
-import { CustomerFormType, useCustomerForm } from "../form";
 import { Customer } from "@/types";
+
+import { CustomerFormType, useCustomerForm } from "../form";
 
 export const CustomerForm = ({
   customer,
@@ -35,7 +37,7 @@ export const CustomerForm = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [customer]);
 
-  const handleSubmit = form.handleSubmit(async (data) => {
+  const handleSubmit = form.handleSubmit(async data => {
     await onSubmitCustomer(data);
   });
 

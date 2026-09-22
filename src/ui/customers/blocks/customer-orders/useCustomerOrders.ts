@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+
 import { getAllOrders } from "@/api/api-call/orders";
 import { Order } from "@/types";
 import { showToast } from "@/utils/toast";
@@ -39,23 +40,16 @@ export const useCustomerOrders = (customerId?: string) => {
       return orders;
     }
 
-    return orders.filter((order) => {
+    return orders.filter(order => {
       const salesmanName = order.salesman?.username?.toLowerCase() || "";
 
       const salesmanEmail = order.salesman?.email?.toLowerCase() || "";
 
-      const itemNames =
-        order.items?.map((item) => item.name?.toLowerCase() || "").join(" ") ||
-        "";
+      const itemNames = order.items?.map(item => item.name?.toLowerCase() || "").join(" ") || "";
 
       const variantNames =
         order.items
-          ?.flatMap(
-            (item) =>
-              item.variants?.map(
-                (variant) => variant.color?.toLowerCase() || "",
-              ) || [],
-          )
+          ?.flatMap(item => item.variants?.map(variant => variant.color?.toLowerCase() || "") || [])
           .join(" ") || "";
 
       return (

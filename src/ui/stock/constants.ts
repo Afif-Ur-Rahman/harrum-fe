@@ -125,7 +125,7 @@ export const STOCK_ITEM_FIELDS: StockItemField[] = [
     placeholder: "0",
     icon: Hash,
     required: true,
-    showWhen: (values) => NO_COLOR_VARIANT_TYPES.includes(values.type),
+    showWhen: values => NO_COLOR_VARIANT_TYPES.includes(values.type),
   },
   {
     name: "purchasePrice",
@@ -166,7 +166,7 @@ export const VARIANT_FIELDS: VariantField[] = [
 ];
 
 export const STOCK_TYPE_OPTIONS: FieldOption[] =
-  STOCK_ITEM_FIELDS.find((field) => field.name === "type")?.options ?? [];
+  STOCK_ITEM_FIELDS.find(field => field.name === "type")?.options ?? [];
 
 export const PRICE_TYPE_OPTIONS = [
   { label: "Purchase price", value: "purchase" },

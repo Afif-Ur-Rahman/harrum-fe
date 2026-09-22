@@ -1,26 +1,17 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import {
-  createVendor,
-  deleteVendor,
-  getAllVendors,
-  updateVendor,
-} from "@/api/api-call/vendors";
+
+import { createVendor, deleteVendor, getAllVendors, updateVendor } from "@/api/api-call/vendors";
+import { usePersistStore } from "@/store/presistStore";
 import { Vendor } from "@/types";
 import { showToast } from "@/utils/toast";
+
 import { VendorFormType } from "./form";
-import { usePersistStore } from "@/store/presistStore";
 
 const useVendors = () => {
-  const {
-    vendors,
-    vendorsLoaded,
-    setVendors,
-    addVendor,
-    updateVendorById,
-    removeVendorById,
-  } = usePersistStore();
+  const { vendors, vendorsLoaded, setVendors, addVendor, updateVendorById, removeVendorById } =
+    usePersistStore();
 
   const [loading, setLoading] = useState(!vendorsLoaded);
   const [saving, setSaving] = useState(false);
@@ -119,8 +110,7 @@ const useVendors = () => {
   };
 
   const dueAmount = useMemo(
-    () =>
-      vendors.reduce((sum, vendor) => sum + (vendor.remainingAmount || 0), 0),
+    () => vendors.reduce((sum, vendor) => sum + (vendor.remainingAmount || 0), 0),
     [vendors],
   );
 
@@ -130,7 +120,7 @@ const useVendors = () => {
     if (!query) return vendors;
 
     return vendors.filter(
-      (vendor) =>
+      vendor =>
         vendor.name?.toLowerCase().includes(query) ||
         vendor.phone?.toLowerCase().includes(query) ||
         vendor.email?.toLowerCase().includes(query),

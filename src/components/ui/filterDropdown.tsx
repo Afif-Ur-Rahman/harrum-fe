@@ -1,5 +1,5 @@
-import React from "react";
 import { Select } from "@radix-ui/themes";
+import React from "react";
 
 interface DropdownFilterProps {
   options: { value: string; label: string }[];
@@ -23,12 +23,8 @@ const DropdownFilter: React.FC<DropdownFilterProps> = ({
       className={`min-w-32! cursor-pointer! ${className}`}
     />
     <Select.Content position="popper" className="min-w-32! cursor-pointer!">
-      {options?.map((opt) => (
-        <Select.Item
-          key={opt?.value}
-          value={opt?.value}
-          className="cursor-pointer!"
-        >
+      {options?.map(opt => (
+        <Select.Item key={opt?.value} value={opt?.value} className="cursor-pointer!">
           {opt?.label}
         </Select.Item>
       ))}

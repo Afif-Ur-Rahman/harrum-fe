@@ -1,17 +1,15 @@
 "use client";
 
+import { Plus, Trash2, Package, Palette, X } from "lucide-react";
 import React, { useEffect } from "react";
 import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
-import { StockItemType } from "../form/schema";
-import { Plus, Trash2, Package, Palette, X } from "lucide-react";
-import { StockFormType } from "../form";
+
 import { FormInput } from "@/components";
-import {
-  NO_COLOR_VARIANT_TYPES,
-  STOCK_ITEM_FIELDS,
-  VARIANT_FIELDS,
-} from "../constants";
 import { usePersistStore } from "@/store/presistStore";
+
+import { NO_COLOR_VARIANT_TYPES, STOCK_ITEM_FIELDS, VARIANT_FIELDS } from "../constants";
+import { StockFormType } from "../form";
+import { StockItemType } from "../form/schema";
 
 interface VendorOption {
   label: string;
@@ -24,10 +22,7 @@ interface StockInTableProps {
   vendorOptions?: VendorOption[];
 }
 
-const existingQtyPlaceholder = (
-  current: number | string | undefined | null,
-  fallback: string,
-) => {
+const existingQtyPlaceholder = (current: number | string | undefined | null, fallback: string) => {
   if (current === undefined || current === null || current === "") {
     return fallback;
   }
@@ -49,9 +44,7 @@ const StockRow = ({
   const { control, setValue } = useFormContext<StockFormType>();
   const { stocks } = usePersistStore();
 
-  const existingStock = row._id
-    ? stocks.find((stock) => stock._id === row._id)
-    : undefined;
+  const existingStock = row._id ? stocks.find(stock => stock._id === row._id) : undefined;
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -79,7 +72,7 @@ const StockRow = ({
       <div className="flex items-center justify-between gap-2 border-b border-white/10 bg-white/8 px-3 py-2">
         <div className="flex items-center gap-2">
           <Package className="h-3.5 w-3.5 text-cyan-300" />
-          <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+          <p className="text-[10px] font-semibold tracking-widest text-slate-400 uppercase">
             Item Details
           </p>
         </div>
@@ -95,7 +88,7 @@ const StockRow = ({
       </div>
 
       <div className="grid grid-cols-1 gap-2 p-3 sm:grid-cols-2">
-        {STOCK_ITEM_FIELDS.map((item) => {
+        {STOCK_ITEM_FIELDS.map(item => {
           const shouldShow =
             !item.showWhen ||
             item.showWhen({
@@ -105,18 +98,11 @@ const StockRow = ({
           if (!shouldShow) return null;
 
           const options =
-            item.name === "vendor"
-              ? vendorOptions
-              : "options" in item
-                ? item.options
-                : [];
+            item.name === "vendor" ? vendorOptions : "options" in item ? item.options : [];
 
           const placeholder =
             item.name === "quantity"
-              ? existingQtyPlaceholder(
-                  existingStock?.quantity,
-                  item.placeholder,
-                )
+              ? existingQtyPlaceholder(existingStock?.quantity, item.placeholder)
               : item.placeholder;
 
           return (
@@ -139,12 +125,12 @@ const StockRow = ({
           <div className="grid grid-cols-[1fr_130px_40px] gap-2 border-b border-white/10 bg-white/8 px-3 py-2 max-sm:grid-cols-1">
             <div className="flex items-center gap-2">
               <Palette className="h-3.5 w-3.5 text-cyan-300" />
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+              <p className="text-[10px] font-semibold tracking-widest text-slate-400 uppercase">
                 Colors
               </p>
             </div>
 
-            <p className="text-center text-[10px] font-semibold uppercase tracking-widest text-slate-400 max-sm:hidden">
+            <p className="text-center text-[10px] font-semibold tracking-widest text-slate-400 uppercase max-sm:hidden">
               Qty
             </p>
           </div>
@@ -152,9 +138,7 @@ const StockRow = ({
           <div className="divide-y divide-white/10">
             {fields.map((field, variantIdx) => {
               const existingVariantQty = field.color
-                ? existingStock?.variants?.find(
-                    (variant) => variant.color === field.color,
-                  )?.quantity
+                ? existingStock?.variants?.find(variant => variant.color === field.color)?.quantity
                 : undefined;
 
               return (
@@ -169,10 +153,7 @@ const StockRow = ({
                       type={type}
                       placeholder={
                         name === "quantity"
-                          ? existingQtyPlaceholder(
-                              existingVariantQty,
-                              placeholder,
-                            )
+                          ? existingQtyPlaceholder(existingVariantQty, placeholder)
                           : placeholder
                       }
                       icon={icon}
@@ -219,7 +200,7 @@ export const StockInTable: React.FC<StockInTableProps> = ({
 
       <div className="relative">
         <div className="border-b border-white/10 bg-white/8 px-3 py-2">
-          <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+          <p className="text-[10px] font-semibold tracking-widest text-slate-400 uppercase">
             Stock Items
           </p>
         </div>

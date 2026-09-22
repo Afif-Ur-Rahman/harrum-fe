@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { ArrowLeft, ClipboardList } from "lucide-react";
-import { Loader } from "@/components/ui/loader";
-import { useAllOrders } from "./useAllOrders";
-import { OrdersTable, OrdersSearch } from "./blocks";
+import { useEffect, useRef } from "react";
+
 import { NavigationLink } from "@/components/navigation-link";
+import { Loader } from "@/components/ui/loader";
+
+import { OrdersTable, OrdersSearch } from "./blocks";
+import { useAllOrders } from "./useAllOrders";
 
 export const AllOrders = () => {
   const {
@@ -29,7 +31,7 @@ export const AllOrders = () => {
     if (!node) return;
 
     const observer = new IntersectionObserver(
-      (entries) => {
+      entries => {
         if (entries[0].isIntersecting) {
           loadMore();
         }

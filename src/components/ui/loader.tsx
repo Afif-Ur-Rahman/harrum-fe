@@ -17,9 +17,7 @@ export const Loader = ({
         <Loader2 className={`h-5 w-5 animate-spin ${loaderColor}`} />
       </div>
 
-      <span className={`text-sm font-medium ${labelColor}`}>
-        Loading {label}...
-      </span>
+      <span className={`text-sm font-medium ${labelColor}`}>Loading {label}...</span>
     </div>
   );
 };

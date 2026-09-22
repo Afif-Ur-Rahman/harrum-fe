@@ -1,5 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
+
 import { getAuthCookies } from "@/utils/cookies";
+
 import { createHeaders } from "./api";
 import { API_URL } from "./constants";
 
@@ -21,7 +23,7 @@ const PUBLIC_PWA_FILES = [
 ];
 
 const isPathMatch = (pathname: string, paths: string[]) =>
-  paths.some((path) => pathname.startsWith(path));
+  paths.some(path => pathname.startsWith(path));
 
 export const config = {
   matcher: [
@@ -42,10 +44,7 @@ const middleware = async (request: NextRequest) => {
     return NextResponse.next();
   }
 
-  if (
-    request.headers.get("next-action") !== null ||
-    pathname.startsWith("/api-v1")
-  ) {
+  if (request.headers.get("next-action") !== null || pathname.startsWith("/api-v1")) {
     return NextResponse.next();
   }
 
@@ -55,18 +54,14 @@ const middleware = async (request: NextRequest) => {
     const proxyHeaders = new Headers(headersInit);
 
     try {
-      const response = await fetch(
-        new URL(`${pathname}${request.nextUrl.search}`, API_URL),
-        {
-          body: request.body,
-          method: request.method,
-          headers: {
-            Authorization: proxyHeaders.get("Authorization") ?? "",
-            "Content-Type":
-              proxyHeaders.get("Content-Type") ?? "application/json",
-          },
+      const response = await fetch(new URL(`${pathname}${request.nextUrl.search}`, API_URL), {
+        body: request.body,
+        method: request.method,
+        headers: {
+          Authorization: proxyHeaders.get("Authorization") ?? "",
+          "Content-Type": proxyHeaders.get("Content-Type") ?? "application/json",
         },
-      );
+      });
       return response;
     } catch (error) {
       console.error(`Proxy error for ${pathname}:`, error);

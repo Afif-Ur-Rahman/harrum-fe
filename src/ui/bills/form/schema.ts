@@ -5,7 +5,7 @@ export const BillSchema = z.object({
   amount: z
     .string()
     .min(1, "Amount is required")
-    .refine((value) => Number(value) > 0, "Amount must be greater than 0"),
+    .refine(value => Number(value) > 0, "Amount must be greater than 0"),
   note: z.string().optional(),
 });
 

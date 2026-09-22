@@ -1,6 +1,7 @@
-import { serverAction } from "../server-action";
-import { OrderFormType } from "@/ui/orders/add-order/form/schema";
 import { ResponseForMultipleOrders, ResponseForOrder } from "@/types";
+import { OrderFormType } from "@/ui/orders/add-order/form/schema";
+
+import { serverAction } from "../server-action";
 
 export const getAllOrders = async (params?: {
   page?: number;
@@ -40,11 +41,7 @@ export const createOrder = async (data: OrderFormType) => {
   }
 };
 
-export const returnOrderItem = async (
-  orderId: string,
-  itemId: string,
-  variantId: string,
-) => {
+export const returnOrderItem = async (orderId: string, itemId: string, variantId: string) => {
   try {
     const response = await serverAction({
       url: `/orders/return/${orderId}/${itemId}/${variantId}`,
@@ -70,11 +67,7 @@ export const returnOrder = async (orderId: string, itemId: string) => {
   }
 };
 
-export const claimOrderItem = async (
-  orderId: string,
-  itemId: string,
-  variantId: string,
-) => {
+export const claimOrderItem = async (orderId: string, itemId: string, variantId: string) => {
   try {
     const response = await serverAction({
       url: `/orders/claim/${orderId}/${itemId}/${variantId}`,

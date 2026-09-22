@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useRef, useState, RefObject } from "react";
 import { Search, X, PlusCircle, CheckCircle2 } from "lucide-react";
+import { useMemo, useRef, useState, RefObject } from "react";
+
 import { Stock } from "@/types";
 
 interface StockOption {
@@ -29,29 +30,24 @@ export const StockSearchAdd = ({
   const [open, setOpen] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
-  const blurTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
-    undefined,
-  );
+  const blurTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const trimmedQuery = query.trim();
 
   const availableOptions = useMemo(
-    () =>
-      stockOptions.filter((option) => !selectedStockIds.includes(option.value)),
+    () => stockOptions.filter(option => !selectedStockIds.includes(option.value)),
     [stockOptions, selectedStockIds],
   );
 
   const matchingAll = useMemo(() => {
     if (trimmedQuery.length === 0) return [];
     const q = trimmedQuery.toLowerCase();
-    return stockOptions.filter((option) =>
-      option.label.toLowerCase().includes(q),
-    );
+    return stockOptions.filter(option => option.label.toLowerCase().includes(q));
   }, [stockOptions, trimmedQuery]);
 
   const filtered =
     trimmedQuery.length > 0
-      ? matchingAll.filter((option) => !selectedStockIds.includes(option.value))
+      ? matchingAll.filter(option => !selectedStockIds.includes(option.value))
       : availableOptions;
 
   const isAlreadySelected =
@@ -109,7 +105,7 @@ export const StockSearchAdd = ({
           <input
             ref={inputRef}
             value={query}
-            onChange={(e) => {
+            onChange={e => {
               setQuery(e.target.value);
               setOpen(true);
             }}
@@ -117,13 +113,12 @@ export const StockSearchAdd = ({
             onBlur={() => {
               blurTimer.current = setTimeout(() => setOpen(false), 150);
             }}
-            onKeyDown={(e) => {
+            onKeyDown={e => {
               if (e.key === "Enter") {
                 e.preventDefault();
                 handleEnter();
               } else if (e.key === "Tab") {
-                const firstInput =
-                  tableRef?.current?.querySelector<HTMLInputElement>("input");
+                const firstInput = tableRef?.current?.querySelector<HTMLInputElement>("input");
 
                 if (firstInput) {
                   e.preventDefault();
@@ -149,7 +144,7 @@ export const StockSearchAdd = ({
         </div>
 
         {open && (
-          <div className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-2xl border border-white/10 bg-slate-950 shadow-2xl shadow-black/40 backdrop-blur-xl">
+          <div className="absolute top-full right-0 left-0 z-50 mt-2 overflow-hidden rounded-2xl border border-white/10 bg-slate-950 shadow-2xl shadow-black/40 backdrop-blur-xl">
             <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.98)_0%,rgba(15,23,42,0.96)_100%)]" />
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.12),transparent_32%)]" />
 
@@ -161,9 +156,7 @@ export const StockSearchAdd = ({
                   </div>
 
                   <span>
-                    <span className="block font-semibold text-white">
-                      Already selected
-                    </span>
+                    <span className="block font-semibold text-white">Already selected</span>
 
                     <span className="block text-xs text-slate-400">
                       “{trimmedQuery}” has already been added to this order
@@ -173,7 +166,7 @@ export const StockSearchAdd = ({
               ) : canCreateNew ? (
                 <button
                   type="button"
-                  onMouseDown={(e) => {
+                  onMouseDown={e => {
                     e.preventDefault();
                     handleCreateNew();
                   }}
@@ -184,9 +177,7 @@ export const StockSearchAdd = ({
                   </div>
 
                   <span>
-                    <span className="block font-semibold text-white">
-                      No matching stock found
-                    </span>
+                    <span className="block font-semibold text-white">No matching stock found</span>
 
                     <span className="block text-xs text-slate-400">
                       Click to add “{trimmedQuery}” as a new stock item
@@ -195,17 +186,17 @@ export const StockSearchAdd = ({
                 </button>
               ) : filtered.length > 0 ? (
                 <div className="py-1">
-                  {filtered.map((option) => (
+                  {filtered.map(option => (
                     <button
                       key={option.value}
                       type="button"
-                      onMouseDown={(e) => {
+                      onMouseDown={e => {
                         e.preventDefault();
                         handleSelectExisting(option.stock);
                       }}
                       className="flex w-full items-center gap-3 px-4 py-1 text-left transition hover:bg-white/8"
                     >
-                      <div className="w-full flex justify-between items-center">
+                      <div className="flex w-full items-center justify-between">
                         <span className="block truncate text-sm text-white">
                           {option.stock.name}
                         </span>
@@ -217,9 +208,7 @@ export const StockSearchAdd = ({
                   ))}
                 </div>
               ) : (
-                <p className="px-4 py-3 text-sm text-slate-400">
-                  All items have been selected
-                </p>
+                <p className="px-4 py-3 text-sm text-slate-400">All items have been selected</p>
               )}
             </div>
           </div>

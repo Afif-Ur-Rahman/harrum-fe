@@ -1,10 +1,12 @@
 "use client";
 
-import { ReuseableDialog, Table } from "@/components";
-import { Order } from "@/types";
 import { Flex } from "@radix-ui/themes";
 import { Eye } from "lucide-react";
+
+import { ReuseableDialog, Table } from "@/components";
+import { Order } from "@/types";
 import { formatDateTime, formatPrice } from "@/utils";
+
 import { OrderDetails } from "./order-details";
 
 interface OrdersTableProps {
@@ -67,8 +69,7 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
       render: (row: Order) => {
         return (
           <span className="inline-flex items-center rounded-full border border-white/10 bg-white/8 px-2.5 py-1 text-xs font-semibold text-cyan-300">
-            {row.items.length} item{row.items.length !== 1 ? "s" : ""} ·{" "}
-            {getTotalItemsQty(row)} pcs
+            {row.items.length} item{row.items.length !== 1 ? "s" : ""} · {getTotalItemsQty(row)} pcs
           </span>
         );
       },
@@ -84,9 +85,7 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
       key: "totalPrice" as const,
       header: "Total (PKR)",
       render: (row: Order) => (
-        <span className="font-semibold text-cyan-300">
-          {formatPrice(row.totalPrice)}
-        </span>
+        <span className="font-semibold text-cyan-300">{formatPrice(row.totalPrice)}</span>
       ),
     },
     {

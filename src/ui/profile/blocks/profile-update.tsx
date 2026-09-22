@@ -2,6 +2,7 @@
 
 import { KeyRound, Lock } from "lucide-react";
 import { FormProvider } from "react-hook-form";
+
 import { FormInput } from "@/components";
 import { useProfile } from "@/ui/profile/useProfile";
 
@@ -12,12 +13,8 @@ export const ProfileUpdate = () => {
     <div className="overflow-hidden rounded-[28px] border border-white/10 bg-white/8 p-5 sm:p-6">
       <div className="mb-6 flex items-start justify-between gap-4">
         <div>
-          <p className="text-xs uppercase tracking-[0.2em] text-fuchsia-200">
-            Password Settings
-          </p>
-          <h2 className="mt-2 text-lg font-semibold text-white">
-            Change Password
-          </h2>
+          <p className="text-xs tracking-[0.2em] text-fuchsia-200 uppercase">Password Settings</p>
+          <h2 className="mt-2 text-lg font-semibold text-white">Change Password</h2>
           <p className="mt-2 text-xs leading-6 text-slate-400">
             Use a strong password with at least 8 characters.
           </p>

@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
 import { Search, X } from "lucide-react";
+import { useMemo, useRef, useState } from "react";
+
 import { Stock } from "@/types";
 
 interface StockOption {
@@ -16,28 +17,21 @@ interface ItemSearchProps {
   onSelectItem: (stock: Stock) => void;
 }
 
-export const ItemSearch = ({
-  stockOptions,
-  selectedStockIds,
-  onSelectItem,
-}: ItemSearchProps) => {
+export const ItemSearch = ({ stockOptions, selectedStockIds, onSelectItem }: ItemSearchProps) => {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
-  const blurTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
-    undefined,
-  );
+  const blurTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const trimmedQuery = query.trim();
 
   const availableOptions = useMemo(
-    () =>
-      stockOptions.filter((option) => !selectedStockIds.includes(option.value)),
+    () => stockOptions.filter(option => !selectedStockIds.includes(option.value)),
     [stockOptions, selectedStockIds],
   );
 
   const filtered =
     trimmedQuery.length > 0
-      ? availableOptions.filter((option) =>
+      ? availableOptions.filter(option =>
           option.label.toLowerCase().includes(trimmedQuery.toLowerCase()),
         )
       : availableOptions;
@@ -71,7 +65,7 @@ export const ItemSearch = ({
 
         <input
           value={query}
-          onChange={(e) => {
+          onChange={e => {
             setQuery(e.target.value);
             setOpen(true);
           }}
@@ -96,26 +90,24 @@ export const ItemSearch = ({
       </div>
 
       {open && (
-        <div className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-2xl border border-white/10 bg-slate-950 shadow-2xl shadow-black/40 backdrop-blur-xl">
+        <div className="absolute top-full right-0 left-0 z-50 mt-2 overflow-hidden rounded-2xl border border-white/10 bg-slate-950 shadow-2xl shadow-black/40 backdrop-blur-xl">
           <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.98)_0%,rgba(15,23,42,0.96)_100%)]" />
 
           <div className="relative z-10 max-h-60 overflow-y-auto">
             {filtered.length > 0 ? (
               <div className="py-1">
-                {filtered.map((option) => (
+                {filtered.map(option => (
                   <button
                     key={option.value}
                     type="button"
-                    onMouseDown={(e) => {
+                    onMouseDown={e => {
                       e.preventDefault();
                       handleSelect(option.stock);
                     }}
                     className="flex w-full items-center gap-3 px-4 py-1 text-left transition hover:bg-white/8"
                   >
-                    <div className="w-full flex justify-between items-center">
-                      <span className="block truncate text-sm text-white">
-                        {option.stock.name}
-                      </span>
+                    <div className="flex w-full items-center justify-between">
+                      <span className="block truncate text-sm text-white">{option.stock.name}</span>
                       <span className="block truncate text-xs text-slate-400">
                         {option.stock.brand}
                       </span>

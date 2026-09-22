@@ -1,7 +1,7 @@
-  export interface CategoryPayload {
-    name: string;
-    media: File | null;
-  }
+export interface CategoryPayload {
+  name: string;
+  media: File | null;
+}
 
 export interface Category {
   _id: string;
@@ -14,7 +14,7 @@ export interface Category {
 
 export interface CategoryResponse {
   message: string;
-  data:  Category;
+  data: Category;
 }
 
 export interface ResponseForSingleCategory {
@@ -25,7 +25,7 @@ export interface ResponseForSingleCategory {
 
 export interface CategoryResponseMultiple {
   message: string;
-  data:  Category[];
+  data: Category[];
 }
 
 export interface ResponseForMultipleCategory {

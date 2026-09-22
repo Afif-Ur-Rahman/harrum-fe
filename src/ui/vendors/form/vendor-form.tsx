@@ -1,10 +1,12 @@
 "use client";
 
+import { User, Mail, Phone, Loader2 } from "lucide-react";
 import { useEffect } from "react";
 import { FormProvider } from "react-hook-form";
-import { User, Mail, Phone, Loader2 } from "lucide-react";
+
 import { FormInput } from "@/components";
 import { Vendor } from "@/types";
+
 import { useVendorForm } from "./form";
 import { VendorFormType } from "./schema";
 
@@ -34,7 +36,7 @@ export const VendorForm = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vendor]);
 
-  const handleSubmit = form.handleSubmit(async (data) => {
+  const handleSubmit = form.handleSubmit(async data => {
     await onSubmitVendor(data);
   });
 

@@ -1,14 +1,17 @@
 "use client";
 
+import { ArrowLeft, Save, PackagePlus } from "lucide-react";
 import { useRef } from "react";
 import { FormProvider } from "react-hook-form";
-import { useStocks } from "../useStocks";
-import { ArrowLeft, Save, PackagePlus } from "lucide-react";
-import { StockInTable } from "./stock-in-table";
-import { StockSearchAdd } from "./stock-search-add";
+
 import { EmptyState } from "@/components";
 import { PageLayout } from "@/components/layout";
 import { NavigationLink } from "@/components/navigation-link";
+
+import { StockInTable } from "./stock-in-table";
+import { StockSearchAdd } from "./stock-search-add";
+
+import { useStocks } from "../useStocks";
 
 const StockIn = () => {
   const {
@@ -38,9 +41,7 @@ const StockIn = () => {
         </NavigationLink>
 
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">
-            Create Stock
-          </h1>
+          <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">Create Stock</h1>
 
           <p className="mt-1 text-xs text-slate-400">
             Create new stock items with brand, prices, and variants
@@ -55,7 +56,7 @@ const StockIn = () => {
         >
           <StockSearchAdd
             stockOptions={stockOptions}
-            selectedStockIds={fields.map((item) => item._id)}
+            selectedStockIds={fields.map(item => item._id)}
             tableRef={tableRef}
             onCreateNew={addNewStockRow}
             onSelectExisting={addExistingStockRow}

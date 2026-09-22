@@ -22,14 +22,14 @@ export const ReuseableDialog = ({
       {triggerButton && <Dialog.Trigger>{triggerButton}</Dialog.Trigger>}
 
       <Dialog.Content
-        onClick={(e) => e.stopPropagation()}
-        onPointerDown={(e) => e.stopPropagation()}
-        onPointerDownOutside={(e) => {
+        onClick={e => e.stopPropagation()}
+        onPointerDown={e => e.stopPropagation()}
+        onPointerDownOutside={e => {
           e.preventDefault();
           e.stopPropagation();
           setOpen?.(false);
         }}
-        onInteractOutside={(e) => {
+        onInteractOutside={e => {
           e.preventDefault();
           e.stopPropagation();
           setOpen?.(false);
@@ -56,7 +56,7 @@ export const ReuseableDialog = ({
 
             <Dialog.Close
               className="flex h-9 w-9 rounded-xl p-2 text-slate-300 transition hover:bg-white/10 hover:text-white"
-              onClick={(e) => e.stopPropagation()}
+              onClick={e => e.stopPropagation()}
               aria-label="Close dialog"
             >
               <VscChromeClose size="1.15rem" />

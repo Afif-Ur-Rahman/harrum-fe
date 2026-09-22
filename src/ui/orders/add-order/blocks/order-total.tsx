@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
+
 import { formatPrice } from "@/utils";
+
 import { OrderFormType } from "../form";
 
 interface OrderTotalProps {
@@ -69,7 +71,7 @@ export const OrderTotal = ({ orderTotal }: OrderTotalProps) => {
     <div
       onDoubleClick={startEditing}
       onTouchEnd={handleTouchEnd}
-      className="text-sm text-slate-300 select-none touch-manipulation"
+      className="touch-manipulation text-sm text-slate-300 select-none"
     >
       Order Total{" "}
       {editing ? (
@@ -79,9 +81,9 @@ export const OrderTotal = ({ orderTotal }: OrderTotalProps) => {
           min={0}
           value={draft}
           placeholder="Discount"
-          onChange={(e) => setDraft(e.target.value)}
+          onChange={e => setDraft(e.target.value)}
           onBlur={commitDiscount}
-          onKeyDown={(e) => {
+          onKeyDown={e => {
             if (e.key === "Enter") {
               e.preventDefault();
               commitDiscount();
@@ -92,14 +94,12 @@ export const OrderTotal = ({ orderTotal }: OrderTotalProps) => {
               setEditing(false);
             }
           }}
-          onClick={(e) => e.stopPropagation()}
-          onContextMenu={(e) => e.preventDefault()}
-          className="ml-1 w-28 rounded-lg border border-cyan-300/40 bg-white/10 px-2 py-1 text-sm font-semibold text-white outline-none focus:border-cyan-300 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+          onClick={e => e.stopPropagation()}
+          onContextMenu={e => e.preventDefault()}
+          className="ml-1 w-28 [appearance:textfield] rounded-lg border border-cyan-300/40 bg-white/10 px-2 py-1 text-sm font-semibold text-white outline-none focus:border-cyan-300 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
         />
       ) : (
-        <span className="ml-1 text-lg font-semibold text-white">
-          {formatPrice(finalTotal)}
-        </span>
+        <span className="ml-1 text-lg font-semibold text-white">{formatPrice(finalTotal)}</span>
       )}{" "}
       PKR
     </div>

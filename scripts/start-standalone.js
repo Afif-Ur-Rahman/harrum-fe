@@ -5,27 +5,20 @@
  * Used by PM2 to ensure .env files are in place before starting
  */
 
+import { spawn } from "child_process";
 import { existsSync, copyFileSync, mkdirSync, statSync, readdirSync } from "fs";
 import { join } from "path";
-import { spawn } from "child_process";
 
 const projectRoot = process.cwd();
 const standaloneDir = join(projectRoot, ".next", "standalone");
-const envFiles = [
-  ".env",
-  ".env.local",
-  ".env.production",
-  ".env.production.local",
-];
+const envFiles = [".env", ".env.local", ".env.production", ".env.production.local"];
 
 // Copy .env files to standalone if they exist
 if (existsSync(standaloneDir)) {
-  console.log(
-    `[${new Date().toISOString()}] 📋 Copying environment files to standalone build...`,
-  );
+  console.log(`[${new Date().toISOString()}] 📋 Copying environment files to standalone build...`);
 
   let copiedCount = 0;
-  envFiles.forEach((envFile) => {
+  envFiles.forEach(envFile => {
     const sourcePath = join(projectRoot, envFile);
     const destPath = join(standaloneDir, envFile);
 
@@ -35,10 +28,7 @@ if (existsSync(standaloneDir)) {
         console.log(`[${new Date().toISOString()}] ✅ Copied ${envFile}`);
         copiedCount++;
       } catch (error) {
-        console.error(
-          `[${new Date().toISOString()}] ❌ Failed to copy ${envFile}:`,
-          error.message,
-        );
+        console.error(`[${new Date().toISOString()}] ❌ Failed to copy ${envFile}:`, error.message);
       }
     }
   });
@@ -48,9 +38,7 @@ if (existsSync(standaloneDir)) {
       `[${new Date().toISOString()}] ✅ Copied ${copiedCount} environment file(s) to standalone`,
     );
   } else {
-    console.log(
-      `[${new Date().toISOString()}] ⚠️  No .env files found in project root`,
-    );
+    console.log(`[${new Date().toISOString()}] ⚠️  No .env files found in project root`);
   }
 
   // Copy static directory to standalone build (required for images and static assets)
@@ -74,11 +62,8 @@ if (existsSync(standaloneDir)) {
           if (!existsSync(dest)) {
             mkdirSync(dest, { recursive: true });
           }
-          readdirSync(src).forEach((childItemName) => {
-            copyRecursiveSync(
-              join(src, childItemName),
-              join(dest, childItemName),
-            );
+          readdirSync(src).forEach(childItemName => {
+            copyRecursiveSync(join(src, childItemName), join(dest, childItemName));
           });
         } else {
           copyFileSync(src, dest);
@@ -86,14 +71,9 @@ if (existsSync(standaloneDir)) {
       };
 
       copyRecursiveSync(staticSource, staticDest);
-      console.log(
-        `[${new Date().toISOString()}] ✅ Copied static files to standalone build`,
-      );
+      console.log(`[${new Date().toISOString()}] ✅ Copied static files to standalone build`);
     } catch (error) {
-      console.error(
-        `[${new Date().toISOString()}] ❌ Failed to copy static files:`,
-        error.message,
-      );
+      console.error(`[${new Date().toISOString()}] ❌ Failed to copy static files:`, error.message);
     }
   } else if (existsSync(staticDest)) {
     console.log(
@@ -114,9 +94,7 @@ if (existsSync(standaloneDir)) {
 const serverPath = join(standaloneDir, "server.js");
 
 if (!existsSync(serverPath)) {
-  console.error(
-    `[${new Date().toISOString()}] ❌ Error: ${serverPath} not found!`,
-  );
+  console.error(`[${new Date().toISOString()}] ❌ Error: ${serverPath} not found!`);
   process.exit(1);
 }
 
@@ -129,23 +107,16 @@ const server = spawn("node", [serverPath], {
   env: process.env,
 });
 
-server.on("error", (error) => {
-  console.error(
-    `[${new Date().toISOString()}] ❌ Failed to start server:`,
-    error,
-  );
+server.on("error", error => {
+  console.error(`[${new Date().toISOString()}] ❌ Failed to start server:`, error);
   process.exit(1);
 });
 
 server.on("exit", (code, signal) => {
   if (signal) {
-    console.log(
-      `[${new Date().toISOString()}] Server stopped by signal: ${signal}`,
-    );
+    console.log(`[${new Date().toISOString()}] Server stopped by signal: ${signal}`);
   } else {
-    console.log(
-      `[${new Date().toISOString()}] Server exited with code: ${code}`,
-    );
+    console.log(`[${new Date().toISOString()}] Server exited with code: ${code}`);
   }
   process.exit(code || 0);
 });

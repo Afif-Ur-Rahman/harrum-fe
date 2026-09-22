@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import { Dialog } from "@radix-ui/themes";
-import { Forgotpassword } from "./password-forgot";
-import ResetPassword from "./password-reset";
-import OtpVerify from "./password-otpVerify";
 import { X } from "lucide-react";
+import { useState } from "react";
+
+import { Forgotpassword } from "./password-forgot";
+import OtpVerify from "./password-otpVerify";
+import ResetPassword from "./password-reset";
 
 const STEPS = {
   FormForgot: "FormForgot",
@@ -13,11 +14,7 @@ const STEPS = {
   ResetPassword: "ResetPassword",
 };
 
-const STEP_LIST = [
-  STEPS.FormForgot,
-  STEPS.OtpVerification,
-  STEPS.ResetPassword,
-];
+const STEP_LIST = [STEPS.FormForgot, STEPS.OtpVerification, STEPS.ResetPassword];
 
 const PasswordForgotDialog = () => {
   const [currentStep, setCurrentStep] = useState(STEPS.FormForgot);
@@ -30,7 +27,7 @@ const PasswordForgotDialog = () => {
         </button>
       </Dialog.Trigger>
 
-      <Dialog.Content className="max-w-md! w-full! overflow-hidden! rounded-3xl! border! border-white/10! bg-slate-950! p-0! shadow-2xl! shadow-black/50!">
+      <Dialog.Content className="w-full! max-w-md! overflow-hidden! rounded-3xl! border! border-white/10! bg-slate-950! p-0! shadow-2xl! shadow-black/50!">
         <div className="relative overflow-hidden">
           {/* Background effects */}
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.98)_0%,rgba(15,23,42,0.96)_52%,rgba(17,24,39,0.98)_100%)]" />
@@ -38,7 +35,7 @@ const PasswordForgotDialog = () => {
 
           <div className="relative z-10">
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-white/10 px-6 pb-4 pt-6">
+            <div className="flex items-center justify-between border-b border-white/10 px-6 pt-6 pb-4">
               <div>
                 <Dialog.Title className="mb-0! text-base! font-bold! text-white!">
                   {currentStep === STEPS.FormForgot && "Reset your password"}
@@ -47,12 +44,9 @@ const PasswordForgotDialog = () => {
                 </Dialog.Title>
 
                 <p className="mt-1 text-xs text-slate-400">
-                  {currentStep === STEPS.FormForgot &&
-                    "We'll send a reset code to your email"}
-                  {currentStep === STEPS.OtpVerification &&
-                    "Enter the 6-digit code we sent you"}
-                  {currentStep === STEPS.ResetPassword &&
-                    "Choose a strong password"}
+                  {currentStep === STEPS.FormForgot && "We'll send a reset code to your email"}
+                  {currentStep === STEPS.OtpVerification && "Enter the 6-digit code we sent you"}
+                  {currentStep === STEPS.ResetPassword && "Choose a strong password"}
                 </p>
               </div>
 
@@ -70,8 +64,7 @@ const PasswordForgotDialog = () => {
             {/* Step indicator */}
             <div className="flex gap-1.5 px-6 pt-4">
               {STEP_LIST.map((step, index) => {
-                const isCompletedOrActive =
-                  STEP_LIST.indexOf(currentStep) >= index;
+                const isCompletedOrActive = STEP_LIST.indexOf(currentStep) >= index;
 
                 return (
                   <div

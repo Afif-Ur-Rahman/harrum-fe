@@ -2,9 +2,11 @@
 
 import { Loader2, User, Store, Phone } from "lucide-react";
 import { FormProvider } from "react-hook-form";
+
 import { FormInput } from "@/components";
 import { ReceiptParty, ReceiptPartyType } from "@/types";
 import { formatPrice } from "@/utils";
+
 import { useReceiptForm } from "../form";
 import { useReceipts } from "../useReceipts";
 
@@ -31,7 +33,7 @@ export const ReceiptForm = <T extends ReceiptParty>({
     onPaymentRecorded,
   });
 
-  const handleSubmit = form.handleSubmit(async (data) => {
+  const handleSubmit = form.handleSubmit(async data => {
     const success = await onSubmitReceipt(data);
     if (success) {
       form.reset(defaults);
@@ -100,11 +102,7 @@ export const ReceiptForm = <T extends ReceiptParty>({
           className="mt-1 flex w-full items-center justify-center gap-2 rounded-2xl bg-linear-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-cyan-950/30 transition-all hover:opacity-95 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
-          {submitting
-            ? "Recording…"
-            : hasBalance
-              ? "Record Payment"
-              : "No Balance Due"}
+          {submitting ? "Recording…" : hasBalance ? "Record Payment" : "No Balance Due"}
         </button>
       </div>
     </FormProvider>

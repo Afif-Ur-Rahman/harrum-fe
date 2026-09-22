@@ -7,12 +7,8 @@ export const ProductMixCard = () => {
     <div className="overflow-hidden rounded-[28px] border border-white/10 bg-white/8 p-5 shadow-2xl shadow-black/25 backdrop-blur-xl sm:p-6">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm uppercase tracking-[0.2em] text-fuchsia-200">
-            Product Mix
-          </p>
-          <h2 className="mt-2 text-2xl font-semibold text-white">
-            Top Selling Products
-          </h2>
+          <p className="text-sm tracking-[0.2em] text-fuchsia-200 uppercase">Product Mix</p>
+          <h2 className="mt-2 text-2xl font-semibold text-white">Top Selling Products</h2>
         </div>
 
         <PackageCheck className="h-6 w-6 text-slate-300" />
@@ -30,12 +26,8 @@ export const ProductMixCard = () => {
           <div className="absolute inset-[22%] rounded-full bg-slate-950/95 shadow-inner shadow-black/50" />
 
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-xs uppercase tracking-[0.25em] text-slate-400">
-              Sold Units
-            </span>
-            <span className="mt-2 text-4xl font-semibold text-white">
-              1,339
-            </span>
+            <span className="text-xs tracking-[0.25em] text-slate-400 uppercase">Sold Units</span>
+            <span className="mt-2 text-4xl font-semibold text-white">1,339</span>
           </div>
         </div>
       </div>

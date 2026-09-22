@@ -1,8 +1,9 @@
 "use client";
 
 import Link, { LinkProps } from "next/link";
-import { MouseEvent, ReactNode } from "react";
 import { usePathname } from "next/navigation";
+import { MouseEvent, ReactNode } from "react";
+
 import { useNavigationLoader } from "./layout";
 
 interface NavigationLinkProps extends LinkProps {
@@ -11,12 +12,7 @@ interface NavigationLinkProps extends LinkProps {
   onClick?: (event: MouseEvent<HTMLAnchorElement>) => void;
 }
 
-export const NavigationLink = ({
-  children,
-  onClick,
-  href,
-  ...props
-}: NavigationLinkProps) => {
+export const NavigationLink = ({ children, onClick, href, ...props }: NavigationLinkProps) => {
   const pathname = usePathname();
   const { startNavigation } = useNavigationLoader();
 
@@ -26,13 +22,7 @@ export const NavigationLink = ({
     if (event.defaultPrevented) return;
 
     // Only handle normal left-click navigation
-    if (
-      event.button !== 0 ||
-      event.metaKey ||
-      event.ctrlKey ||
-      event.shiftKey ||
-      event.altKey
-    ) {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
       return;
     }
 

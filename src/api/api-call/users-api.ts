@@ -2,6 +2,7 @@
 
 import { serverAction } from "@/api/server-action";
 import type { User } from "@/types";
+
 import { USERS_ENDPOINT } from "../endpoints";
 
 export const getAllUsers = async (): Promise<User[]> => {
@@ -43,10 +44,7 @@ export const getUserById = async (userId: string): Promise<User | null> => {
   }
 };
 
-export const updateUser = async (
-  userId: string,
-  userData: Partial<User>
-): Promise<boolean> => {
+export const updateUser = async (userId: string, userData: Partial<User>): Promise<boolean> => {
   try {
     const response = await serverAction({
       url: `${USERS_ENDPOINT}/${userId}`,

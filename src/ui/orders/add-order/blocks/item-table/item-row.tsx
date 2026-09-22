@@ -1,14 +1,18 @@
 "use client";
 
+import { Trash2, Plus, Palette, Hash } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { Trash2, Plus, Palette, Hash } from "lucide-react";
-import { Stock } from "@/types";
-import { VariantRow } from "./variant-row";
-import { OrderFormType, OrderItemFormType } from "../../form";
-import { getUnitPrice, PriceSelector, PriceType } from "../price-selector";
+
 import { FormInput } from "@/components";
+import { Stock } from "@/types";
 import { NO_COLOR_VARIANT_TYPES } from "@/ui/stock/constants";
+
+import { VariantRow } from "./variant-row";
+
+import { getUnitPrice, PriceSelector, PriceType } from "../price-selector";
+
+import { OrderFormType, OrderItemFormType } from "../../form";
 
 interface ItemRowProps {
   item: OrderItemFormType;
@@ -18,20 +22,12 @@ interface ItemRowProps {
   showBorder: number;
 }
 
-export const ItemRow = ({
-  item,
-  index,
-  stock,
-  removeItem,
-  showBorder,
-}: ItemRowProps) => {
+export const ItemRow = ({ item, index, stock, removeItem, showBorder }: ItemRowProps) => {
   const { control, watch, setValue } = useFormContext<OrderFormType>();
 
   const [customPrice, setCustomPrice] = useState("");
 
-  const isNoColorType = stock
-    ? NO_COLOR_VARIANT_TYPES.includes(stock.type)
-    : false;
+  const isNoColorType = stock ? NO_COLOR_VARIANT_TYPES.includes(stock.type) : false;
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -48,7 +44,7 @@ export const ItemRow = ({
 
   const quantitiesKey = isNoColorType
     ? itemQuantity
-    : selectedVariants.map((v) => v.quantity).join("|");
+    : selectedVariants.map(v => v.quantity).join("|");
 
   // No-color stock: compute price at the item level
   useEffect(() => {
@@ -86,13 +82,13 @@ export const ItemRow = ({
 
     return (
       stock?.variants
-        ?.filter((variant) => {
+        ?.filter(variant => {
           const alreadyUsed = selectedVariants.some(
             (v, i) => i !== variantIdx && v.color === variant.color,
           );
           return !alreadyUsed || variant.color === currentColor;
         })
-        .map((variant) => ({
+        .map(variant => ({
           label: `${variant.color} (${variant.quantity} ${stock.size})`,
           value: variant.color,
         })) || []
@@ -101,25 +97,23 @@ export const ItemRow = ({
 
   const getMaxQuantity = (variantIdx: number) => {
     const color = selectedVariants[variantIdx]?.color;
-    return stock?.variants?.find((v) => v.color === color)?.quantity;
+    return stock?.variants?.find(v => v.color === color)?.quantity;
   };
 
   const canAddMoreColors = fields.length < (stock?.variants?.length || 0);
 
   return (
-    <div
-      className={`${showBorder ? "sm:border-r sm:border-white/10 sm:pr-2" : ""}`}
-    >
+    <div className={`${showBorder ? "sm:border-r sm:border-white/10 sm:pr-2" : ""}`}>
       <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
         <p className="truncate text-sm font-semibold text-white">{item.name}</p>
 
-        <div className="flex flex-1 items-center justify-between gap-2 sm:justify-center sm:flex-0">
+        <div className="flex flex-1 items-center justify-between gap-2 sm:flex-0 sm:justify-center">
           <PriceSelector
             stock={stock}
             totalQuantity={totalQuantity}
             value={priceType}
             customPrice={customPrice}
-            onChange={(value) =>
+            onChange={value =>
               setValue(`items.${index}.priceType`, value, {
                 shouldValidate: true,
               })
@@ -143,7 +137,7 @@ export const ItemRow = ({
           <div className="flex items-center justify-between gap-2 border-b border-white/10 bg-white/8 px-3 py-2">
             <div className="flex items-center gap-2">
               <Hash className="h-3.5 w-3.5 text-cyan-300" />
-              <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+              <span className="text-[10px] font-semibold tracking-widest text-slate-400 uppercase">
                 Quantity
               </span>
             </div>
@@ -167,12 +161,12 @@ export const ItemRow = ({
           <div className="grid grid-cols-[1fr_130px_40px] gap-2 border-b border-white/10 bg-white/8 px-3 py-2 max-sm:grid-cols-1">
             <div className="flex items-center gap-2">
               <Palette className="h-3.5 w-3.5 text-cyan-300" />
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+              <p className="text-[10px] font-semibold tracking-widest text-slate-400 uppercase">
                 Colors
               </p>
             </div>
 
-            <p className="text-center text-[10px] font-semibold uppercase tracking-widest text-slate-400 max-sm:hidden">
+            <p className="text-center text-[10px] font-semibold tracking-widest text-slate-400 uppercase max-sm:hidden">
               Qty
             </p>
           </div>

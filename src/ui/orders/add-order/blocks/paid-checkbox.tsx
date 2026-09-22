@@ -1,4 +1,5 @@
 import { useFormContext } from "react-hook-form";
+
 import { OrderFormType } from "../form";
 
 export const PaidCheckbox = () => {
@@ -18,11 +19,7 @@ export const PaidCheckbox = () => {
         }`}
       >
         {isPaid && (
-          <svg
-            className="h-2.5 w-2.5 text-slate-950"
-            fill="none"
-            viewBox="0 0 10 8"
-          >
+          <svg className="h-2.5 w-2.5 text-slate-950" fill="none" viewBox="0 0 10 8">
             <path
               d="M1 4l3 3 5-6"
               stroke="currentColor"
@@ -33,7 +30,7 @@ export const PaidCheckbox = () => {
           </svg>
         )}
       </div>
-      <span className="select-none text-sm text-slate-300">Paid</span>
+      <span className="text-sm text-slate-300 select-none">Paid</span>
     </label>
   );
 };

@@ -1,17 +1,18 @@
 "use client";
 
 import { ArrowLeft, FileText, Plus } from "lucide-react";
+
 import { DueAmountPill, EmptyState, ReuseableDialog } from "@/components";
 import { PageLayout } from "@/components/layout";
+import { NavigationLink } from "@/components/navigation-link";
 import { Loader } from "@/components/ui/loader";
+
 import { BillCard } from "./blocks";
 import { BillForm } from "./form";
 import { useBills } from "./useBills";
-import { NavigationLink } from "@/components/navigation-link";
 
 export const VendorBills = ({ vendorId }: { vendorId: string }) => {
-  const { vendor, bills, loading, saving, open, setOpen, onSubmitBill } =
-    useBills(vendorId);
+  const { vendor, bills, loading, saving, open, setOpen, onSubmitBill } = useBills(vendorId);
 
   return (
     <PageLayout>
@@ -27,9 +28,7 @@ export const VendorBills = ({ vendorId }: { vendorId: string }) => {
 
           <div className="flex items-center gap-3">
             <div>
-              <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">
-                Bills
-              </h1>
+              <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">Bills</h1>
               <p className="mt-1 text-xs text-slate-400">
                 {vendor?.name ?? "Vendor"} · {bills.length} bill
                 {bills.length !== 1 ? "s" : ""}
@@ -40,10 +39,7 @@ export const VendorBills = ({ vendorId }: { vendorId: string }) => {
 
         <div className="flex items-center gap-3">
           <div className="hidden sm:block">
-            <DueAmountPill
-              amount={vendor?.remainingAmount ?? 0}
-              loading={loading}
-            />
+            <DueAmountPill amount={vendor?.remainingAmount ?? 0} loading={loading} />
           </div>
 
           <ReuseableDialog
@@ -82,7 +78,7 @@ export const VendorBills = ({ vendorId }: { vendorId: string }) => {
         />
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {bills.map((bill) => (
+          {bills.map(bill => (
             <BillCard key={bill._id} bill={bill} />
           ))}
         </div>

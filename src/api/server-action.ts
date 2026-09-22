@@ -13,10 +13,7 @@ interface ServerActionRequest<TBody extends object | FormData = object> {
   headers?: Record<string, string>;
 }
 
-const serverAction = async <
-  TBody extends object | FormData = object,
-  TResponse = unknown,
->({
+const serverAction = async <TBody extends object | FormData = object, TResponse = unknown>({
   url,
   method,
   body,

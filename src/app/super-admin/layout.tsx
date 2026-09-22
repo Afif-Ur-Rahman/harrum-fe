@@ -1,12 +1,9 @@
 import { redirect } from "next/navigation";
-import { getAuthCookies } from "@/utils/cookies";
-import { AppSidebar } from "@/components/layout";
 
-export default async function OwnerLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+import { AppSidebar } from "@/components/layout";
+import { getAuthCookies } from "@/utils/cookies";
+
+export default async function OwnerLayout({ children }: { children: React.ReactNode }) {
   const authCookies = await getAuthCookies();
 
   if (!authCookies?.user || authCookies.user.type !== "owner") {

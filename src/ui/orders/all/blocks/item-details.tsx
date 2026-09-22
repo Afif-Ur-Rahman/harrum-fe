@@ -1,8 +1,9 @@
 "use client";
 
 import { Palette, RotateCcw, ShieldCheck } from "lucide-react";
-import { formatPrice } from "@/utils";
+
 import { OrderItem } from "@/types";
+import { formatPrice } from "@/utils";
 
 interface ItemDetailsProps {
   item: OrderItem;
@@ -11,13 +12,9 @@ interface ItemDetailsProps {
 export const ItemDetails: React.FC<ItemDetailsProps> = ({ item }) => {
   const hasVariants = item.variants.length > 0;
 
-  const hasReturned = hasVariants
-    ? item.variants.some((v) => v.isReturned)
-    : !!item.isReturned;
+  const hasReturned = hasVariants ? item.variants.some(v => v.isReturned) : !!item.isReturned;
 
-  const hasClaimed = hasVariants
-    ? item.variants.some((v) => v.isClaimed)
-    : false;
+  const hasClaimed = hasVariants ? item.variants.some(v => v.isClaimed) : false;
 
   return (
     <div className="rounded-lg border border-white/5 bg-white/5 p-3">
@@ -25,7 +22,7 @@ export const ItemDetails: React.FC<ItemDetailsProps> = ({ item }) => {
         <div className="min-w-0">
           <p className="truncate text-sm font-medium text-white">{item.name}</p>
 
-          <p className="mt-1 text-[10px] uppercase tracking-wider text-slate-500">
+          <p className="mt-1 text-[10px] tracking-wider text-slate-500 uppercase">
             {item.priceType || "Sale"}
           </p>
         </div>
@@ -34,10 +31,7 @@ export const ItemDetails: React.FC<ItemDetailsProps> = ({ item }) => {
           {formatPrice(
             item.price ??
               (hasVariants
-                ? item.variants.reduce(
-                    (sum, variant) => sum + Number(variant.price || 0),
-                    0,
-                  )
+                ? item.variants.reduce((sum, variant) => sum + Number(variant.price || 0), 0)
                 : 0),
           )}{" "}
           <span className="text-[10px] font-normal text-slate-500">PKR</span>
@@ -46,7 +40,7 @@ export const ItemDetails: React.FC<ItemDetailsProps> = ({ item }) => {
 
       <div className="mt-3 space-y-2">
         {hasVariants ? (
-          item.variants.map((variant) => (
+          item.variants.map(variant => (
             <div
               key={variant._id}
               className="flex flex-wrap items-center justify-between gap-2 rounded-md bg-black/20 px-2.5 py-2"
@@ -54,15 +48,11 @@ export const ItemDetails: React.FC<ItemDetailsProps> = ({ item }) => {
               <div className="flex items-center gap-2">
                 <Palette className="h-3.5 w-3.5 text-slate-500" />
 
-                <span className="text-xs text-slate-300">
-                  {variant.color || "No color"}
-                </span>
+                <span className="text-xs text-slate-300">{variant.color || "No color"}</span>
               </div>
 
               <div className="flex items-center gap-3">
-                <span className="text-xs text-slate-400">
-                  {variant.quantity} pcs
-                </span>
+                <span className="text-xs text-slate-400">{variant.quantity} pcs</span>
               </div>
             </div>
           ))
@@ -73,9 +63,7 @@ export const ItemDetails: React.FC<ItemDetailsProps> = ({ item }) => {
             </div>
 
             <div className="flex items-center gap-3">
-              <span className="text-xs text-slate-400">
-                {item.quantity} pcs
-              </span>
+              <span className="text-xs text-slate-400">{item.quantity} pcs</span>
             </div>
           </div>
         )}

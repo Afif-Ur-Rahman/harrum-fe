@@ -1,18 +1,21 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { FaBarsStaggered } from "react-icons/fa6";
-import { clearClientAuthCookies } from "@/utils/client-cookies";
-import { logout } from "@/api/api-call/auth-api";
-import { NavRes } from "@/components/layout/ResponsiveNavbar";
-import { usePersistStore } from "@/store/presistStore";
 import { CaretRightIcon } from "@radix-ui/react-icons";
 import { Flex } from "@radix-ui/themes";
-import { ACCOUNTANT_NAV_TABS, OWNER_NAV_TABS } from "./constants";
-import { NavigationLink } from "../navigation-link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { FaBarsStaggered } from "react-icons/fa6";
+
+import { logout } from "@/api/api-call/auth-api";
+import { NavRes } from "@/components/layout/ResponsiveNavbar";
 import { useNavigation } from "@/lib/useNavigation";
+import { usePersistStore } from "@/store/presistStore";
+import { clearClientAuthCookies } from "@/utils/client-cookies";
+
+import { ACCOUNTANT_NAV_TABS, OWNER_NAV_TABS } from "./constants";
+
+import { NavigationLink } from "../navigation-link";
 
 interface SidebarHeaderProps {
   collapsed: boolean;
@@ -53,9 +56,7 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
       <CaretRightIcon
         width={20}
         height={20}
-        className={`transition-transform duration-300 ${
-          collapsed ? "" : "rotate-180"
-        }`}
+        className={`transition-transform duration-300 ${collapsed ? "" : "rotate-180"}`}
       />
     </button>
   </div>
@@ -83,7 +84,7 @@ const NavigationItem: React.FC<NavigationItemProps> = ({
         collapsed ? "w-fit" : "w-full"
       } items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium transition-all duration-200 ${
         isActive
-          ? "bg-linear-to-r from-cyan-500/20 via-blue-500/20 to-fuchsia-500/20 text-white shadow-lg shadow-cyan-950/30 ring-1 ring-inset ring-white/10"
+          ? "bg-linear-to-r from-cyan-500/20 via-blue-500/20 to-fuchsia-500/20 text-white shadow-lg ring-1 shadow-cyan-950/30 ring-white/10 ring-inset"
           : "text-slate-300 hover:bg-white/5 hover:text-white"
       }`}
     >
@@ -107,7 +108,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
   onMenuClick,
 }) => (
   <header
-    className={`fixed left-0 right-0 top-0 z-100 border-b transition-all duration-200 lg:hidden ${
+    className={`fixed top-0 right-0 left-0 z-100 border-b transition-all duration-200 lg:hidden ${
       isScrolled
         ? "border-white/10 bg-slate-950/85 shadow-xl shadow-black/20 backdrop-blur-xl"
         : "border-white/5 bg-slate-950/65 backdrop-blur-lg"
@@ -121,9 +122,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
           width={24}
           height={24}
         />
-        <span className="text-sm font-semibold text-white">
-          {userFullName || "Super Admin"}
-        </span>
+        <span className="text-sm font-semibold text-white">{userFullName || "Super Admin"}</span>
       </Flex>
 
       <button
@@ -145,8 +144,7 @@ export const AppSidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
-  const NAV_TABS =
-    user?.type === "owner" ? OWNER_NAV_TABS : ACCOUNTANT_NAV_TABS;
+  const NAV_TABS = user?.type === "owner" ? OWNER_NAV_TABS : ACCOUNTANT_NAV_TABS;
 
   const handleLogout = async () => {
     try {
@@ -162,7 +160,7 @@ export const AppSidebar = () => {
   };
 
   const toggleSidebar = () => {
-    setCollapsed((prev) => !prev);
+    setCollapsed(prev => !prev);
   };
 
   useEffect(() => {
@@ -179,7 +177,7 @@ export const AppSidebar = () => {
   return (
     <div>
       <aside
-        className={`sticky left-0 top-0 z-50 hidden h-screen border-r border-white/10 bg-[linear-gradient(180deg,rgba(2,6,23,0.96)_0%,rgba(15,23,42,0.94)_52%,rgba(17,24,39,0.96)_100%)] shadow-2xl shadow-black/30 backdrop-blur-xl transition-all duration-300 lg:block ${
+        className={`sticky top-0 left-0 z-50 hidden h-screen border-r border-white/10 bg-[linear-gradient(180deg,rgba(2,6,23,0.96)_0%,rgba(15,23,42,0.94)_52%,rgba(17,24,39,0.96)_100%)] shadow-2xl shadow-black/30 backdrop-blur-xl transition-all duration-300 lg:block ${
           collapsed ? "w-20" : "w-64"
         }`}
       >
@@ -195,21 +193,19 @@ export const AppSidebar = () => {
 
           <nav className="mt-4 border-b border-white/10 pb-4">
             <ul className="flex flex-col gap-2 px-3">
-              {NAV_TABS.map((tab) => (
+              {NAV_TABS.map(tab => (
                 <NavigationItem
                   key={tab.href}
                   {...tab}
                   collapsed={collapsed}
-                  isActive={
-                    pathname === tab.href || pathname.startsWith(`${tab.href}/`)
-                  }
+                  isActive={pathname === tab.href || pathname.startsWith(`${tab.href}/`)}
                 />
               ))}
             </ul>
           </nav>
 
           {!collapsed && (
-            <div className="absolute bottom-6 left-0 right-0 px-3">
+            <div className="absolute right-0 bottom-6 left-0 px-3">
               <button
                 className="w-full rounded-2xl border border-white/10 bg-white/8 px-3 py-3 text-base font-medium text-white transition hover:bg-white/12"
                 onClick={handleLogout}

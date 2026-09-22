@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+
 import { profileAPI } from "@/api/api-call/profile-api";
 import { showToast } from "@/utils/toast";
 
@@ -54,16 +55,12 @@ export const useProfile = () => {
         reset();
         showToast("success", "Password changed successfully.");
       } else {
-        showToast(
-          "error",
-          response.error || "Failed to change password. Please try again.",
-        );
+        showToast("error", response.error || "Failed to change password. Please try again.");
       }
     } catch (error) {
       showToast(
         "error",
-        (error as Error)?.message ||
-          "Failed to change password. Please try again.",
+        (error as Error)?.message || "Failed to change password. Please try again.",
       );
     } finally {
       setLoading(false);

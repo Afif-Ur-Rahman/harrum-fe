@@ -1,12 +1,4 @@
-import {
-  LayoutGrid,
-  Package,
-  ShoppingBag,
-  User,
-  Users,
-  Contact,
-  Store,
-} from "lucide-react";
+import { LayoutGrid, Package, ShoppingBag, User, Users, Contact, Store } from "lucide-react";
 import { BsEnvelopePlus } from "react-icons/bs";
 
 export const OWNER_NAV_TABS = [

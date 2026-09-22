@@ -1,15 +1,16 @@
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { ForgotFormType, forgotSchema } from './schema'
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+
+import { ForgotFormType, forgotSchema } from "./schema";
 
 const useForgotForm = (intialValues?: ForgotFormType) => {
   const form = useForm({
     resolver: zodResolver(forgotSchema),
-    reValidateMode: 'onChange',
+    reValidateMode: "onChange",
     defaultValues: intialValues,
-  })
+  });
 
-  return form
-}
+  return form;
+};
 
-export { useForgotForm }
+export { useForgotForm };

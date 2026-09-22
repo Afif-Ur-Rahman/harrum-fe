@@ -35,18 +35,12 @@ const EmptyState: React.FC<EmptyStateProps> = ({
             isCompact ? "h-12 w-12" : "h-14 w-14"
           }`}
         >
-          <Icon
-            className={
-              isCompact ? "h-5 w-5 text-cyan-300" : "h-6 w-6 text-cyan-300"
-            }
-          />
+          <Icon className={isCompact ? "h-5 w-5 text-cyan-300" : "h-6 w-6 text-cyan-300"} />
         </div>
 
         <h3 className="mb-1 text-base font-semibold text-white">{title}</h3>
 
-        {description && (
-          <p className="max-w-sm text-sm text-slate-400">{description}</p>
-        )}
+        {description && <p className="max-w-sm text-sm text-slate-400">{description}</p>}
       </div>
     </div>
   );

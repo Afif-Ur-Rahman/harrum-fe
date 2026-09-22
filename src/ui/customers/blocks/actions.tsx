@@ -1,17 +1,13 @@
 "use client";
 
-import { useState } from "react";
 import { DropdownMenu } from "@radix-ui/themes";
-import {
-  MoreVertical,
-  Pen,
-  Wallet,
-  Receipt as ReceiptIcon,
-  Eye,
-} from "lucide-react";
+import { MoreVertical, Pen, Wallet, Receipt as ReceiptIcon, Eye } from "lucide-react";
+import { useState } from "react";
+
 import { ReuseableDialog } from "@/components";
 import { Customer } from "@/types";
 import { ReceiptForm, ReceiptHistory } from "@/ui/receipts";
+
 import { CustomerOrders } from "./customer-orders";
 
 interface ActionsProps {
@@ -28,11 +24,7 @@ type ActionButton = {
   hoverClass: string;
 };
 
-export const Actions: React.FC<ActionsProps> = ({
-  customer,
-  onEdit,
-  onCustomerUpdated,
-}) => {
+export const Actions: React.FC<ActionsProps> = ({ customer, onEdit, onCustomerUpdated }) => {
   const [paymentOpen, setPaymentOpen] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [ordersOpen, setOrdersOpen] = useState(false);
@@ -45,32 +37,28 @@ export const Actions: React.FC<ActionsProps> = ({
       icon: Pen,
       disabled: false,
       onSelect: () => onEdit(customer),
-      hoverClass:
-        "data-highlighted:bg-cyan-400/20! data-highlighted:text-cyan-200!",
+      hoverClass: "data-highlighted:bg-cyan-400/20! data-highlighted:text-cyan-200!",
     },
     {
       label: "Record Payment",
       icon: Wallet,
       disabled: !hasBalance,
       onSelect: () => setPaymentOpen(true),
-      hoverClass:
-        "data-highlighted:bg-emerald-400/20! data-highlighted:text-emerald-200!",
+      hoverClass: "data-highlighted:bg-emerald-400/20! data-highlighted:text-emerald-200!",
     },
     {
       label: "Payment History",
       icon: ReceiptIcon,
       disabled: false,
       onSelect: () => setHistoryOpen(true),
-      hoverClass:
-        "data-highlighted:bg-amber-400/20! data-highlighted:text-amber-200!",
+      hoverClass: "data-highlighted:bg-amber-400/20! data-highlighted:text-amber-200!",
     },
     {
       label: "View Orders",
       icon: Eye,
       disabled: false,
       onSelect: () => setOrdersOpen(true),
-      hoverClass:
-        "data-highlighted:bg-cyan-400/20! data-highlighted:text-cyan-200!",
+      hoverClass: "data-highlighted:bg-cyan-400/20! data-highlighted:text-cyan-200!",
     },
   ];
 
@@ -89,9 +77,9 @@ export const Actions: React.FC<ActionsProps> = ({
 
         <DropdownMenu.Content
           align="end"
-          className="rounded-2xl! border! border-white/10! bg-slate-900/95! backdrop-blur-xl! shadow-2xl! shadow-black/40!"
+          className="rounded-2xl! border! border-white/10! bg-slate-900/95! shadow-2xl! shadow-black/40! backdrop-blur-xl!"
         >
-          {actionButtons.map((action) => {
+          {actionButtons.map(action => {
             const Icon = action.icon;
 
             return (

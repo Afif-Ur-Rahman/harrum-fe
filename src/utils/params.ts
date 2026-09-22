@@ -3,19 +3,19 @@ const appendSearchParams = (
   searchParams?: URLSearchParams,
   excludeParam?: string,
 ): string | null => {
-  if (!baseUrl) return null
+  if (!baseUrl) return null;
 
-  let updatedUrl = baseUrl
+  let updatedUrl = baseUrl;
 
   if (searchParams) {
     Array.from(searchParams.entries()).forEach(([key, value]) => {
       if (value && (!excludeParam || key !== excludeParam)) {
-        if (updatedUrl.includes(key)) return
-        updatedUrl += `${updatedUrl.includes('?') ? '&' : '?'}${key}=${value}`
+        if (updatedUrl.includes(key)) return;
+        updatedUrl += `${updatedUrl.includes("?") ? "&" : "?"}${key}=${value}`;
       }
-    })
+    });
   }
 
-  return updatedUrl
-}
-export { appendSearchParams }
+  return updatedUrl;
+};
+export { appendSearchParams };

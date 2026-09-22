@@ -1,11 +1,7 @@
-const IGNORED_CONSOLE_PATTERNS = [
-  /^\[Fast Refresh\]/i,
-  /^\[HMR\]/i,
-  /^\[locatorjs\]/i,
-];
+const IGNORED_CONSOLE_PATTERNS = [/^\[Fast Refresh\]/i, /^\[HMR\]/i, /^\[locatorjs\]/i];
 
 export const shouldIgnoreConsoleMessage = (message: string) =>
-  IGNORED_CONSOLE_PATTERNS.some((pattern) => pattern.test(message));
+  IGNORED_CONSOLE_PATTERNS.some(pattern => pattern.test(message));
 
 const IGNORED_URL_PATTERNS = [
   /[?&]_rsc=/, // Next.js RSC payload requests
@@ -15,4 +11,4 @@ const IGNORED_URL_PATTERNS = [
 ];
 
 export const shouldIgnoreNetworkUrl = (url: string) =>
-  IGNORED_URL_PATTERNS.some((pattern) => pattern.test(url));
+  IGNORED_URL_PATTERNS.some(pattern => pattern.test(url));

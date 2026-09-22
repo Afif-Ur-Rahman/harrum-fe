@@ -6,12 +6,12 @@ export const getClientAuthCookies = (): AuthCookies | undefined => {
 
   const accessToken = document.cookie
     .split("; ")
-    .find((row) => row.startsWith(`${ACCESS_TOKEN_COOKIE}=`))
+    .find(row => row.startsWith(`${ACCESS_TOKEN_COOKIE}=`))
     ?.split("=")[1];
 
   const userJson = document.cookie
     .split("; ")
-    .find((row) => row.startsWith(`${USER_COOKIE}=`))
+    .find(row => row.startsWith(`${USER_COOKIE}=`))
     ?.split("=")[1];
 
   if (!accessToken || !userJson) {
@@ -38,7 +38,7 @@ export const setClientAuthCookies = (value: AuthCookies) => {
     value.accessToken
   }; expires=${expires.toUTCString()}; path=/`;
   document.cookie = `${USER_COOKIE}=${encodeURIComponent(
-    JSON.stringify(value.user)
+    JSON.stringify(value.user),
   )}; expires=${expires.toUTCString()}; path=/`;
 };
 

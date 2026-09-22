@@ -1,19 +1,21 @@
-'use client'
+"use client";
 
-import { cn } from '@/utils'
-import { Flex, TextField } from '@radix-ui/themes'
-import { useFormContext } from 'react-hook-form'
-import { BlockLabel } from '../block-label'
+import { Flex, TextField } from "@radix-ui/themes";
+import { useFormContext } from "react-hook-form";
+
+import { cn } from "@/utils";
+
+import { BlockLabel } from "../block-label";
 
 interface TextInputProps {
-  label?: string
-  field: string
-  autoFocus?: boolean
-  className?: string
-  placeHolder?: string
-  disabled?: boolean
-  required?: boolean
-  maxLength?: number
+  label?: string;
+  field: string;
+  autoFocus?: boolean;
+  className?: string;
+  placeHolder?: string;
+  disabled?: boolean;
+  required?: boolean;
+  maxLength?: number;
 }
 
 const TextInput = ({
@@ -26,7 +28,7 @@ const TextInput = ({
   required = false,
   maxLength,
 }: TextInputProps) => {
-  const form = useFormContext()
+  const form = useFormContext();
 
   return (
     <Flex align="center" gap="2">
@@ -39,13 +41,13 @@ const TextInput = ({
         required={required}
         autoFocus={autoFocus}
         disabled={disabled}
-        className={cn('h-8 text-[13px] flex-1 rounded-md!', className)}
+        className={cn("h-8 flex-1 rounded-md! text-[13px]", className)}
         placeholder={placeHolder}
         {...form.register(field)}
         maxLength={maxLength}
       />
     </Flex>
-  )
-}
+  );
+};
 
-export { TextInput }
+export { TextInput };

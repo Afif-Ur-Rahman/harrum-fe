@@ -1,16 +1,18 @@
 "use client";
 
 import { ShieldCheck } from "lucide-react";
-import { usePersistStore } from "@/store/presistStore";
-import { ProfileCard, ProfileUpdate } from "./blocks";
+
 import { PageLayout } from "@/components/layout";
+import { usePersistStore } from "@/store/presistStore";
+
+import { ProfileCard, ProfileUpdate } from "./blocks";
 
 export const Profile = () => {
   const { user } = usePersistStore();
 
   if (!user) {
     return (
-      <div className="min-h-full flex items-center justify-center rounded-[28px] text-white">
+      <div className="flex min-h-full items-center justify-center rounded-[28px] text-white">
         <p className="text-lg text-slate-400">No user data available.</p>
       </div>
     );
@@ -24,9 +26,7 @@ export const Profile = () => {
         </div>
 
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">
-            My Profile
-          </h1>
+          <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">My Profile</h1>
           <p className="mt-1 text-xs text-slate-400">
             View your account information and update your password securely
           </p>

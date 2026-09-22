@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+
 import {
   createCustomer,
   deleteCustomer,
@@ -7,6 +8,7 @@ import {
 } from "@/api/api-call/customers";
 import { Customer } from "@/types";
 import { showToast } from "@/utils/toast";
+
 import { CustomerFormType } from "./form";
 
 const useCustomers = () => {
@@ -71,12 +73,10 @@ const useCustomers = () => {
     const savedCustomer = response.data.data;
 
     if (editingCustomer) {
-      setCustomers((prev) =>
-        prev.map((c) => (c._id === savedCustomer._id ? savedCustomer : c)),
-      );
+      setCustomers(prev => prev.map(c => (c._id === savedCustomer._id ? savedCustomer : c)));
       showToast("success", "Customer updated successfully");
     } else {
-      setCustomers((prev) => [savedCustomer, ...prev]);
+      setCustomers(prev => [savedCustomer, ...prev]);
       showToast("success", "Customer added successfully");
     }
 
@@ -93,15 +93,13 @@ const useCustomers = () => {
       return { state: false, error: res?.error || "Failed to delete customer" };
     }
 
-    setCustomers((prev) => prev.filter((c) => c._id !== id));
+    setCustomers(prev => prev.filter(c => c._id !== id));
 
     return { state: true, message: res.data.message };
   };
 
   const updateCustomerInList = (updated: Customer) => {
-    setCustomers((prev) =>
-      prev.map((c) => (c._id === updated._id ? updated : c)),
-    );
+    setCustomers(prev => prev.map(c => (c._id === updated._id ? updated : c)));
   };
 
   const filtered = useMemo(() => {
@@ -110,7 +108,7 @@ const useCustomers = () => {
     if (!query) return customers;
 
     return customers.filter(
-      (customer) =>
+      customer =>
         customer.name?.toLowerCase().includes(query) ||
         customer.phone?.toLowerCase().includes(query) ||
         customer.email?.toLowerCase().includes(query),

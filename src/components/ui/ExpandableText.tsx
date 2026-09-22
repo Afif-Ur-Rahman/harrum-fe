@@ -1,6 +1,6 @@
 "use client";
-import React, { useState } from "react";
 import { Text } from "@radix-ui/themes";
+import React, { useState } from "react";
 
 interface ExpandableTextProps {
   text?: string;
@@ -28,9 +28,7 @@ const ExpandableText: React.FC<ExpandableTextProps> = ({
   }
 
   const isLong = text.length > maxLength;
-  const displayText = expanded
-    ? text
-    : text.substring(0, maxLength) + (isLong ? "..." : "");
+  const displayText = expanded ? text : text.substring(0, maxLength) + (isLong ? "..." : "");
 
   return (
     <div className={`flex flex-col ${className}`}>
@@ -40,11 +38,15 @@ const ExpandableText: React.FC<ExpandableTextProps> = ({
       {isLong && (
         <button
           type="button"
-          onClick={(e) => {
+          onClick={e => {
             e.stopPropagation();
             setExpanded(!expanded);
           }}
-          className={buttonStyle ? buttonStyle : "text-sm text-blue-600 hover:text-blue-800 transition-all self-start mt-1 cursor-pointer!"}
+          className={
+            buttonStyle
+              ? buttonStyle
+              : "mt-1 cursor-pointer! self-start text-sm text-blue-600 transition-all hover:text-blue-800"
+          }
         >
           {expanded ? "See less" : "See more"}
         </button>

@@ -1,13 +1,13 @@
-import { StateStorage } from 'zustand/middleware'
+import { StateStorage } from "zustand/middleware";
 
 export const zustandStorage: StateStorage = {
   getItem: async (name: string) => {
-    return localStorage.getItem(name)
+    return localStorage.getItem(name);
   },
   setItem: async (name: string, value: string) => {
-    return localStorage.setItem(name, value)
+    return localStorage.setItem(name, value);
   },
   removeItem: async (name: string) => {
-    return localStorage.removeItem(name)
+    return localStorage.removeItem(name);
   },
-}
+};

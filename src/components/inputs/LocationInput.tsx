@@ -1,11 +1,12 @@
 "use client";
 
+import { Tooltip } from "@radix-ui/themes";
+import { MapPin, Loader2, X, LocateFixed } from "lucide-react";
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useFormContext } from "react-hook-form";
-import { Tooltip } from "@radix-ui/themes";
-import { GoolgePlaceType } from "@/types/google";
+
 import { googleAPI } from "@/api/api-call/google-api";
-import { MapPin, Loader2, X, LocateFixed } from "lucide-react";
+import { GoolgePlaceType } from "@/types/google";
 
 interface LocationInputProps {
   field: string;
@@ -26,9 +27,7 @@ const LocationInput: React.FC<LocationInputProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const suppressSearch = useRef(false);
 
-  const [searchText, setSearchText] = useState(
-    selectedPlace?.formatted_address || ""
-  );
+  const [searchText, setSearchText] = useState(selectedPlace?.formatted_address || "");
   const [places, setPlaces] = useState<GoolgePlaceType[]>([]);
   const [debouncedValue, setDebouncedValue] = useState(searchText);
   const [fetching, setFetching] = useState(false);
@@ -38,7 +37,7 @@ const LocationInput: React.FC<LocationInputProps> = ({
     if (!navigator.geolocation || disabled) return;
     setLocating(true);
     navigator.geolocation.getCurrentPosition(
-      async (pos) => {
+      async pos => {
         try {
           const { latitude: lat, longitude: lng } = pos.coords;
           const result = await googleAPI.getCoodinatesAddress(lat, lng);
@@ -119,7 +118,7 @@ const LocationInput: React.FC<LocationInputProps> = ({
       form.setValue("country", placeInfo.transformedAddress?.country?.long_name);
       form.setValue("zip", placeInfo.transformedAddress?.postal_code?.long_name);
     },
-    [field, form, disabled]
+    [field, form, disabled],
   );
 
   const handleClear = () => {
@@ -146,14 +145,14 @@ const LocationInput: React.FC<LocationInputProps> = ({
   return (
     <div ref={containerRef} className={`relative w-full ${className || ""}`}>
       <div
-        className={`flex items-center gap-2.5 px-4 py-3 rounded-xl border text-sm transition-all ${
+        className={`flex items-center gap-2.5 rounded-xl border px-4 py-3 text-sm transition-all ${
           disabled
-            ? "bg-gray-50 border-gray-100 text-gray-500 cursor-default"
-            : "bg-white border-gray-200 text-gray-900 focus-within:border-gray-900 focus-within:ring-2 focus-within:ring-gray-900/8 shadow-xs"
+            ? "cursor-default border-gray-100 bg-gray-50 text-gray-500"
+            : "border-gray-200 bg-white text-gray-900 shadow-xs focus-within:border-gray-900 focus-within:ring-2 focus-within:ring-gray-900/8"
         }`}
       >
         {/* Left: address pin */}
-        <MapPin className="w-4 h-4 text-gray-400 shrink-0" />
+        <MapPin className="h-4 w-4 shrink-0 text-gray-400" />
 
         {/* Text input */}
         <input
@@ -161,26 +160,26 @@ const LocationInput: React.FC<LocationInputProps> = ({
           disabled={disabled}
           value={addressValue}
           placeholder={placeholder}
-          onChange={(e) => {
+          onChange={e => {
             if (disabled) return;
             suppressSearch.current = false;
             setSearchText(e.target.value);
             form.setValue("address", e.target.value);
           }}
-          className="flex-1 bg-transparent outline-none placeholder-gray-300 text-sm disabled:cursor-default min-w-0"
+          className="min-w-0 flex-1 bg-transparent text-sm placeholder-gray-300 outline-none disabled:cursor-default"
         />
 
         {/* Right: spinner / clear / locate */}
         {!disabled && fetching && (
-          <Loader2 className="w-4 h-4 text-gray-400 animate-spin shrink-0" />
+          <Loader2 className="h-4 w-4 shrink-0 animate-spin text-gray-400" />
         )}
         {!disabled && !fetching && addressValue && (
           <button
             type="button"
             onClick={handleClear}
-            className="text-gray-300 hover:text-gray-500 transition-colors shrink-0"
+            className="shrink-0 text-gray-300 transition-colors hover:text-gray-500"
           >
-            <X className="w-3.5 h-3.5" />
+            <X className="h-3.5 w-3.5" />
           </button>
         )}
         {!disabled && (
@@ -189,30 +188,31 @@ const LocationInput: React.FC<LocationInputProps> = ({
               type="button"
               onClick={handleUseCurrentLocation}
               disabled={locating}
-              className="text-gray-400 hover:text-blue-600 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shrink-0"
+              className="shrink-0 text-gray-400 transition-colors hover:text-blue-600 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              {locating
-                ? <Loader2 className="w-4 h-4 animate-spin text-blue-500" />
-                : <LocateFixed className="w-4 h-4" />
-              }
+              {locating ? (
+                <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
+              ) : (
+                <LocateFixed className="h-4 w-4" />
+              )}
             </button>
           </Tooltip>
         )}
       </div>
 
       {!disabled && places.length > 0 && (
-        <ul className="absolute top-full left-0 z-50 mt-1.5 w-full bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
+        <ul className="absolute top-full left-0 z-50 mt-1.5 w-full overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg">
           {places.map((place, idx) => (
             <li
               key={place.place_id}
-              className={`flex items-start gap-3 px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors text-sm ${
+              className={`flex cursor-pointer items-start gap-3 px-4 py-3 text-sm transition-colors hover:bg-gray-50 ${
                 idx !== 0 ? "border-t border-gray-100" : ""
               }`}
-              onMouseDown={(e) => e.preventDefault()}
+              onMouseDown={e => e.preventDefault()}
               onClick={() => handlePlaceSelect(place)}
             >
-              <MapPin className="w-4 h-4 text-gray-400 mt-0.5 shrink-0" />
-              <span className="text-gray-700 leading-snug">{place.formatted_address}</span>
+              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gray-400" />
+              <span className="leading-snug text-gray-700">{place.formatted_address}</span>
             </li>
           ))}
         </ul>

@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import * as Popover from "@radix-ui/react-popover";
 import { Check, ChevronDown, X } from "lucide-react";
+import { useState } from "react";
 
 const DIALOG_PORTAL_ID = "dialog-dropdown-portal";
 
@@ -27,9 +27,7 @@ export const FilterMultiSelect = ({
   onChange,
 }: FilterMultiSelectProps) => {
   const [open, setOpen] = useState(false);
-  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(
-    null,
-  );
+  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null);
 
   const handleOpenChange = (next: boolean) => {
     if (next) {
@@ -39,32 +37,31 @@ export const FilterMultiSelect = ({
   };
 
   const getLabel = (optionValue: string) =>
-    options.find((option) => option.value === optionValue)?.label ??
-    optionValue;
+    options.find(option => option.value === optionValue)?.label ?? optionValue;
 
   const toggle = (optionValue: string) => {
     onChange(
       value.includes(optionValue)
-        ? value.filter((item) => item !== optionValue)
+        ? value.filter(item => item !== optionValue)
         : [...value, optionValue],
     );
   };
 
   const remove = (optionValue: string) => {
-    onChange(value.filter((item) => item !== optionValue));
+    onChange(value.filter(item => item !== optionValue));
   };
 
   return (
     <div className="flex w-full flex-col gap-1.5">
       <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5">
-        <label className="text-[12px] font-semibold uppercase tracking-widest text-slate-400">
+        <label className="text-[12px] font-semibold tracking-widest text-slate-400 uppercase">
           {label}
         </label>
 
-        {value.map((item) => (
+        {value.map(item => (
           <span
             key={item}
-            className="inline-flex items-center gap-1 rounded-full border border-cyan-300/20 bg-cyan-400/10 py-0.5 pl-2 pr-1 text-[11px] font-medium text-cyan-200"
+            className="inline-flex items-center gap-1 rounded-full border border-cyan-300/20 bg-cyan-400/10 py-0.5 pr-1 pl-2 text-[11px] font-medium text-cyan-200"
           >
             {getLabel(item)}
 
@@ -86,9 +83,7 @@ export const FilterMultiSelect = ({
             type="button"
             className="group flex w-full items-center justify-between gap-2.5 rounded-2xl border border-white/10 bg-white/8 px-4 py-1.5 text-left text-sm shadow-lg shadow-black/10 backdrop-blur-xl transition-all hover:bg-white/10 data-[state=open]:border-cyan-300/60 data-[state=open]:bg-white/12 data-[state=open]:ring-2 data-[state=open]:ring-cyan-300/10"
           >
-            <span
-              className={value.length > 0 ? "text-white" : "text-slate-300"}
-            >
+            <span className={value.length > 0 ? "text-white" : "text-slate-300"}>
               {value.length > 0 ? `${value.length} selected` : placeholder}
             </span>
 
@@ -104,11 +99,9 @@ export const FilterMultiSelect = ({
             className="z-50 max-h-48 w-(--radix-popover-trigger-width) overflow-y-auto rounded-2xl border border-white/10 bg-slate-900 py-1 shadow-2xl shadow-black/40 outline-none"
           >
             {options.length === 0 ? (
-              <p className="px-4 py-3 text-sm text-slate-400">
-                No options available
-              </p>
+              <p className="px-4 py-3 text-sm text-slate-400">No options available</p>
             ) : (
-              options.map((option) => {
+              options.map(option => {
                 const isSelected = value.includes(option.value);
 
                 return (
@@ -122,9 +115,7 @@ export const FilterMultiSelect = ({
                   >
                     <span className="truncate">{option.label}</span>
 
-                    {isSelected && (
-                      <Check className="h-3.5 w-3.5 shrink-0 text-cyan-300" />
-                    )}
+                    {isSelected && <Check className="h-3.5 w-3.5 shrink-0 text-cyan-300" />}
                   </button>
                 );
               })

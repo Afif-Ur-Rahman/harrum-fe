@@ -91,20 +91,27 @@ export const printReceipt = (data: ReceiptData) => {
   const subtotal = data.items.reduce((s, i) => s + i.price * i.qty, 0);
   const tip = data.tip ?? 0;
 
-  const itemRows = data.items.map((item) => `
+  const itemRows = data.items
+    .map(
+      item => `
     <div class="row mb1">
       <span class="name">${item.name}${item.variant ? ` (${item.variant})` : ""}</span>
       <span class="qty">×${item.qty}</span>
       <span class="price">${formatPrice(item.price * item.qty)}</span>
     </div>
-  `).join("");
+  `,
+    )
+    .join("");
 
-  const deliveryInfo = (data.orderType === "delivery" || data.orderType === "pickup") ? `
+  const deliveryInfo =
+    data.orderType === "delivery" || data.orderType === "pickup"
+      ? `
     ${data.customerName ? `<div>${data.customerName}</div>` : ""}
     ${data.customerPhone ? `<div>${data.customerPhone}</div>` : ""}
     ${data.deliveryAddress ? `<div>Addr: ${data.deliveryAddress}</div>` : ""}
     <div class="divider"></div>
-  ` : "";
+  `
+      : "";
 
   const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>${PAGE_CSS(width)}.header{display:flex;align-items:center;gap:6px;margin-bottom:5px;}.logo{width:40px;height:40px;object-fit:contain;flex-shrink:0;}.header-text{display:flex;flex-direction:column;}</style></head><body>
     <div class="header mb2">
@@ -148,7 +155,9 @@ export const printKitchenTicket = (data: KitchenTicketData) => {
   const width = data.paperWidth ?? "80mm";
   const isDelivery = data.orderType === "delivery" || data.orderType === "pickup";
 
-  const itemRows = data.items.map((item) => `
+  const itemRows = data.items
+    .map(
+      item => `
     <div class="mb1">
       <div class="row bold">
         <span class="name">${item.qty}x ${item.name}</span>
@@ -156,15 +165,20 @@ export const printKitchenTicket = (data: KitchenTicketData) => {
       </div>
       ${item.note ? `<div class="sm" style="padding-left:8px">↳ ${item.note}</div>` : ""}
     </div>
-  `).join("");
+  `,
+    )
+    .join("");
 
-  const headerHtml = (isDelivery && (data.logoUrl || data.restaurantName)) ? `
+  const headerHtml =
+    isDelivery && (data.logoUrl || data.restaurantName)
+      ? `
     <div class="header mb2">
       ${data.logoUrl ? `<img class="logo" src="${data.logoUrl}" alt="logo" />` : ""}
       <div class="header-text">
         ${data.restaurantName ? `<div class="bold lg">${data.restaurantName}</div>` : ""}
       </div>
-    </div>` : "";
+    </div>`
+      : "";
 
   const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>${PAGE_CSS(width)}.header{display:flex;align-items:center;gap:6px;margin-bottom:5px;}.logo{width:40px;height:40px;object-fit:contain;flex-shrink:0;}.header-text{display:flex;flex-direction:column;}</style></head><body>
     ${headerHtml}

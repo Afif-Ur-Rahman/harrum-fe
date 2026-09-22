@@ -1,11 +1,13 @@
 "use client";
 
+import { Lock } from "lucide-react";
 import { useEffect, useState } from "react";
 import { FormProvider } from "react-hook-form";
-import { useForgot } from "./useForgot";
-import { useForgotForm } from "./form";
-import { Lock } from "lucide-react";
+
 import { FormInput } from "@/components";
+
+import { useForgotForm } from "./form";
+import { useForgot } from "./useForgot";
 
 const ResetPassword = () => {
   const { resetForgotPassword } = useForgot();
@@ -27,7 +29,7 @@ const ResetPassword = () => {
 
     setIsLoading(true);
 
-    await form.handleSubmit(async (data) => {
+    await form.handleSubmit(async data => {
       const res = await resetForgotPassword({ ...data, email, otp });
 
       setIsLoading(false);

@@ -8,29 +8,17 @@ interface FilterTabsProps {
   onSelect: (value: string) => void;
 }
 
-const FilterTabs: React.FC<FilterTabsProps> = ({
-  options,
-  selected,
-  onSelect,
-}) => {
+const FilterTabs: React.FC<FilterTabsProps> = ({ options, selected, onSelect }) => {
   return (
-    <ScrollArea
-      size="1"
-      type="auto"
-      scrollbars="horizontal"
-      style={{ height: 60 }}
-      my="4"
-    >
+    <ScrollArea size="1" type="auto" scrollbars="horizontal" style={{ height: 60 }} my="4">
       <Flex gap="3">
-        {options.map((option) => (
+        {options.map(option => (
           <Box key={option.label}>
             <button
               onClick={() => onSelect(option.label)}
               className={`${
-                selected === option.label
-                  ? "bg-black text-white"
-                  : "text-black bg-white"
-              } rounded-full px-3 py-1 border border-black text-nowrap capitalize! ${
+                selected === option.label ? "bg-black text-white" : "bg-white text-black"
+              } rounded-full border border-black px-3 py-1 text-nowrap capitalize! ${
                 option.count !== 0
                   ? "pointer-events-auto opacity-100"
                   : "pointer-events-none opacity-50"

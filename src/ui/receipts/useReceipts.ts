@@ -1,9 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+
 import { createReceipt, getAllReceipts } from "@/api/api-call/receipts";
-import { showToast } from "@/utils/toast";
 import { Receipt, ReceiptParty, ReceiptPartyType } from "@/types";
+import { showToast } from "@/utils/toast";
+
 import { ReceiptFormType } from "./form";
 
 interface UseReceiptsOptions<T extends ReceiptParty> {
@@ -62,12 +64,9 @@ export const useReceipts = <T extends ReceiptParty = ReceiptParty>(
       return false;
     }
 
-    showToast(
-      "success",
-      response.data.message || "Payment recorded successfully",
-    );
+    showToast("success", response.data.message || "Payment recorded successfully");
 
-    setReceipts((prev) => [response.data!.data, ...prev]);
+    setReceipts(prev => [response.data!.data, ...prev]);
 
     if (response.data.updatedParty && onPaymentRecorded) {
       onPaymentRecorded(response.data.updatedParty as T);

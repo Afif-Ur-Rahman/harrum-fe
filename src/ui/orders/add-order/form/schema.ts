@@ -10,9 +10,7 @@ export const orderItemSchema = z
   .object({
     stockId: z.string().min(1, "Item is required"),
     name: z.string().min(1),
-    priceType: z
-      .enum(["purchase", "wholesale", "sale", "custom"])
-      .default("sale"),
+    priceType: z.enum(["purchase", "wholesale", "sale", "custom"]).default("sale"),
     hasVariants: z.boolean().default(true),
     quantity: z.string().optional(),
     price: z.string().optional(),

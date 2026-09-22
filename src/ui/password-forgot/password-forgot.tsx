@@ -1,11 +1,13 @@
 "use client";
 
+import { Mail } from "lucide-react";
 import { useState } from "react";
 import { FormProvider } from "react-hook-form";
-import { useForgot } from "./useForgot";
-import { useForgotForm } from "./form";
-import { Mail } from "lucide-react";
+
 import { FormInput } from "@/components";
+
+import { useForgotForm } from "./form";
+import { useForgot } from "./useForgot";
 
 const Forgotpassword = ({
   setCurrentStep,
@@ -21,7 +23,7 @@ const Forgotpassword = ({
   const handleSubmit = async () => {
     setIsLoading(true);
 
-    await form.handleSubmit(async (data) => {
+    await form.handleSubmit(async data => {
       const res = await onForgot(data);
 
       if (res?.error || !res?.data) {

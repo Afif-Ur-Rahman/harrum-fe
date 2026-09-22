@@ -9,6 +9,7 @@ import type {
   AuthResponse,
   OtpVerificationData,
 } from "@/types";
+
 import { serverAction } from "../server-action";
 
 export const login = async (data: AuthRequest) => {
@@ -192,9 +193,7 @@ export const updateProfile = async (data: FormData): Promise<User | null> => {
   }
 };
 
-export const updateSuperAdminProfile = async (
-  data: FormData,
-): Promise<User | null> => {
+export const updateSuperAdminProfile = async (data: FormData): Promise<User | null> => {
   try {
     const response = await serverAction({
       url: "/profile",

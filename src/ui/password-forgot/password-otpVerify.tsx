@@ -1,15 +1,17 @@
 "use client";
 
+import { Flex } from "@radix-ui/themes";
+import { Mail } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import OTPInput from "react-otp-input";
-import { useForgotForm } from "./form";
-import { OtpVerificationData } from "@/types";
+
 import { forgotPassword, resetVerifyOtp } from "@/api/api-call/auth-api";
-import { ForgotFormType } from "./schema";
+import { OtpVerificationData } from "@/types";
 import { showToast } from "@/utils/toast";
-import { Mail } from "lucide-react";
-import { Flex } from "@radix-ui/themes";
+
+import { useForgotForm } from "./form";
+import { ForgotFormType } from "./schema";
 
 type FormData = { otp: string; email: string };
 
@@ -45,7 +47,7 @@ const OtpVerify = ({
     if (timer <= 0) return;
 
     const interval = setInterval(() => {
-      setTimer((prev) => prev - 1);
+      setTimer(prev => prev - 1);
     }, 1000);
 
     return () => clearInterval(interval);
@@ -112,17 +114,15 @@ const OtpVerify = ({
               onChange={field.onChange}
               numInputs={6}
               renderSeparator={<span className="w-2" />}
-              renderInput={(props) => (
+              renderInput={props => (
                 <input
                   {...props}
-                  className="h-12! w-11! rounded-xl border-2 border-white/10 bg-white/8 text-center text-lg font-semibold text-white outline-none transition-all placeholder:text-slate-500 focus:border-cyan-300 focus:bg-white/12 focus:shadow-lg focus:shadow-cyan-950/30"
+                  className="h-12! w-11! rounded-xl border-2 border-white/10 bg-white/8 text-center text-lg font-semibold text-white transition-all outline-none placeholder:text-slate-500 focus:border-cyan-300 focus:bg-white/12 focus:shadow-lg focus:shadow-cyan-950/30"
                 />
               )}
             />
 
-            {fieldState.error && (
-              <p className="text-xs text-red-400">{fieldState.error.message}</p>
-            )}
+            {fieldState.error && <p className="text-xs text-red-400">{fieldState.error.message}</p>}
           </div>
         )}
       />
@@ -143,9 +143,7 @@ const OtpVerify = ({
       </button>
 
       <Flex justify="center" align="center" gap="2" className="min-h-5">
-        <p className="text-center text-sm text-slate-400">
-          Didn&apos;t receive the code?
-        </p>
+        <p className="text-center text-sm text-slate-400">Didn&apos;t receive the code?</p>
 
         <button
           type="button"

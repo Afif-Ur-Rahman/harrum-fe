@@ -1,5 +1,5 @@
-import React from "react";
 import { Avatar, Flex, Text } from "@radix-ui/themes";
+import React from "react";
 interface DashboadCardProps {
   image?: string;
   title?: string;

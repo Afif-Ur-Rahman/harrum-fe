@@ -1,9 +1,11 @@
 "use client";
 
-import React from "react";
 import { Box, Table as RadixTable } from "@radix-ui/themes";
-import { Loader } from "@/components/ui/loader";
 import { PackageSearch } from "lucide-react";
+import React from "react";
+
+import { Loader } from "@/components/ui/loader";
+
 import { EmptyState } from "./empty-state";
 
 export type Column<T> =
@@ -31,14 +33,7 @@ interface TableProps<T> {
   getRowClassName?: (row: T) => string;
 }
 
-function Table<T>({
-  data,
-  columns,
-  isLoading,
-  onRowClick,
-  title,
-  getRowClassName,
-}: TableProps<T>) {
+function Table<T>({ data, columns, isLoading, onRowClick, title, getRowClassName }: TableProps<T>) {
   const getAlign = (index: number, col?: Column<T>) => {
     if (col?.align) return col.align;
     if (index === 0) return "left";
@@ -59,7 +54,7 @@ function Table<T>({
                 <RadixTable.ColumnHeaderCell
                   key={String(col.key)}
                   align={getAlign(index, col)}
-                  className={`px-4! py-4! text-xs! font-semibold! uppercase! tracking-widest! text-slate-400! ${
+                  className={`px-4! py-4! text-xs! font-semibold! tracking-widest! text-slate-400! uppercase! ${
                     col.className || ""
                   }`}
                 >
@@ -72,10 +67,7 @@ function Table<T>({
           <RadixTable.Body>
             {isLoading ? (
               <RadixTable.Row>
-                <RadixTable.Cell
-                  colSpan={columns.length}
-                  className="py-10! text-center!"
-                >
+                <RadixTable.Cell colSpan={columns.length} className="py-10! text-center!">
                   <Loader label={title} />
                 </RadixTable.Cell>
               </RadixTable.Row>
@@ -99,22 +91,16 @@ function Table<T>({
                   key={rowIndex}
                   onClick={() => onRowClick?.(row)}
                   className={`group border-b border-white/5 align-middle! transition last:border-b-0 ${
-                    onRowClick
-                      ? "cursor-pointer hover:bg-white/8"
-                      : "hover:bg-white/5"
+                    onRowClick ? "cursor-pointer hover:bg-white/8" : "hover:bg-white/5"
                   } ${getRowClassName?.(row) || ""}`}
                 >
                   {columns.map((col, colIndex) => (
                     <RadixTable.Cell
                       key={String(col.key)}
                       align={getAlign(colIndex, col)}
-                      className={`px-4! py-4! text-sm! text-slate-300! ${
-                        col.className || ""
-                      }`}
+                      className={`px-4! py-4! text-sm! text-slate-300! ${col.className || ""}`}
                     >
-                      {col.render
-                        ? col.render(row, rowIndex)
-                        : String(row[col.key])}
+                      {col.render ? col.render(row, rowIndex) : String(row[col.key])}
                     </RadixTable.Cell>
                   ))}
                 </RadixTable.Row>

@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useMemo } from "react";
 import { Calculator, Edit, PersonStanding, Trash2 } from "lucide-react";
+import React, { useMemo } from "react";
 
+import { Tooltip } from "@/components";
 import { ConfirmationDialog } from "@/components/confirmation-dialog";
 import { Table, Column } from "@/components/ui/table";
 import { Employee } from "@/types";
-import { Tooltip } from "@/components";
 
 export type EmployeeType = Employee & {
   roleLabel: string;
@@ -14,9 +14,7 @@ export type EmployeeType = Employee & {
 
 interface EmployeeTableProps {
   filtered: EmployeeType[];
-  onDeleteEmployee: (
-    id: string,
-  ) => Promise<{ state: boolean; message?: string; error?: string }>;
+  onDeleteEmployee: (id: string) => Promise<{ state: boolean; message?: string; error?: string }>;
   onEditEmployee: (employee: Employee) => void;
   roleStyles?: Record<string, string>;
 }
@@ -33,7 +31,7 @@ export const EmployeeTable: React.FC<EmployeeTableProps> = ({
         key: "username",
         header: "Employee",
         align: "left",
-        render: (employee) => (
+        render: employee => (
           <div className="flex items-center gap-3">
             <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md ring-1 ring-white/10">
               {employee.type === "salesman" ? (
@@ -44,9 +42,7 @@ export const EmployeeTable: React.FC<EmployeeTableProps> = ({
             </div>
 
             <div className="min-w-0">
-              <p className="truncate font-semibold text-white">
-                {employee.username}
-              </p>
+              <p className="truncate font-semibold text-white">{employee.username}</p>
             </div>
           </div>
         ),
@@ -67,18 +63,18 @@ export const EmployeeTable: React.FC<EmployeeTableProps> = ({
         key: "phone",
         header: "Phone",
         align: "center",
-        render: (employee) => employee.phone || "—",
+        render: employee => employee.phone || "—",
       },
 
       {
         key: "roleLabel",
         header: "Role",
         align: "center",
-        render: (employee) => (
+        render: employee => (
           <span
             className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-semibold ${
               roleStyles[employee.roleLabel] ??
-              "bg-white/10 text-slate-200 ring-1 ring-inset ring-white/10"
+              "bg-white/10 text-slate-200 ring-1 ring-white/10 ring-inset"
             }`}
           >
             {employee.roleLabel}
@@ -90,14 +86,14 @@ export const EmployeeTable: React.FC<EmployeeTableProps> = ({
         key: "guardianName",
         header: "Guardian",
         align: "center",
-        render: (employee) => employee.guardianName || "—",
+        render: employee => employee.guardianName || "—",
       },
 
       {
         key: "guardianPhone",
         header: "Guardian Phone",
         align: "center",
-        render: (employee) => employee.guardianPhone || "—",
+        render: employee => employee.guardianPhone || "—",
       },
 
       {
@@ -105,10 +101,8 @@ export const EmployeeTable: React.FC<EmployeeTableProps> = ({
         header: "Permanent Address",
         align: "left",
         className: "min-w-72 max-w-80",
-        render: (employee) => (
-          <Tooltip
-            content={employee.permanentAddress || "No permanent address"}
-          >
+        render: employee => (
+          <Tooltip content={employee.permanentAddress || "No permanent address"}>
             <span
               className="block max-w-80 cursor-help truncate"
               title={employee.permanentAddress || undefined}
@@ -124,7 +118,7 @@ export const EmployeeTable: React.FC<EmployeeTableProps> = ({
         header: "Current Address",
         align: "left",
         className: "min-w-72 max-w-80",
-        render: (employee) => (
+        render: employee => (
           <Tooltip content={employee.currentAddress || "No current address"}>
             <span
               className="block max-w-80 cursor-help truncate"
@@ -140,7 +134,7 @@ export const EmployeeTable: React.FC<EmployeeTableProps> = ({
         key: "actions",
         header: "Action",
         align: "right",
-        render: (employee) => (
+        render: employee => (
           <div className="inline-flex items-center gap-2">
             <button
               type="button"

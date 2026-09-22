@@ -1,8 +1,7 @@
 import { Home, Lock, Mail, MapPin, Phone, Type, UserRound } from "lucide-react";
 
 export const ROLE_STYLES: Record<string, string> = {
-  Salesman:
-    "bg-emerald-500/15 text-emerald-200 ring-1 ring-inset ring-emerald-400/30",
+  Salesman: "bg-emerald-500/15 text-emerald-200 ring-1 ring-inset ring-emerald-400/30",
   Accountant: "bg-sky-500/15 text-sky-100 ring-1 ring-inset ring-sky-300/30",
 };
 

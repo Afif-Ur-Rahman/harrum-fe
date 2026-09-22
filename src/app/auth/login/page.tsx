@@ -1,17 +1,19 @@
 "use client";
 
+import { Mail, Lock } from "lucide-react";
 import { useEffect, useState } from "react";
-import OnboardingLayout from "@/components/OnboardingLayout";
-import { login } from "@/api/api-call/auth-api";
-import { useLoginForm } from "./form";
 import { FormProvider } from "react-hook-form";
-import { setClientAuthCookies } from "@/utils/client-cookies";
+
+import { login } from "@/api/api-call/auth-api";
+import { FormInput } from "@/components";
+import OnboardingLayout from "@/components/OnboardingLayout";
+import { useNavigation } from "@/lib/useNavigation";
 import { usePersistStore } from "@/store/presistStore";
 import PasswordForgotDialog from "@/ui/password-forgot/dialog";
+import { setClientAuthCookies } from "@/utils/client-cookies";
 import { showToast } from "@/utils/toast";
-import { Mail, Lock } from "lucide-react";
-import { FormInput } from "@/components";
-import { useNavigation } from "@/lib/useNavigation";
+
+import { useLoginForm } from "./form";
 
 function Login() {
   const form = useLoginForm();
@@ -39,7 +41,7 @@ function Login() {
   const handleSubmit = async () => {
     setIsLoading(true);
 
-    await form.handleSubmit(async (data) => {
+    await form.handleSubmit(async data => {
       const result = await login({ ...data, rememberMe });
 
       if (result?.error || !result?.data) {
@@ -82,10 +84,7 @@ function Login() {
   };
 
   return (
-    <OnboardingLayout
-      heading="Welcome back"
-      text="Sign in to your management portal"
-    >
+    <OnboardingLayout heading="Welcome back" text="Sign in to your management portal">
       <FormProvider {...form}>
         <div className="space-y-5">
           <FormInput
@@ -107,7 +106,7 @@ function Login() {
           <div className="flex items-center justify-between pt-1">
             <label
               className="group flex cursor-pointer items-center gap-2"
-              onClick={() => setRememberMe((v) => !v)}
+              onClick={() => setRememberMe(v => !v)}
             >
               <div
                 className={`flex h-4 w-4 cursor-pointer items-center justify-center rounded border-2 transition-colors ${
@@ -117,11 +116,7 @@ function Login() {
                 }`}
               >
                 {rememberMe && (
-                  <svg
-                    className="h-2.5 w-2.5 text-slate-950"
-                    fill="none"
-                    viewBox="0 0 10 8"
-                  >
+                  <svg className="h-2.5 w-2.5 text-slate-950" fill="none" viewBox="0 0 10 8">
                     <path
                       d="M1 4l3 3 5-6"
                       stroke="currentColor"
@@ -133,9 +128,7 @@ function Login() {
                 )}
               </div>
 
-              <span className="select-none text-sm text-slate-300">
-                Remember me
-              </span>
+              <span className="text-sm text-slate-300 select-none">Remember me</span>
             </label>
 
             <div className="text-sm text-cyan-300 transition hover:text-cyan-200">

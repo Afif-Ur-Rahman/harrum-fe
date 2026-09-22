@@ -1,4 +1,5 @@
-import { GenerictEvents } from '@/types'
-import createEventBus from './event-bus'
+import { GenerictEvents } from "@/types";
 
-export const genericEventBus = createEventBus<GenerictEvents>()
+import createEventBus from "./event-bus";
+
+export const genericEventBus = createEventBus<GenerictEvents>();

@@ -9,11 +9,7 @@ interface PaginationProps {
   onPageChange: (page: number) => void;
 }
 
-export const Pagination = ({
-  currentPage,
-  totalPages,
-  onPageChange,
-}: PaginationProps) => {
+export const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) => {
   const visiblePages = useMemo(() => {
     const pages: number[] = [];
     let startPage = 1;
@@ -38,8 +34,7 @@ export const Pagination = ({
 
   const handleFirstPage = () => onPageChange(1);
   const handlePrevPage = () => onPageChange(Math.max(1, currentPage - 1));
-  const handleNextPage = () =>
-    onPageChange(Math.min(totalPages, currentPage + 1));
+  const handleNextPage = () => onPageChange(Math.min(totalPages, currentPage + 1));
   const handleLastPage = () => onPageChange(totalPages);
 
   if (totalPages <= 1) return null;
@@ -51,7 +46,7 @@ export const Pagination = ({
         size="2"
         onClick={handleFirstPage}
         disabled={currentPage === 1}
-        className="disabled:opacity-50 disabled:cursor-not-allowed"
+        className="disabled:cursor-not-allowed disabled:opacity-50"
       >
         &lt;&lt;
       </Button>
@@ -60,12 +55,12 @@ export const Pagination = ({
         size="2"
         onClick={handlePrevPage}
         disabled={currentPage === 1}
-        className="disabled:opacity-50 disabled:cursor-not-allowed"
+        className="disabled:cursor-not-allowed disabled:opacity-50"
       >
         &lt;
       </Button>
 
-      {visiblePages.map((page) => (
+      {visiblePages.map(page => (
         <Button
           key={page}
           variant={currentPage === page ? "solid" : "soft"}
@@ -82,7 +77,7 @@ export const Pagination = ({
         size="2"
         onClick={handleNextPage}
         disabled={currentPage === totalPages}
-        className="disabled:opacity-50 disabled:cursor-not-allowed"
+        className="disabled:cursor-not-allowed disabled:opacity-50"
       >
         &gt;
       </Button>
@@ -91,7 +86,7 @@ export const Pagination = ({
         size="2"
         onClick={handleLastPage}
         disabled={currentPage === totalPages}
-        className="disabled:opacity-50 disabled:cursor-not-allowed"
+        className="disabled:cursor-not-allowed disabled:opacity-50"
       >
         &gt;&gt;
       </Button>

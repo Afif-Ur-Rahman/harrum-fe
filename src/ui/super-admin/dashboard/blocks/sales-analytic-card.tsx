@@ -5,12 +5,8 @@ export const SalesAnalyticsCard = () => {
     <div className="overflow-hidden rounded-[28px] border border-white/10 bg-white/8 p-5 shadow-2xl shadow-black/25 backdrop-blur-xl sm:p-6">
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm uppercase tracking-[0.2em] text-cyan-200">
-            Sales Analytics
-          </p>
-          <h2 className="mt-2 text-2xl font-semibold text-white">
-            Purchase vs Income Trend
-          </h2>
+          <p className="text-sm tracking-[0.2em] text-cyan-200 uppercase">Sales Analytics</p>
+          <h2 className="mt-2 text-2xl font-semibold text-white">Purchase vs Income Trend</h2>
         </div>
 
         <div className="flex items-center gap-3 text-xs sm:text-sm">
@@ -26,7 +22,7 @@ export const SalesAnalyticsCard = () => {
       </div>
 
       <div className="grid h-80 grid-cols-6 items-end gap-3 sm:gap-4">
-        {salesBars.map((item) => (
+        {salesBars.map(item => (
           <div key={item.label} className="flex h-full flex-col justify-end">
             <div className="flex h-full items-end justify-center gap-2">
               <div className="flex w-full max-w-7 flex-col justify-end rounded-full bg-slate-800/80">

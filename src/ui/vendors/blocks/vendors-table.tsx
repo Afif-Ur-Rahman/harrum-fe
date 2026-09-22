@@ -1,12 +1,14 @@
 "use client";
 
-import { ReuseableDialog, Table } from "@/components";
-import { Vendor } from "@/types";
-import { formatPrice } from "@/utils";
-import { Actions } from "./actions";
 import { useState } from "react";
-import { ReceiptForm, ReceiptHistory } from "@/ui/receipts";
+
+import { ReuseableDialog, Table } from "@/components";
 import { useNavigation } from "@/lib/useNavigation";
+import { Vendor } from "@/types";
+import { ReceiptForm, ReceiptHistory } from "@/ui/receipts";
+import { formatPrice } from "@/utils";
+
+import { Actions } from "./actions";
 
 interface VendorTableProps {
   filtered: Vendor[];
@@ -38,16 +40,12 @@ export const VendorTable: React.FC<VendorTableProps> = ({
     {
       key: "phone" as const,
       header: "Phone",
-      render: (row: Vendor) => (
-        <span className="text-slate-300">{row.phone}</span>
-      ),
+      render: (row: Vendor) => <span className="text-slate-300">{row.phone}</span>,
     },
     {
       key: "email" as const,
       header: "Email",
-      render: (row: Vendor) => (
-        <span className="text-slate-300">{row.email || "—"}</span>
-      ),
+      render: (row: Vendor) => <span className="text-slate-300">{row.email || "—"}</span>,
     },
     {
       key: "remainingAmount" as const,
@@ -85,16 +83,14 @@ export const VendorTable: React.FC<VendorTableProps> = ({
         data={filtered}
         columns={columns}
         isLoading={loading}
-        onRowClick={(vendor) =>
-          router.push(`/super-admin/vendors/${vendor._id}/bills`)
-        }
+        onRowClick={vendor => router.push(`/super-admin/vendors/${vendor._id}/bills`)}
         getRowClassName={() => "bg-cyan-400/5 hover:bg-cyan-400/10"}
       />
 
       <ReuseableDialog
         title="Record Payment"
         open={!!paymentVendor}
-        setOpen={(open) => {
+        setOpen={open => {
           if (!open) {
             setPaymentVendor(null);
           }
@@ -114,15 +110,13 @@ export const VendorTable: React.FC<VendorTableProps> = ({
       <ReuseableDialog
         title={historyVendor ? `${historyVendor.name} — Payments` : "Payments"}
         open={!!historyVendor}
-        setOpen={(open) => {
+        setOpen={open => {
           if (!open) {
             setHistoryVendor(null);
           }
         }}
         content={
-          historyVendor ? (
-            <ReceiptHistory partyId={historyVendor._id} type="Vendor" />
-          ) : null
+          historyVendor ? <ReceiptHistory partyId={historyVendor._id} type="Vendor" /> : null
         }
       />
     </>

@@ -1,23 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
-import { Controller, RegisterOptions, useFormContext } from "react-hook-form";
-import { Eye, EyeOff } from "lucide-react";
 import { Select } from "@radix-ui/themes";
 import { format, parse, isValid } from "date-fns";
+import { Eye, EyeOff } from "lucide-react";
+import React, { useState } from "react";
+import { Controller, RegisterOptions, useFormContext } from "react-hook-form";
+
 import { FormFieldError } from "../form";
 
 interface FormInputProps {
   field: string;
   label?: string;
-  type?:
-    | "text"
-    | "number"
-    | "password"
-    | "email"
-    | "select"
-    | "date"
-    | "textarea";
+  type?: "text" | "number" | "password" | "email" | "select" | "date" | "textarea";
   placeholder: string;
   icon?: React.ElementType;
   rules?: RegisterOptions;
@@ -64,12 +58,7 @@ const FormInput = ({
   const isTextarea = type === "textarea";
   const isEmail = type === "email";
   const shouldCapitalize =
-    capitalizeFirst &&
-    !isNumber &&
-    !isPassword &&
-    !isSelect &&
-    !isDate &&
-    !isEmail;
+    capitalizeFirst && !isNumber && !isPassword && !isSelect && !isDate && !isEmail;
 
   const inputType = isPassword ? (show ? "text" : "password") : type;
 
@@ -80,10 +69,8 @@ const FormInput = ({
           value: 0,
           message: `${label} cannot be negative`,
         },
-        setValueAs: (value) => {
-          const transformedValue = rules?.setValueAs
-            ? rules.setValueAs(value)
-            : value;
+        setValueAs: value => {
+          const transformedValue = rules?.setValueAs ? rules.setValueAs(value) : value;
 
           if (
             transformedValue === "" ||
@@ -107,10 +94,7 @@ const FormInput = ({
       }
     : (rules ?? {});
 
-  const { onChange: registerOnChange, ...registerRest } = register(
-    field,
-    numberRules,
-  );
+  const { onChange: registerOnChange, ...registerRest } = register(field, numberRules);
 
   const handleCapitalizedChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -138,29 +122,24 @@ const FormInput = ({
   const wrapperPaddingY = compact ? "py-1.5" : "py-3";
 
   return (
-    <div className="w-full min-w-0 max-w-full">
-      <div className="flex w-full min-w-0 max-w-full flex-col gap-1.5">
+    <div className="w-full max-w-full min-w-0">
+      <div className="flex w-full max-w-full min-w-0 flex-col gap-1.5">
         {label && (
           <label
             htmlFor={field}
-            className="min-w-0 text-[12px] font-semibold uppercase tracking-widest text-slate-400"
+            className="min-w-0 text-[12px] font-semibold tracking-widest text-slate-400 uppercase"
           >
-            {label}{" "}
-            {required && <span className="text-[14px] text-red-400">*</span>}
+            {label} {required && <span className="text-[14px] text-red-400">*</span>}
           </label>
         )}
 
         <div
-          className={`flex w-full min-w-0 max-w-full ${
+          className={`flex w-full max-w-full min-w-0 ${
             isTextarea ? "items-start" : "items-center"
           } gap-2.5 overflow-hidden rounded-2xl border border-white/10 bg-white/8 px-4 ${wrapperPaddingY} text-sm shadow-lg shadow-black/10 backdrop-blur-xl transition-all focus-within:border-cyan-300/60 focus-within:bg-white/12 focus-within:ring-2 focus-within:ring-cyan-300/10`}
         >
           {Icon && (
-            <Icon
-              className={`h-4 w-4 shrink-0 text-slate-300 ${
-                isTextarea ? "mt-1" : ""
-              }`}
-            />
+            <Icon className={`h-4 w-4 shrink-0 text-slate-300 ${isTextarea ? "mt-1" : ""}`} />
           )}
 
           {isSelect ? (
@@ -171,24 +150,24 @@ const FormInput = ({
               render={({ field: controllerField }) => (
                 <Select.Root
                   value={controllerField.value ?? ""}
-                  onValueChange={(value) => {
+                  onValueChange={value => {
                     controllerField.onChange(value);
                     onValueChange?.(value);
                   }}
                 >
-                  <div className="w-0 min-w-0 max-w-full flex-1 cursor-pointer">
+                  <div className="w-0 max-w-full min-w-0 flex-1 cursor-pointer">
                     <Select.Trigger
                       placeholder={placeholder}
-                      className="h-auto! w-full! min-w-0! max-w-full! border-0! bg-transparent! p-0! text-white! shadow-none! outline-none! ring-0! focus:outline-none! focus:ring-0! focus:shadow-none! focus-visible:outline-none! focus-visible:ring-0! focus-visible:shadow-none! data-[state=open]:shadow-none! data-[state=open]:outline-none!"
+                      className="h-auto! w-full! max-w-full! min-w-0! border-0! bg-transparent! p-0! text-white! shadow-none! ring-0! outline-none! focus:shadow-none! focus:ring-0! focus:outline-none! focus-visible:shadow-none! focus-visible:ring-0! focus-visible:outline-none! data-[state=open]:shadow-none! data-[state=open]:outline-none!"
                     />
                   </div>
 
                   <Select.Content
                     position="popper"
-                    className="max-w-[calc(100vw-2rem)] rounded-2xl! border! border-white/10! bg-slate-900/95! backdrop-blur-xl! shadow-2xl! shadow-black/40!"
+                    className="max-w-[calc(100vw-2rem)] rounded-2xl! border! border-white/10! bg-slate-900/95! shadow-2xl! shadow-black/40! backdrop-blur-xl!"
                   >
                     {options.length > 0 ? (
-                      options.map((option) => (
+                      options.map(option => (
                         <Select.Item
                           key={option.value}
                           value={option.value}
@@ -199,11 +178,7 @@ const FormInput = ({
                         </Select.Item>
                       ))
                     ) : (
-                      <Select.Item
-                        value="empty"
-                        disabled
-                        className="text-slate-400"
-                      >
+                      <Select.Item value="empty" disabled className="text-slate-400">
                         No data
                       </Select.Item>
                     )}
@@ -218,8 +193,7 @@ const FormInput = ({
               rules={rules}
               render={({ field: controllerField }) => {
                 const dateValue =
-                  controllerField.value instanceof Date &&
-                  isValid(controllerField.value)
+                  controllerField.value instanceof Date && isValid(controllerField.value)
                     ? format(controllerField.value, "yyyy-MM-dd")
                     : "";
 
@@ -228,7 +202,7 @@ const FormInput = ({
                     id={field}
                     type="date"
                     value={dateValue}
-                    onChange={(e) => {
+                    onChange={e => {
                       const raw = e.target.value;
 
                       if (!raw) {
@@ -238,9 +212,7 @@ const FormInput = ({
 
                       const parsed = parse(raw, "yyyy-MM-dd", new Date());
 
-                      controllerField.onChange(
-                        isValid(parsed) ? parsed : undefined,
-                      );
+                      controllerField.onChange(isValid(parsed) ? parsed : undefined);
                     }}
                     onBlur={controllerField.onBlur}
                     className={`${inputClassName} scheme-dark`}
@@ -262,7 +234,7 @@ const FormInput = ({
               <input
                 id={field}
                 {...registerRest}
-                onChange={(e) => {
+                onChange={e => {
                   if (isNumber && max !== undefined && e.target.value !== "") {
                     const numericValue = Number(e.target.value);
 
@@ -283,12 +255,12 @@ const FormInput = ({
                 step={isNumber ? "any" : undefined}
                 inputMode={isNumber ? "decimal" : undefined}
                 placeholder={placeholder}
-                onKeyDown={(e) => {
+                onKeyDown={e => {
                   if (isNumber && ["-", "+", "e", "E"].includes(e.key)) {
                     e.preventDefault();
                   }
                 }}
-                onPaste={(e) => {
+                onPaste={e => {
                   if (!isNumber) return;
 
                   const pastedValue = e.clipboardData.getData("text");
@@ -308,15 +280,11 @@ const FormInput = ({
               {isPassword && (
                 <button
                   type="button"
-                  onClick={() => setShow((value) => !value)}
+                  onClick={() => setShow(value => !value)}
                   className="shrink-0 text-slate-300 transition-colors hover:text-cyan-300"
                   aria-label={show ? "Hide password" : "Show password"}
                 >
-                  {show ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
+                  {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               )}
             </>

@@ -1,7 +1,8 @@
 "use client";
 
-import { useNavigationLoader } from "@/components/layout";
 import { useRouter } from "next/navigation";
+
+import { useNavigationLoader } from "@/components/layout";
 
 export const useNavigation = () => {
   const router = useRouter();

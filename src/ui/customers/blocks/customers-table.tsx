@@ -3,6 +3,7 @@
 import { Table } from "@/components";
 import { Customer } from "@/types";
 import { formatPrice } from "@/utils";
+
 import { Actions } from "./actions";
 
 interface CustomerTableProps {
@@ -31,16 +32,12 @@ export const CustomerTable: React.FC<CustomerTableProps> = ({
     {
       key: "phone" as const,
       header: "Phone",
-      render: (row: Customer) => (
-        <span className="text-slate-300">{row.phone}</span>
-      ),
+      render: (row: Customer) => <span className="text-slate-300">{row.phone}</span>,
     },
     {
       key: "email" as const,
       header: "Email",
-      render: (row: Customer) => (
-        <span className="text-slate-300">{row.email || "—"}</span>
-      ),
+      render: (row: Customer) => <span className="text-slate-300">{row.email || "—"}</span>,
     },
     {
       key: "remainingAmount" as const,
@@ -61,11 +58,7 @@ export const CustomerTable: React.FC<CustomerTableProps> = ({
       key: "_id" as const,
       header: "Actions",
       render: (row: Customer) => (
-        <Actions
-          customer={row}
-          onEdit={onEdit}
-          onCustomerUpdated={onCustomerUpdated}
-        />
+        <Actions customer={row} onEdit={onEdit} onCustomerUpdated={onCustomerUpdated} />
       ),
     },
   ];

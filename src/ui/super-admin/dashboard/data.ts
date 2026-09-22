@@ -1,11 +1,6 @@
 import { DollarSign, RotateCcw, ShoppingCart, TrendingUp } from "lucide-react";
 
-import type {
-  SalesBarItem,
-  StatItem,
-  StockAlertItem,
-  TopProductItem,
-} from "./types";
+import type { SalesBarItem, StatItem, StockAlertItem, TopProductItem } from "./types";
 
 export const stats: StatItem[] = [
   {
@@ -97,9 +92,4 @@ export const topProducts: TopProductItem[] = [
   { name: "Casual Shirt", orders: 215, revenue: "$6.2K", share: 16 },
 ];
 
-export const productColors = [
-  "bg-cyan-400",
-  "bg-pink-400",
-  "bg-violet-400",
-  "bg-amber-400",
-];
+export const productColors = ["bg-cyan-400", "bg-pink-400", "bg-violet-400", "bg-amber-400"];

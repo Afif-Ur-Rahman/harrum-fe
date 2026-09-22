@@ -1,9 +1,10 @@
 "use client";
 
-import { Check, BadgeDollarSign } from "lucide-react";
 import * as Popover from "@radix-ui/react-popover";
-import { formatPrice } from "@/utils";
+import { Check, BadgeDollarSign } from "lucide-react";
+
 import { Stock } from "@/types";
+import { formatPrice } from "@/utils";
 
 export type PriceType = "purchase" | "wholesale" | "sale" | "custom";
 
@@ -14,11 +15,7 @@ const PRICE_OPTIONS: { value: PriceType; label: string }[] = [
   { value: "custom", label: "Custom" },
 ];
 
-export const getUnitPrice = (
-  stock: Stock | undefined,
-  type: PriceType,
-  customPrice?: string,
-) => {
+export const getUnitPrice = (stock: Stock | undefined, type: PriceType, customPrice?: string) => {
   if (type === "custom") return Number(customPrice) || 0;
   if (!stock) return 0;
 
@@ -70,7 +67,7 @@ export const PriceSelector = ({
           <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.98)_0%,rgba(15,23,42,0.96)_100%)]" />
 
           <div className="relative z-10 py-1">
-            {PRICE_OPTIONS.map((option) => {
+            {PRICE_OPTIONS.map(option => {
               const isSelected = option.value === value;
 
               return (
@@ -97,7 +94,7 @@ export const PriceSelector = ({
                       type="text"
                       inputMode="numeric"
                       value={customPrice}
-                      onChange={(e) => {
+                      onChange={e => {
                         const rawValue = e.target.value.replace(/,/g, "");
 
                         if (!/^\d*$/.test(rawValue)) return;
@@ -105,14 +102,12 @@ export const PriceSelector = ({
                         onCustomPriceChange(rawValue);
                         onChange("custom");
                       }}
-                      onClick={(e) => e.stopPropagation()}
+                      onClick={e => e.stopPropagation()}
                       placeholder="0"
-                      className="ml-auto min-w-6 max-w-24 rounded-lg border border-white/10 bg-white/8 px-2 py-1 text-right text-sm text-white outline-none placeholder:text-slate-500 focus:border-cyan-300/60"
+                      className="ml-auto max-w-24 min-w-6 rounded-lg border border-white/10 bg-white/8 px-2 py-1 text-right text-sm text-white outline-none placeholder:text-slate-500 focus:border-cyan-300/60"
                     />
                   ) : (
-                    <span className="font-semibold">
-                      {getUnitPrice(stock, option.value)}
-                    </span>
+                    <span className="font-semibold">{getUnitPrice(stock, option.value)}</span>
                   )}
                 </button>
               );

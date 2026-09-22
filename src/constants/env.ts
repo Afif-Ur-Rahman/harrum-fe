@@ -11,13 +11,10 @@ const API_URL = process.env.NEXT_APP_API_URL || "";
 
 // Cookies
 const USER_COOKIE = process.env.USER_COOKIE ?? "HarrumClothHouse_user";
-const ACCESS_TOKEN_COOKIE =
-  process.env.ACCESS_TOKEN_COOKIE ?? "HarrumClothHouse_access_token";
+const ACCESS_TOKEN_COOKIE = process.env.ACCESS_TOKEN_COOKIE ?? "HarrumClothHouse_access_token";
 const ACCESS_TOKEN_EXPIRY_COOKIE =
-  process.env.ACCESS_TOKEN_EXPIRY_COOKIE ??
-  "HarrumClothHouse_access_token_expiry";
-const REFRESH_TOKEN_COOKIE =
-  process.env.REFRESH_TOKEN_COOKIE ?? "HarrumClothHouse_refresh_token";
+  process.env.ACCESS_TOKEN_EXPIRY_COOKIE ?? "HarrumClothHouse_access_token_expiry";
+const REFRESH_TOKEN_COOKIE = process.env.REFRESH_TOKEN_COOKIE ?? "HarrumClothHouse_refresh_token";
 
 // Third Party
 const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY || "";

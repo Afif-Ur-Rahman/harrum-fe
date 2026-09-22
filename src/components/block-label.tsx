@@ -1,18 +1,19 @@
-import { cn } from '@/utils'
-import { Text, Tooltip } from '@radix-ui/themes'
+import { Text, Tooltip } from "@radix-ui/themes";
+
+import { cn } from "@/utils";
 
 interface BlockLabelProps {
-  name?: string
-  orientation?: 'horizontal' | 'vertical'
-  className?: string
-  isTooltip?: boolean
-  required?: boolean
-  tooltipContent?: string
+  name?: string;
+  orientation?: "horizontal" | "vertical";
+  className?: string;
+  isTooltip?: boolean;
+  required?: boolean;
+  tooltipContent?: string;
 }
 
 const BlockLabel = ({
   name,
-  orientation = 'horizontal',
+  orientation = "horizontal",
   className,
   children,
   isTooltip = false,
@@ -23,22 +24,20 @@ const BlockLabel = ({
     <Text
       as="label"
       htmlFor={name}
-      className={cn('text-nowrap flex text-[12px]', className, {
-        'min-h-(--chip-height)': orientation === 'horizontal',
+      className={cn("flex text-[12px] text-nowrap", className, {
+        "min-h-(--chip-height)": orientation === "horizontal",
       })}
     >
       {children}
-      {required ? (
-        <Text className="ml-0.5 text-[12px] text-red-9">*</Text>
-      ) : null}
+      {required ? <Text className="text-red-9 ml-0.5 text-[12px]">*</Text> : null}
     </Text>
-  )
+  );
 
   return isTooltip ? (
-    <Tooltip content={tooltipContent ?? ''}>{labelContent}</Tooltip>
+    <Tooltip content={tooltipContent ?? ""}>{labelContent}</Tooltip>
   ) : (
     labelContent
-  )
-}
+  );
+};
 
-export { BlockLabel }
+export { BlockLabel };

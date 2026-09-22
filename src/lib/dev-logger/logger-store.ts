@@ -42,25 +42,24 @@ interface LoggerState {
   togglePaused: () => void;
 }
 
-export const useLoggerStore = create<LoggerState>((set) => ({
+export const useLoggerStore = create<LoggerState>(set => ({
   entries: [],
   paused: false,
-  addEntry: (entry) =>
-    set((state) => {
+  addEntry: entry =>
+    set(state => {
       if (state.paused) return state;
       const next = [entry, ...state.entries];
       if (next.length > MAX_ENTRIES) next.length = MAX_ENTRIES;
       return { entries: next };
     }),
   updateEntry: (id, patch) =>
-    set((state) => ({
-      entries: state.entries.map((e) =>
+    set(state => ({
+      entries: state.entries.map(e =>
         e.kind === "network" && e.id === id ? { ...e, ...patch } : e,
       ),
     })),
   clear: () => set({ entries: [] }),
-  togglePaused: () => set((state) => ({ paused: !state.paused })),
+  togglePaused: () => set(state => ({ paused: !state.paused })),
 }));
 
-export const genLogId = () =>
-  `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+export const genLogId = () => `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;

@@ -2,14 +2,16 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useFieldArray, useWatch } from "react-hook-form";
-import { getAllStocks } from "@/api/api-call/stock";
-import { getAllEmployees } from "@/api/api-call/employee";
-import { Stock } from "@/types";
-import { useOrderForm, OrderFormType } from "./form";
-import { showToast } from "@/utils/toast";
+
 import { createOrder } from "@/api/api-call";
+import { getAllEmployees } from "@/api/api-call/employee";
+import { getAllStocks } from "@/api/api-call/stock";
 import { usePersistStore } from "@/store/presistStore";
+import { Stock } from "@/types";
 import { NO_COLOR_VARIANT_TYPES } from "@/ui/stock/constants";
+import { showToast } from "@/utils/toast";
+
+import { useOrderForm, OrderFormType } from "./form";
 
 const useAddOrder = () => {
   const {
@@ -53,16 +55,13 @@ const useAddOrder = () => {
       return sum + (Number(item?.price) || 0);
     }
 
-    const itemTotal = (item?.variants || []).reduce(
-      (vSum, v) => vSum + (Number(v?.price) || 0),
-      0,
-    );
+    const itemTotal = (item?.variants || []).reduce((vSum, v) => vSum + (Number(v?.price) || 0), 0);
 
     return sum + itemTotal;
   }, 0);
 
   const stockOptions = useMemo(() => {
-    return stocks.map((item) => ({
+    return stocks.map(item => ({
       value: item._id,
       label: `${item.name} - ${item.brand}`,
       stock: item,
@@ -70,12 +69,9 @@ const useAddOrder = () => {
   }, [stocks]);
 
   const salesmanOptions = useMemo(() => {
-    const allEmployees = [
-      ...(employees.salesman || []),
-      ...(employees.accountant || []),
-    ];
+    const allEmployees = [...(employees.salesman || []), ...(employees.accountant || [])];
 
-    return allEmployees.map((employee) => ({
+    return allEmployees.map(employee => ({
       value: employee._id,
       label: employee.username,
     }));
@@ -111,10 +107,7 @@ const useAddOrder = () => {
 
     setEmployees(data);
 
-    const firstEmployee = [
-      ...(data.salesman || []),
-      ...(data.accountant || []),
-    ][0];
+    const firstEmployee = [...(data.salesman || []), ...(data.accountant || [])][0];
 
     if (firstEmployee && !form.getValues("salesmanId")) {
       form.setValue("salesmanId", firstEmployee._id);

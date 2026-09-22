@@ -1,4 +1,3 @@
-
 export interface Chart {
   categories: string[];
   series: { name: string; data: number[] }[];

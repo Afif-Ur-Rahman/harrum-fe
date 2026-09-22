@@ -1,18 +1,17 @@
 "use client";
 
-import { useStocks } from "./useStocks";
-import { StockFilterDialog, StockStats, StockTable } from "./blocks";
 import { ArrowDownToLine, Package, Boxes, Search } from "lucide-react";
-import { StockVariant } from "@/types";
+
 import { EmptyState } from "@/components";
 import { PageLayout } from "@/components/layout";
 import { NavigationLink } from "@/components/navigation-link";
+import { StockVariant } from "@/types";
+
+import { StockFilterDialog, StockStats, StockTable } from "./blocks";
+import { useStocks } from "./useStocks";
 
 const getTotalQuantity = (variants: StockVariant[] = []) => {
-  return variants.reduce(
-    (total, variant) => total + Number(variant.quantity || 0),
-    0,
-  );
+  return variants.reduce((total, variant) => total + Number(variant.quantity || 0), 0);
 };
 
 export const Stocks = () => {
@@ -34,7 +33,7 @@ export const Stocks = () => {
     return acc + Number(stock.salePrice) * totalQty;
   }, 0);
 
-  const outOfStock = filteredStocks.filter((stock) => {
+  const outOfStock = filteredStocks.filter(stock => {
     const total = stock.quantity ?? getTotalQuantity(stock.variants);
     return total <= 0;
   }).length;
@@ -49,9 +48,7 @@ export const Stocks = () => {
             </div>
 
             <div>
-              <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">
-                Stocks
-              </h1>
+              <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">Stocks</h1>
               <p className="mt-1 text-xs text-slate-400">
                 {stocks.length} item
                 {stocks.length !== 1 ? "s" : ""} in inventory
@@ -63,13 +60,13 @@ export const Stocks = () => {
 
         <div className="flex items-center gap-2">
           <div className="relative min-w-0 flex-1 sm:w-64 sm:flex-none">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <Search className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
               placeholder="Search by name, brand or color"
               value={search}
-              onChange={(event) => setSearch(event.target.value)}
-              className="w-full rounded-2xl border border-white/10 bg-slate-950/50 py-2.5 pl-10 pr-4 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+              onChange={event => setSearch(event.target.value)}
+              className="w-full rounded-2xl border border-white/10 bg-slate-950/50 py-2.5 pr-4 pl-10 text-sm text-white placeholder:text-slate-500 focus:ring-2 focus:ring-cyan-400/40 focus:outline-none"
             />
           </div>
 

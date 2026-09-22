@@ -21,9 +21,7 @@ interface UpdatePasswordResult {
   error?: string;
 }
 
-const updatePassword = async (
-  data: UpdateProps,
-): Promise<UpdatePasswordResult> => {
+const updatePassword = async (data: UpdateProps): Promise<UpdatePasswordResult> => {
   const response = (await serverAction({
     url: "/profile/change-password",
     method: "PUT",

@@ -1,14 +1,16 @@
 import "./globals.css";
-import type { Metadata, Viewport } from "next";
-import { Toaster } from "react-hot-toast";
 import { Theme } from "@radix-ui/themes";
 import { Poppins } from "next/font/google";
-import { ToastProvider } from "@/utils/toast-provider";
-import { getAuthCookies } from "@/utils/cookies";
+import { Toaster } from "react-hot-toast";
+
 import { DevLogger } from "@/components/dev-logger";
+import { NavigationLoaderProvider } from "@/components/layout";
 import { MODE } from "@/constants";
 import { ServiceWorkerRegister } from "@/lib/sw-register";
-import { NavigationLoaderProvider } from "@/components/layout";
+import { getAuthCookies } from "@/utils/cookies";
+import { ToastProvider } from "@/utils/toast-provider";
+
+import type { Metadata, Viewport } from "next";
 
 export const viewport: Viewport = {
   themeColor: "#000000",
@@ -41,10 +43,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
-      <body
-        className={`${poppins.variable} antialiased`}
-        suppressHydrationWarning
-      >
+      <body className={`${poppins.variable} antialiased`} suppressHydrationWarning>
         <ServiceWorkerRegister />
         <ToastProvider>
           <Toaster

@@ -1,23 +1,24 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+
 import { createBill, getAllBills } from "@/api/api-call/bills";
 import { getAllVendors } from "@/api/api-call/vendors";
 import { usePersistStore } from "@/store/presistStore";
 import { Bill } from "@/types";
 import { showToast } from "@/utils/toast";
+
 import { BillFormType } from "./form";
 
 export const useBills = (vendorId: string) => {
-  const { vendors, vendorsLoaded, setVendors, updateVendorById } =
-    usePersistStore();
+  const { vendors, vendorsLoaded, setVendors, updateVendorById } = usePersistStore();
 
   const [bills, setBills] = useState<Bill[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const vendor = vendors.find((item) => item._id === vendorId) ?? null;
+  const vendor = vendors.find(item => item._id === vendorId) ?? null;
 
   useEffect(() => {
     if (vendorsLoaded) return;

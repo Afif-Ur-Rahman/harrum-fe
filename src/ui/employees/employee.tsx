@@ -1,12 +1,14 @@
 "use client";
 
 import { Plus, Users } from "lucide-react";
-import { useEmployees } from "./useEmployee";
-import { EmployeeForm, EmployeesSearch, EmployeeTable } from "./blocks";
-import { ROLE_STYLES } from "./constants";
+
 import { ReuseableDialog } from "@/components";
 import { PageLayout } from "@/components/layout";
 import { Loader } from "@/components/ui/loader";
+
+import { EmployeeForm, EmployeesSearch, EmployeeTable } from "./blocks";
+import { ROLE_STYLES } from "./constants";
+import { useEmployees } from "./useEmployee";
 
 const Employees = () => {
   const {
@@ -34,9 +36,7 @@ const Employees = () => {
         </div>
 
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">
-            Employees
-          </h1>
+          <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">Employees</h1>
 
           <p className="mt-1 text-xs text-slate-400">
             {flatEmployees.length} employee
@@ -75,9 +75,7 @@ const Employees = () => {
               <EmployeeForm
                 employee={selectedEmployee}
                 loading={loading}
-                onSubmit={(data) =>
-                  onUpdateEmployee(selectedEmployee._id, data)
-                }
+                onSubmit={data => onUpdateEmployee(selectedEmployee._id, data)}
               />
             ) : null
           }
@@ -92,7 +90,7 @@ const Employees = () => {
         <EmployeeTable
           filtered={filtered}
           onDeleteEmployee={onDeleteEmployee}
-          onEditEmployee={(employee) => {
+          onEditEmployee={employee => {
             setSelectedEmployee(employee);
             setEditOpen(true);
           }}

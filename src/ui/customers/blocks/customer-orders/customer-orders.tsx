@@ -1,15 +1,16 @@
 "use client";
 
 import { ShoppingBag } from "lucide-react";
-import { Loader } from "@/components/ui/loader";
+
 import { EmptyState } from "@/components";
+import { Loader } from "@/components/ui/loader";
 import { OrderCard } from "@/ui/orders/all/blocks";
-import { useCustomerOrders } from "./useCustomerOrders";
+
 import { OrdersSearch } from "./orders-search";
+import { useCustomerOrders } from "./useCustomerOrders";
 
 export const CustomerOrders = ({ customerId }: { customerId: string }) => {
-  const { orders, filteredOrders, loading, search, setSearch } =
-    useCustomerOrders(customerId);
+  const { orders, filteredOrders, loading, search, setSearch } = useCustomerOrders(customerId);
 
   if (loading) {
     return <Loader label="orders" />;
@@ -41,7 +42,7 @@ export const CustomerOrders = ({ customerId }: { customerId: string }) => {
         />
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {filteredOrders.map((order) => (
+          {filteredOrders.map(order => (
             <OrderCard key={order._id} order={order} />
           ))}
         </div>

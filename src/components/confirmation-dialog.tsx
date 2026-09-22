@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Dialog, Flex } from "@radix-ui/themes";
 import { AlertTriangle, Trash2, CheckCircle2, X } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
 import { showToast } from "@/utils/toast";
 
 interface ConfirmationDialogProps<T = { state: string; error?: string }> {
@@ -17,9 +18,7 @@ interface ConfirmationDialogProps<T = { state: string; error?: string }> {
   description: string;
 }
 
-const ConfirmationDialog = <
-  T extends { state: boolean; message?: string; error?: string },
->({
+const ConfirmationDialog = <T extends { state: boolean; message?: string; error?: string }>({
   trigger,
   onCancel,
   onSuccess,
@@ -40,16 +39,12 @@ const ConfirmationDialog = <
     const result = await confirmAction();
 
     if (result.state === false) {
-      showToast(
-        "error",
-        result?.error || "An error occurred. Please try again.",
-      );
+      showToast("error", result?.error || "An error occurred. Please try again.");
       setLoading(false);
       return;
     }
 
-    if (result.state === true && result.message)
-      showToast("success", result?.message || "");
+    if (result.state === true && result.message) showToast("success", result?.message || "");
 
     router.refresh();
     setOpen(false);
@@ -65,21 +60,21 @@ const ConfirmationDialog = <
         <Dialog.Trigger>{trigger}</Dialog.Trigger>
       </Flex>
 
-      <Dialog.Content className="relative max-w-md! w-full! overflow-hidden! rounded-3xl! border! border-white/10! bg-slate-950! p-0! shadow-2xl! shadow-black/50!">
+      <Dialog.Content className="relative w-full! max-w-md! overflow-hidden! rounded-3xl! border! border-white/10! bg-slate-950! p-0! shadow-2xl! shadow-black/50!">
         {/* Background effects */}
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.98)_0%,rgba(15,23,42,0.96)_52%,rgba(17,24,39,0.98)_100%)]" />
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.14),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(244,114,182,0.12),transparent_36%)]" />
 
         <div className="relative z-10">
           <Dialog.Close
-            className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-xl p-2 text-slate-300 transition hover:bg-white/10 hover:text-white"
-            onClick={(e) => e.stopPropagation()}
+            className="absolute top-4 right-4 flex h-9 w-9 items-center justify-center rounded-xl p-2 text-slate-300 transition hover:bg-white/10 hover:text-white"
+            onClick={e => e.stopPropagation()}
             aria-label="Close dialog"
           >
             <X size="1.15rem" />
           </Dialog.Close>
 
-          <div className="px-6 pb-6 pt-8">
+          <div className="px-6 pt-8 pb-6">
             <Flex justify="center" className="mb-5">
               <div
                 className={`flex h-16 w-16 items-center justify-center rounded-2xl border shadow-lg ${
@@ -102,7 +97,7 @@ const ConfirmationDialog = <
 
             <Dialog.Description
               size="3"
-              className="mb-0! mt-2! text-center! text-sm! leading-relaxed! text-slate-400!"
+              className="mt-2! mb-0! text-center! text-sm! leading-relaxed! text-slate-400!"
             >
               {description}
             </Dialog.Description>

@@ -1,25 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  getAllOrders,
-  claimOrderItem,
-  returnOrderItem,
-  returnOrder,
-} from "@/api/api-call/orders";
-import { showToast } from "@/utils/toast";
+
+import { getAllOrders, claimOrderItem, returnOrderItem, returnOrder } from "@/api/api-call/orders";
 import { usePersistStore } from "@/store/presistStore";
+import { showToast } from "@/utils/toast";
 
 const ORDERS_PER_PAGE = 30;
 const SEARCH_DEBOUNCE_MS = 400;
 
 const useAllOrders = () => {
-  const {
-    orders,
-    ordersTotal,
-    setOrders,
-    appendOrders,
-    updateOrderById,
-    updateStockById,
-  } = usePersistStore();
+  const { orders, ordersTotal, setOrders, appendOrders, updateOrderById, updateStockById } =
+    usePersistStore();
 
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -27,9 +17,7 @@ const useAllOrders = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [search, setSearch] = useState("");
 
-  const debounceTimer = useRef<ReturnType<typeof setTimeout> | undefined>(
-    undefined,
-  );
+  const debounceTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const requestId = useRef(0);
 
   const fetchOrders = useCallback(

@@ -18,11 +18,7 @@ export const apps = [
   {
     name: `${SERVICE_NAME}-${PORT}`,
     // Use standalone server if available (with .env copy), otherwise fall back to next start
-    script: useStandalone
-      ? "node"
-      : existsSync(nextBinPath)
-        ? nextBinPath
-        : "npx",
+    script: useStandalone ? "node" : existsSync(nextBinPath) ? nextBinPath : "npx",
     args: useStandalone
       ? [standaloneScript]
       : existsSync(nextBinPath)

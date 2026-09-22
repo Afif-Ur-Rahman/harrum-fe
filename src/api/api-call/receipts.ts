@@ -1,9 +1,6 @@
+import { ReceiptPartyType, ResponseForMultipleReceipts, ResponseForReceipt } from "@/types";
+
 import { serverAction } from "../server-action";
-import {
-  ReceiptPartyType,
-  ResponseForMultipleReceipts,
-  ResponseForReceipt,
-} from "@/types";
 
 interface CreateReceiptPayload {
   party: string;

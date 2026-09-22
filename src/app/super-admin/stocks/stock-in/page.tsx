@@ -1,9 +1,7 @@
-import { StockIn } from "@/ui/stock"
+import { StockIn } from "@/ui/stock";
 
 const StocksInPage = () => {
-  return (
-    <StockIn />
-  )
-}
+  return <StockIn />;
+};
 
-export default StocksInPage
+export default StocksInPage;

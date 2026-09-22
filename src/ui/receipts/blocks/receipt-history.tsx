@@ -1,19 +1,16 @@
 "use client";
 
 import { Receipt as ReceiptIcon } from "lucide-react";
-import { Loader } from "@/components/ui/loader";
+
 import { EmptyState } from "@/components";
+import { Loader } from "@/components/ui/loader";
 import { ReceiptPartyType } from "@/types";
-import { useReceipts } from "../useReceipts";
+
 import { ReceiptRow } from "./receipt-row";
 
-export const ReceiptHistory = ({
-  partyId,
-  type,
-}: {
-  partyId: string;
-  type: ReceiptPartyType;
-}) => {
+import { useReceipts } from "../useReceipts";
+
+export const ReceiptHistory = ({ partyId, type }: { partyId: string; type: ReceiptPartyType }) => {
   const { receipts, loading } = useReceipts(partyId, type, { autoFetch: true });
 
   if (loading) {
@@ -38,7 +35,7 @@ export const ReceiptHistory = ({
 
   return (
     <div className="space-y-3">
-      {receipts.map((receipt) => (
+      {receipts.map(receipt => (
         <ReceiptRow key={receipt._id} receipt={receipt} />
       ))}
     </div>

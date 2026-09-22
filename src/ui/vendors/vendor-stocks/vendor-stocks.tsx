@@ -1,12 +1,14 @@
 "use client";
 
 import { ArrowLeft, PackageSearch } from "lucide-react";
+
 import { EmptyState } from "@/components";
-import { Loader } from "@/components/ui/loader";
-import { StockTable } from "@/ui/stock";
-import { useVendorStocks } from "./useVendorStocks";
 import { PageLayout } from "@/components/layout";
 import { NavigationLink } from "@/components/navigation-link";
+import { Loader } from "@/components/ui/loader";
+import { StockTable } from "@/ui/stock";
+
+import { useVendorStocks } from "./useVendorStocks";
 
 export const VendorStocks = ({ vendorId }: { vendorId: string }) => {
   const { vendorStocks, loading } = useVendorStocks(vendorId);
@@ -24,9 +26,7 @@ export const VendorStocks = ({ vendorId }: { vendorId: string }) => {
         </NavigationLink>
 
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">
-            Vendor Stocks
-          </h1>
+          <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">Vendor Stocks</h1>
 
           <p className="mt-1 text-xs text-slate-400">
             View all stock items purchased from this vendor

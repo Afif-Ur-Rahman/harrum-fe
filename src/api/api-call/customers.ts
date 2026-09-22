@@ -1,8 +1,6 @@
+import { ResponseForMultipleCustomers, ResponseForSingleCustomer } from "@/types";
+
 import { serverAction } from "../server-action";
-import {
-  ResponseForMultipleCustomers,
-  ResponseForSingleCustomer,
-} from "@/types";
 
 interface CreateCustomerPayload {
   name: string;
@@ -44,10 +42,7 @@ export const createCustomer = async (data: CreateCustomerPayload) => {
   }
 };
 
-export const updateCustomer = async (
-  id: string,
-  data: UpdateCustomerPayload,
-) => {
+export const updateCustomer = async (id: string, data: UpdateCustomerPayload) => {
   try {
     const response = await serverAction({
       url: `/customers/${id}`,

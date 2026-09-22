@@ -38,8 +38,6 @@ interface ProfileUpdateData {
   image?: File;
 }
 
-
-
 // Password reset types
 interface PasswordResetData {
   email: string;

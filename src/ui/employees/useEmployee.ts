@@ -1,14 +1,16 @@
+import { useEffect, useMemo, useState } from "react";
+
 import {
   createEmployees,
   deleteEmployee,
   getAllEmployees,
   updateEmployee,
 } from "@/api/api-call/employee";
-import { EmployeeFormType } from "./schema";
-import { Employee, Employees } from "@/types/employees";
-import { useEffect, useMemo, useState } from "react";
-import { showToast } from "@/utils/toast";
 import { usePersistStore } from "@/store/presistStore";
+import { Employee, Employees } from "@/types/employees";
+import { showToast } from "@/utils/toast";
+
+import { EmployeeFormType } from "./schema";
 
 const EMPLOYEE_SECTIONS = [
   { key: "salesman" as const, roleLabel: "Salesman" },
@@ -27,9 +29,7 @@ const useEmployees = () => {
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
-  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(
-    null,
-  );
+  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
   const [loading, setLoading] = useState<boolean>(!employeesLoaded);
 
   useEffect(() => {
@@ -68,10 +68,7 @@ const useEmployees = () => {
 
       setEmployees({
         ...employees,
-        [newEmployee.type]: [
-          ...(employees[newEmployee.type] || []),
-          newEmployee,
-        ],
+        [newEmployee.type]: [...(employees[newEmployee.type] || []), newEmployee],
       });
 
       showToast("success", "Employee added successfully");
@@ -125,10 +122,7 @@ const useEmployees = () => {
 
       showToast("success", "Employee updated successfully");
     } catch (error) {
-      showToast(
-        "error",
-        (error as Error).message || "Failed to update employee",
-      );
+      showToast("error", (error as Error).message || "Failed to update employee");
     } finally {
       setLoading(false);
     }
@@ -146,10 +140,8 @@ const useEmployees = () => {
       }
 
       const updatedEmployees: Employees = {
-        salesman: employees.salesman.filter((employee) => employee._id !== id),
-        accountant: employees.accountant.filter(
-          (employee) => employee._id !== id,
-        ),
+        salesman: employees.salesman.filter(employee => employee._id !== id),
+        accountant: employees.accountant.filter(employee => employee._id !== id),
       };
 
       setEmployees(updatedEmployees);
@@ -167,8 +159,8 @@ const useEmployees = () => {
   };
 
   const flatEmployees = useMemo(() => {
-    return EMPLOYEE_SECTIONS.flatMap((section) =>
-      (employees[section.key] || []).map((employee) => ({
+    return EMPLOYEE_SECTIONS.flatMap(section =>
+      (employees[section.key] || []).map(employee => ({
         ...employee,
         roleLabel: section.roleLabel,
       })),
@@ -180,7 +172,7 @@ const useEmployees = () => {
 
     if (!query) return flatEmployees;
 
-    return flatEmployees.filter((employee) =>
+    return flatEmployees.filter(employee =>
       [
         employee.username,
         employee.email,
@@ -190,7 +182,7 @@ const useEmployees = () => {
         employee.permanentAddress,
         employee.currentAddress,
         employee.roleLabel,
-      ].some((value) => value?.toLowerCase().includes(query)),
+      ].some(value => value?.toLowerCase().includes(query)),
     );
   }, [flatEmployees, search]);
 

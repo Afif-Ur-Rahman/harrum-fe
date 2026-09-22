@@ -1,11 +1,15 @@
 "use client";
 
-import { FormProvider, UseFormReturn } from "react-hook-form";
 import { Save, PackagePlus, UserCheck } from "lucide-react";
-import { OrderFormType } from ".";
-import { Stock } from "@/types";
-import { CUSTOMER_FORM_FIELDS } from "./constants";
+import { FormProvider, UseFormReturn } from "react-hook-form";
+
 import { EmptyState, FormInput } from "@/components";
+import { Stock } from "@/types";
+
+import { CUSTOMER_FORM_FIELDS } from "./constants";
+
+import { OrderFormType } from ".";
+
 import { ItemSearch, ItemsTable, OrderTotal, PaidCheckbox } from "../blocks";
 
 interface StockOption {
@@ -48,7 +52,7 @@ export const OrderForm = ({
     <FormProvider {...form}>
       <section className="relative sm:pt-3">
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-3">
-          {CUSTOMER_FORM_FIELDS.map((item) => (
+          {CUSTOMER_FORM_FIELDS.map(item => (
             <FormInput
               key={item.field}
               field={item.field}
@@ -73,7 +77,7 @@ export const OrderForm = ({
 
           <ItemSearch
             stockOptions={stockOptions}
-            selectedStockIds={fields.map((item) => item.stockId)}
+            selectedStockIds={fields.map(item => item.stockId)}
             onSelectItem={addOrderItem}
           />
         </div>
@@ -87,11 +91,7 @@ export const OrderForm = ({
             description="Search and select an item above to add it to the order"
           />
         ) : (
-          <ItemsTable
-            items={fields}
-            stocks={stocks}
-            removeItem={removeOrderItem}
-          />
+          <ItemsTable items={fields} stocks={stocks} removeItem={removeOrderItem} />
         )}
       </div>
 
@@ -105,7 +105,7 @@ export const OrderForm = ({
           type="button"
           onClick={form.handleSubmit(onSubmitOrder)}
           disabled={fields.length === 0 || submitting}
-          className="w-full sm:w-fit flex items-center justify-center gap-2 rounded-2xl bg-linear-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-cyan-950/30 transition hover:opacity-95 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
+          className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl bg-linear-to-r from-cyan-500 via-blue-500 to-fuchsia-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-cyan-950/30 transition hover:opacity-95 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 sm:w-fit"
         >
           <Save className="h-4 w-4" />
           <span>{submitting ? "Saving…" : "Create Order"}</span>

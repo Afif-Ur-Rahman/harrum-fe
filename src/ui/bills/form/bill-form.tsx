@@ -2,7 +2,9 @@
 
 import { FileText, Hash, Loader2, Wallet } from "lucide-react";
 import { FormProvider } from "react-hook-form";
+
 import { FormInput } from "@/components";
+
 import { useBillForm } from "./form";
 import { BillFormType } from "./schema";
 
@@ -17,7 +19,7 @@ export const BillForm = ({
 }) => {
   const form = useBillForm(DEFAULTS);
 
-  const handleSubmit = form.handleSubmit(async (data) => {
+  const handleSubmit = form.handleSubmit(async data => {
     const success = await onSubmitBill(data);
     if (success) form.reset(DEFAULTS);
   });

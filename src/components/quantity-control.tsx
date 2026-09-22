@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState, useCallback } from "react";
 import { Minus, Plus, X } from "lucide-react";
+import { useRef, useState, useCallback } from "react";
 
 interface QuantityControlProps {
   quantity: number;
@@ -68,25 +68,21 @@ export const QuantityControl = ({
   const displayQty = isDebounced && isPending ? localQty : quantity;
 
   return (
-    <div className="flex items-center gap-1.5 shrink-0">
+    <div className="flex shrink-0 items-center gap-1.5">
       <button
         onClick={displayQty === 1 ? onRemove : handleDecrement}
-        className="w-7 h-7 flex items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 hover:border-red-300 hover:text-red-500 transition"
+        className="flex h-7 w-7 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 transition hover:border-red-300 hover:text-red-500"
       >
-        {displayQty === 1 ? (
-          <X className="w-3 h-3" />
-        ) : (
-          <Minus className="w-3 h-3" />
-        )}
+        {displayQty === 1 ? <X className="h-3 w-3" /> : <Minus className="h-3 w-3" />}
       </button>
       <span className="w-6 text-center text-sm font-bold text-gray-900 tabular-nums">
         {displayQty}
       </span>
       <button
         onClick={handleIncrement}
-        className="w-7 h-7 flex items-center justify-center rounded-lg bg-gray-900 text-white hover:bg-gray-700 transition"
+        className="flex h-7 w-7 items-center justify-center rounded-lg bg-gray-900 text-white transition hover:bg-gray-700"
       >
-        <Plus className="w-3 h-3" />
+        <Plus className="h-3 w-3" />
       </button>
     </div>
   );

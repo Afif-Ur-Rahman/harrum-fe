@@ -1,11 +1,13 @@
 "use client";
 
 import { Plus, Store } from "lucide-react";
-import { useVendors } from "./useVendors";
-import { VendorTable, VendorsSearch } from "./blocks";
+
 import { DueAmountPill, ReuseableDialog } from "@/components";
-import { VendorForm } from "./form";
 import { PageLayout } from "@/components/layout";
+
+import { VendorTable, VendorsSearch } from "./blocks";
+import { VendorForm } from "./form";
+import { useVendors } from "./useVendors";
 
 const Vendors = () => {
   const {
@@ -34,9 +36,7 @@ const Vendors = () => {
           </div>
 
           <div>
-            <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">
-              Vendors
-            </h1>
+            <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">Vendors</h1>
 
             <p className="mt-1 text-xs text-slate-400">
               {vendors.length} vendor{vendors.length !== 1 ? "s" : ""}
@@ -64,21 +64,13 @@ const Vendors = () => {
               </button>
             }
             content={
-              <VendorForm
-                vendor={editingVendor}
-                onSubmitVendor={onSubmitVendor}
-                loading={saving}
-              />
+              <VendorForm vendor={editingVendor} onSubmitVendor={onSubmitVendor} loading={saving} />
             }
           />
         </div>
 
         <div className="w-full sm:hidden">
-          <DueAmountPill
-            amount={dueAmount}
-            loading={loading}
-            className="w-full"
-          />
+          <DueAmountPill amount={dueAmount} loading={loading} className="w-full" />
         </div>
       </div>
 

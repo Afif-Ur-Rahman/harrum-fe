@@ -1,6 +1,6 @@
 "use client";
-import React from "react";
 import Image from "next/image";
+import React from "react";
 
 interface MediaPreviewProps {
   src?: string | string[];
@@ -26,8 +26,7 @@ const MediaPreview: React.FC<MediaPreviewProps> = ({
 
   const renderMedia = (mediaSrc: string, index: number) => {
     const isVideo =
-      typeof mediaSrc === "string" &&
-      videoExts.some((ext) => mediaSrc.toLowerCase().endsWith(ext));
+      typeof mediaSrc === "string" && videoExts.some(ext => mediaSrc.toLowerCase().endsWith(ext));
 
     return (
       <div
@@ -36,12 +35,7 @@ const MediaPreview: React.FC<MediaPreviewProps> = ({
         style={{ height, width }}
       >
         {isVideo ? (
-          <video
-            src={mediaSrc}
-            controls
-            className="w-full h-full object-cover"
-            {...videoProps}
-          />
+          <video src={mediaSrc} controls className="h-full w-full object-cover" {...videoProps} />
         ) : (
           <Image
             fill

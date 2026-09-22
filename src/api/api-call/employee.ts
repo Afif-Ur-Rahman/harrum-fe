@@ -1,4 +1,3 @@
-import { serverAction } from "../server-action";
 import { SimpleResponse } from "@/types/auth";
 import {
   CreateEmployeeResponse,
@@ -6,6 +5,8 @@ import {
   ResponseForEmployee,
 } from "@/types/employees";
 import { EmployeeFormType } from "@/ui/employees/schema";
+
+import { serverAction } from "../server-action";
 
 export const getAllEmployees = async () => {
   try {
@@ -34,10 +35,7 @@ export const createEmployees = async (data: EmployeeFormType) => {
   }
 };
 
-export const updateEmployee = async (
-  id: string,
-  data: Partial<EmployeeFormType>,
-) => {
+export const updateEmployee = async (id: string, data: Partial<EmployeeFormType>) => {
   try {
     const response = await serverAction({
       url: `/employee/${id}`,

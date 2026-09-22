@@ -1,11 +1,13 @@
 "use client";
 
+import { Flex } from "@radix-ui/themes";
+import { Palette } from "lucide-react";
+
 import { ReuseableDialog, Table } from "@/components";
 import { StockHistory, StockVariant } from "@/types";
-import { Flex } from "@radix-ui/themes";
 import { formatDateTime, formatPrice } from "@/utils";
+
 import { ColorsDetails } from "./colors-details";
-import { Palette } from "lucide-react";
 
 interface HistoryTableProps {
   historyData: StockHistory[];
@@ -13,16 +15,10 @@ interface HistoryTableProps {
 }
 
 const getTotalQuantity = (variants: StockVariant[] = []) => {
-  return variants.reduce(
-    (total, variant) => total + Number(variant.quantity || 0),
-    0,
-  );
+  return variants.reduce((total, variant) => total + Number(variant.quantity || 0), 0);
 };
 
-export const HistoryTable: React.FC<HistoryTableProps> = ({
-  historyData = [],
-  size = "",
-}) => {
+export const HistoryTable: React.FC<HistoryTableProps> = ({ historyData = [], size = "" }) => {
   const columns = [
     {
       key: "date" as const,
@@ -44,18 +40,14 @@ export const HistoryTable: React.FC<HistoryTableProps> = ({
       key: "purchasePrice" as const,
       header: "Purchase (PKR)",
       render: (row: StockHistory) => (
-        <span className="text-slate-300">
-          {formatPrice(Number(row.purchasePrice)) || 0}
-        </span>
+        <span className="text-slate-300">{formatPrice(Number(row.purchasePrice)) || 0}</span>
       ),
     },
     {
       key: "wholesalePrice" as const,
       header: "Wholesale (PKR)",
       render: (row: StockHistory) => (
-        <span className="text-slate-300">
-          {formatPrice(Number(row.wholesalePrice)) || 0}
-        </span>
+        <span className="text-slate-300">{formatPrice(Number(row.wholesalePrice)) || 0}</span>
       ),
     },
     {
@@ -71,9 +63,7 @@ export const HistoryTable: React.FC<HistoryTableProps> = ({
       key: "totalValue" as const,
       header: "Total Sale Value",
       render: (row: StockHistory) => {
-        const quantity = row.quantity
-          ? row.quantity
-          : getTotalQuantity(row.variants);
+        const quantity = row.quantity ? row.quantity : getTotalQuantity(row.variants);
         return (
           <span className="font-semibold text-cyan-300">
             {formatPrice(Number(row.salePrice) * quantity) || 0}
@@ -98,9 +88,7 @@ export const HistoryTable: React.FC<HistoryTableProps> = ({
                   Colors
                 </button>
               }
-              content={
-                <ColorsDetails colors={row.variants || []} size={size} />
-              }
+              content={<ColorsDetails colors={row.variants || []} size={size} />}
             />
           ) : (
             "-"

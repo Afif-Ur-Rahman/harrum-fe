@@ -15,11 +15,11 @@ export interface ActionErrorState {
 }
 
 export interface NetworkResult<T = unknown> extends ActionResult<T> {
-  state: boolean
-  data?: T
-  error?: string
-  status?: number
-  headers?: Headers
+  state: boolean;
+  data?: T;
+  error?: string;
+  status?: number;
+  headers?: Headers;
 }
 
 export interface GetOptions extends RequestInit {

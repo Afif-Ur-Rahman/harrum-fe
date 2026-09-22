@@ -1,14 +1,8 @@
 "use client";
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
 import { usePathname } from "next/navigation";
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+
 import { HarrumIconLoader } from "../harrum-icon-loader";
 
 interface NavigationLoaderContextType {
@@ -17,14 +11,9 @@ interface NavigationLoaderContextType {
   isNavigating: boolean;
 }
 
-const NavigationLoaderContext =
-  createContext<NavigationLoaderContextType | null>(null);
+const NavigationLoaderContext = createContext<NavigationLoaderContextType | null>(null);
 
-export const NavigationLoaderProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+export const NavigationLoaderProvider = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
 
   const [isNavigating, setIsNavigating] = useState(false);
@@ -84,9 +73,7 @@ export const useNavigationLoader = () => {
   const context = useContext(NavigationLoaderContext);
 
   if (!context) {
-    throw new Error(
-      "useNavigationLoader must be used inside NavigationLoaderProvider",
-    );
+    throw new Error("useNavigationLoader must be used inside NavigationLoaderProvider");
   }
 
   return context;

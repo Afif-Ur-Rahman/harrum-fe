@@ -1,5 +1,6 @@
-import { AddressComponent } from "@/types/google";
 import axios from "axios";
+
+import { AddressComponent } from "@/types/google";
 
 export const googleAPI = {
   getPlaces: async (text: string) => {
@@ -15,13 +16,11 @@ export const googleAPI = {
     });
     const address = res.data?.results?.[0];
     const transformedAddress: { [key: string]: AddressComponent } = {};
-    res.data?.results?.[0].address_components.forEach(
-      (element: AddressComponent) => {
-        element.types.forEach((type: string) => {
-          transformedAddress[type] = element;
-        });
-      }
-    );
+    res.data?.results?.[0].address_components.forEach((element: AddressComponent) => {
+      element.types.forEach((type: string) => {
+        transformedAddress[type] = element;
+      });
+    });
 
     return { ...address, transformedAddress };
   },
@@ -31,13 +30,11 @@ export const googleAPI = {
       params: { type: "details", placeId },
     });
     const transformedAddress: { [key: string]: AddressComponent } = {};
-    res.data?.result.address_components?.forEach(
-      (element: AddressComponent) => {
-        element.types.forEach((type: string) => {
-          transformedAddress[type] = element;
-        });
-      }
-    );
+    res.data?.result.address_components?.forEach((element: AddressComponent) => {
+      element.types.forEach((type: string) => {
+        transformedAddress[type] = element;
+      });
+    });
     return { ...res.data.result, transformedAddress };
   },
 };

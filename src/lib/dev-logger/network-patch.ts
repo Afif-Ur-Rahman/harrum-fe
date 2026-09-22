@@ -1,7 +1,7 @@
 "use client";
 
-import { useLoggerStore, genLogId } from "./logger-store";
 import { shouldIgnoreNetworkUrl } from "./ignore-rules";
+import { useLoggerStore, genLogId } from "./logger-store";
 
 let patched = false;
 
@@ -35,7 +35,7 @@ const safeParseResponse = async (res: Response) => {
     }
 
     const apiResponse = parsedResponses.findLast(
-      (item) =>
+      item =>
         typeof item === "object" &&
         item !== null &&
         ("state" in item || "data" in item || "error" in item),
@@ -79,10 +79,7 @@ export const patchNetwork = () => {
 
   window.fetch = async (...args: Parameters<typeof fetch>) => {
     const [input, init] = args;
-    const url =
-      typeof input === "string"
-        ? input
-        : ((input as Request).url ?? String(input));
+    const url = typeof input === "string" ? input : ((input as Request).url ?? String(input));
 
     if (shouldIgnoreNetworkUrl(url)) {
       return originalFetch(...args);

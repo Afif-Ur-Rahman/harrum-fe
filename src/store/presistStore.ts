@@ -1,7 +1,9 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { zustandStorage } from "./storage/storage";
+
 import { User, Stock, Employees, Order, Vendor } from "@/types";
+
+import { zustandStorage } from "./storage/storage";
 
 interface AuthState {
   token?: string | null;
@@ -44,26 +46,26 @@ interface AuthState {
 
 export const usePersistStore = create<AuthState>()(
   persist(
-    (set) => {
+    set => {
       return {
         user: null,
-        setUser: (user) => set({ user }),
+        setUser: user => set({ user }),
         token: null,
-        setToken: (token) => set({ token }),
+        setToken: token => set({ token }),
 
         // ── Stocks ─────────────────────────────────────────
         stocks: [],
         stocksLoaded: false,
-        setStocks: (stocks) => set({ stocks, stocksLoaded: true }),
-        setStocksLoaded: (loaded) => set({ stocksLoaded: loaded }),
-        updateStockById: (stock) =>
-          set((state) => ({
-            stocks: state.stocks.map((s) => (s._id === stock._id ? stock : s)),
+        setStocks: stocks => set({ stocks, stocksLoaded: true }),
+        setStocksLoaded: loaded => set({ stocksLoaded: loaded }),
+        updateStockById: stock =>
+          set(state => ({
+            stocks: state.stocks.map(s => (s._id === stock._id ? stock : s)),
           })),
-        updateStocksByIds: (stocks) =>
-          set((state) => ({
-            stocks: state.stocks.map((s) => {
-              const updated = stocks.find((u) => u._id === s._id);
+        updateStocksByIds: stocks =>
+          set(state => ({
+            stocks: state.stocks.map(s => {
+              const updated = stocks.find(u => u._id === s._id);
               return updated || s;
             }),
           })),
@@ -71,40 +73,37 @@ export const usePersistStore = create<AuthState>()(
         // ── Employees ────────────────────────────────────────
         employees: { salesman: [], accountant: [] },
         employeesLoaded: false,
-        setEmployees: (employees) => set({ employees, employeesLoaded: true }),
-        setEmployeesLoaded: (loaded) => set({ employeesLoaded: loaded }),
+        setEmployees: employees => set({ employees, employeesLoaded: true }),
+        setEmployeesLoaded: loaded => set({ employeesLoaded: loaded }),
 
         // ── Orders ─────────────────────────────────────────
         orders: [],
         ordersTotal: 0,
         setOrders: (orders, total) => set({ orders, ordersTotal: total }),
         appendOrders: (orders, total) =>
-          set((state) => ({
+          set(state => ({
             orders: [...state.orders, ...orders],
             ordersTotal: total,
           })),
-        updateOrderById: (order) =>
-          set((state) => ({
-            orders: state.orders.map((o) => (o._id === order._id ? order : o)),
+        updateOrderById: order =>
+          set(state => ({
+            orders: state.orders.map(o => (o._id === order._id ? order : o)),
           })),
         resetOrders: () => set({ orders: [], ordersTotal: 0 }),
 
         // ── Vendors ─────────────────────────────────────────
         vendors: [],
         vendorsLoaded: false,
-        setVendors: (vendors) => set({ vendors, vendorsLoaded: true }),
-        setVendorsLoaded: (loaded) => set({ vendorsLoaded: loaded }),
-        addVendor: (vendor) =>
-          set((state) => ({ vendors: [vendor, ...state.vendors] })),
-        updateVendorById: (vendor) =>
-          set((state) => ({
-            vendors: state.vendors.map((v) =>
-              v._id === vendor._id ? vendor : v,
-            ),
+        setVendors: vendors => set({ vendors, vendorsLoaded: true }),
+        setVendorsLoaded: loaded => set({ vendorsLoaded: loaded }),
+        addVendor: vendor => set(state => ({ vendors: [vendor, ...state.vendors] })),
+        updateVendorById: vendor =>
+          set(state => ({
+            vendors: state.vendors.map(v => (v._id === vendor._id ? vendor : v)),
           })),
-        removeVendorById: (id) =>
-          set((state) => ({
-            vendors: state.vendors.filter((v) => v._id !== id),
+        removeVendorById: id =>
+          set(state => ({
+            vendors: state.vendors.filter(v => v._id !== id),
           })),
         resetVendors: () => set({ vendors: [], vendorsLoaded: false }),
       };
@@ -112,7 +111,7 @@ export const usePersistStore = create<AuthState>()(
     {
       name: "auth",
       storage: createJSONStorage(() => zustandStorage),
-      partialize: (state) => ({ user: state.user }),
+      partialize: state => ({ user: state.user }),
     },
   ),
 );

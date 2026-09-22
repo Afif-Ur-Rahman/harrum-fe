@@ -28,7 +28,7 @@ export const StockStats = ({
             <Package className="h-4 w-4 text-cyan-300" />
           </div>
 
-          <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-slate-400">
+          <p className="mb-1 text-xs font-semibold tracking-widest text-slate-400 uppercase">
             Total Items
           </p>
 
@@ -44,7 +44,7 @@ export const StockStats = ({
             <TrendingUp className="h-4 w-4 text-blue-300" />
           </div>
 
-          <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-slate-400">
+          <p className="mb-1 text-xs font-semibold tracking-widest text-slate-400 uppercase">
             Total Sale Value
           </p>
 
@@ -65,7 +65,7 @@ export const StockStats = ({
             <AlertTriangle className={`h-4 w-4 text-red-300`} />
           </div>
 
-          <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-slate-400">
+          <p className="mb-1 text-xs font-semibold tracking-widest text-slate-400 uppercase">
             Out of Stock
           </p>
 

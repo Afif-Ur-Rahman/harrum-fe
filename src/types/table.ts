@@ -15,7 +15,6 @@ export interface Table {
   } | null;
 }
 
-
 export interface TableResponseMultiple {
   message: string;
   data: Table[];

@@ -1,6 +1,7 @@
 import { AddStockPayload, ResponseForMultipleStocks } from "@/types";
-import { serverAction } from "../server-action";
 import { StockFormType } from "@/ui/stock/form/schema";
+
+import { serverAction } from "../server-action";
 
 export const getAllStocks = async () => {
   try {
@@ -76,10 +77,7 @@ export const getStockHistory = async (params: {
   }
 };
 
-export const addStockQuantity = async (
-  stockId: string,
-  payload: AddStockPayload,
-) => {
+export const addStockQuantity = async (stockId: string, payload: AddStockPayload) => {
   try {
     const response = await serverAction({
       url: `/stock/${stockId}/add`,
@@ -90,8 +88,8 @@ export const addStockQuantity = async (
   } catch (error) {
     return {
       error:
-        (error as unknown as { response?: { data?: { message?: string } } })
-          ?.response?.data?.message || "Failed to add stock",
+        (error as unknown as { response?: { data?: { message?: string } } })?.response?.data
+          ?.message || "Failed to add stock",
     };
   }
 };

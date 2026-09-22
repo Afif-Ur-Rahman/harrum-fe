@@ -1,22 +1,21 @@
 "use client";
 
-import { ReuseableDialog, Table } from "@/components";
-import { Stock, StockVariant } from "@/types";
 import { Flex } from "@radix-ui/themes";
 import { History, Palette } from "lucide-react";
+
+import { ReuseableDialog, Table } from "@/components";
+import { Stock, StockVariant } from "@/types";
 import { formatDateTime, formatPrice } from "@/utils";
-import { HistoryTable } from "./history-table";
+
 import { ColorsDetails } from "./colors-details";
+import { HistoryTable } from "./history-table";
 
 interface StockTableProps {
   stockData: Stock[];
 }
 
 const getTotalQuantity = (variants: StockVariant[] = []) => {
-  return variants.reduce(
-    (total, variant) => total + Number(variant.quantity || 0),
-    0,
-  );
+  return variants.reduce((total, variant) => total + Number(variant.quantity || 0), 0);
 };
 
 export const StockTable: React.FC<StockTableProps> = ({ stockData = [] }) => {
@@ -24,24 +23,18 @@ export const StockTable: React.FC<StockTableProps> = ({ stockData = [] }) => {
     {
       key: "name" as const,
       header: "Name",
-      render: (row: Stock) => (
-        <span className="font-semibold text-slate-300">{row.name}</span>
-      ),
+      render: (row: Stock) => <span className="font-semibold text-slate-300">{row.name}</span>,
     },
     {
       key: "brand" as const,
       header: "Brand",
-      render: (row: Stock) => (
-        <span className="text-slate-300">{row.brand}</span>
-      ),
+      render: (row: Stock) => <span className="text-slate-300">{row.brand}</span>,
     },
     {
       key: "quantity" as const,
       header: "Total Qty",
       render: (row: Stock) => {
-        const totalQuantity = row.quantity
-          ? row.quantity
-          : getTotalQuantity(row.variants);
+        const totalQuantity = row.quantity ? row.quantity : getTotalQuantity(row.variants);
 
         return (
           <span className="inline-flex items-center rounded-full border border-white/10 bg-white/8 px-2.5 py-1 text-xs font-semibold text-cyan-300">
@@ -54,18 +47,14 @@ export const StockTable: React.FC<StockTableProps> = ({ stockData = [] }) => {
       key: "purchasePrice" as const,
       header: "Purchase Price (PKR)",
       render: (row: Stock) => (
-        <span className="text-slate-300">
-          {formatPrice(Number(row.purchasePrice)) || 0}
-        </span>
+        <span className="text-slate-300">{formatPrice(Number(row.purchasePrice)) || 0}</span>
       ),
     },
     {
       key: "wholesalePrice" as const,
       header: "Wholesale (PKR)",
       render: (row: Stock) => (
-        <span className="text-slate-300">
-          {formatPrice(Number(row.wholesalePrice)) || 0}
-        </span>
+        <span className="text-slate-300">{formatPrice(Number(row.wholesalePrice)) || 0}</span>
       ),
     },
     {
@@ -81,9 +70,7 @@ export const StockTable: React.FC<StockTableProps> = ({ stockData = [] }) => {
       key: "totalValue" as const,
       header: "Total Sale Value",
       render: (row: Stock) => {
-        const quantity = row.quantity
-          ? row.quantity
-          : getTotalQuantity(row.variants);
+        const quantity = row.quantity ? row.quantity : getTotalQuantity(row.variants);
         return (
           <span className="font-semibold text-cyan-300">
             {formatPrice(Number(row.salePrice) * quantity) || 0}
@@ -95,9 +82,7 @@ export const StockTable: React.FC<StockTableProps> = ({ stockData = [] }) => {
       key: "status" as const,
       header: "Status",
       render: (row: Stock) => {
-        const totalQuantity = row.quantity
-          ? row.quantity
-          : getTotalQuantity(row.variants);
+        const totalQuantity = row.quantity ? row.quantity : getTotalQuantity(row.variants);
 
         return (
           <span
@@ -152,9 +137,7 @@ export const StockTable: React.FC<StockTableProps> = ({ stockData = [] }) => {
                   <History className="h-4 w-4" />
                 </button>
               }
-              content={
-                <HistoryTable historyData={row.history} size={row.size} />
-              }
+              content={<HistoryTable historyData={row.history} size={row.size} />}
             />
           )}
         </Flex>

@@ -10,17 +10,17 @@ export const convertToFormData = (data: Record<string, unknown>): FormData => {
     ) {
       if (Array.isArray(value)) {
         const arr = value as unknown[];
-        const allFiles = arr.every((item) => item instanceof File);
+        const allFiles = arr.every(item => item instanceof File);
 
         if (allFiles) {
-          arr.forEach((file) => {
+          arr.forEach(file => {
             if (parentKey) {
               formData.append(parentKey, file as File);
             }
           });
-        } else if (arr.every((item) => typeof item === "string") && parentKey) {
+        } else if (arr.every(item => typeof item === "string") && parentKey) {
           // String arrays: repeat the same key so the server receives an array
-          arr.forEach((item) => formData.append(parentKey, item as string));
+          arr.forEach(item => formData.append(parentKey, item as string));
         } else {
           arr.forEach((item, index) => {
             const key = parentKey ? `${parentKey}[${index}]` : String(index);
@@ -29,7 +29,7 @@ export const convertToFormData = (data: Record<string, unknown>): FormData => {
         }
       } else {
         const obj = value as Record<string, unknown>;
-        Object.keys(obj).forEach((key) => {
+        Object.keys(obj).forEach(key => {
           const val = obj[key];
           const newKey = parentKey ? `${parentKey}[${key}]` : key;
           appendFormData(val, newKey);

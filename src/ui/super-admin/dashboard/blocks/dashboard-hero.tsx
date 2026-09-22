@@ -17,8 +17,7 @@ const heroStats = [
     label: "Growth Score",
     value: "92%",
     valueClassName: "text-white",
-    className:
-      "col-span-2 bg-linear-to-r from-cyan-500/20 to-fuchsia-500/20 sm:col-span-1",
+    className: "col-span-2 bg-linear-to-r from-cyan-500/20 to-fuchsia-500/20 sm:col-span-1",
   },
 ];
 
@@ -29,36 +28,29 @@ export const DashboardHero = () => {
 
       <div className="relative flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
         <div className="max-w-3xl">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.22em] text-cyan-200">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs font-medium tracking-[0.22em] text-cyan-200 uppercase">
             <Sparkles className="h-4 w-4" />
             Performance Overview
           </div>
 
-          <h1 className="max-w-2xl text-3xl font-semibold leading-tight text-white sm:text-4xl xl:text-5xl">
+          <h1 className="max-w-2xl text-3xl leading-tight font-semibold text-white sm:text-4xl xl:text-5xl">
             Welcome Back,
           </h1>
 
           <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
-            Monitor revenue, stock pressure, product demand, and purchase
-            momentum from one responsive dashboard built for desktop, tablet,
-            and mobile.
+            Monitor revenue, stock pressure, product demand, and purchase momentum from one
+            responsive dashboard built for desktop, tablet, and mobile.
           </p>
         </div>
 
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:min-w-105">
-          {heroStats.map((item) => (
+          {heroStats.map(item => (
             <div
               key={item.label}
               className={`rounded-2xl border border-white/10 p-4 ${item.className}`}
             >
-              <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
-                {item.label}
-              </p>
-              <p
-                className={`mt-2 text-2xl font-semibold ${item.valueClassName}`}
-              >
-                {item.value}
-              </p>
+              <p className="text-xs tracking-[0.2em] text-slate-400 uppercase">{item.label}</p>
+              <p className={`mt-2 text-2xl font-semibold ${item.valueClassName}`}>{item.value}</p>
             </div>
           ))}
         </div>

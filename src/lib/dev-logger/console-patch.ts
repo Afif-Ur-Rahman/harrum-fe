@@ -1,7 +1,7 @@
 "use client";
 
-import { useLoggerStore, genLogId } from "./logger-store";
 import { shouldIgnoreConsoleMessage } from "./ignore-rules";
+import { useLoggerStore, genLogId } from "./logger-store";
 
 let patched = false;
 
@@ -26,7 +26,7 @@ export const patchConsole = () => {
     error: console.error,
   };
 
-  (["log", "info", "warn", "error"] as const).forEach((level) => {
+  (["log", "info", "warn", "error"] as const).forEach(level => {
     console[level] = (...args: unknown[]) => {
       original[level](...args);
 
@@ -44,7 +44,7 @@ export const patchConsole = () => {
     };
   });
 
-  window.addEventListener("error", (event) => {
+  window.addEventListener("error", event => {
     if (shouldIgnoreConsoleMessage(event.message)) return;
 
     useLoggerStore.getState().addEntry({
@@ -56,7 +56,7 @@ export const patchConsole = () => {
     });
   });
 
-  window.addEventListener("unhandledrejection", (event) => {
+  window.addEventListener("unhandledrejection", event => {
     const message = `Unhandled promise rejection: ${stringifyArg(event.reason)}`;
 
     if (shouldIgnoreConsoleMessage(message)) return;

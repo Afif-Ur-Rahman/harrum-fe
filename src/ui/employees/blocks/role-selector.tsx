@@ -1,8 +1,9 @@
 "use client";
 
-import { useFormContext } from "react-hook-form";
-import { FormFieldError } from "@/components/form";
 import { Calculator, PersonStanding } from "lucide-react";
+import { useFormContext } from "react-hook-form";
+
+import { FormFieldError } from "@/components/form";
 
 const ROLES = [
   {
@@ -35,7 +36,7 @@ const RoleSelector = () => {
 
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">
+      <label className="text-[11px] font-semibold tracking-widest text-slate-400 uppercase">
         Role
       </label>
 
@@ -58,12 +59,10 @@ const RoleSelector = () => {
               <button
                 key={value}
                 type="button"
-                onClick={() =>
-                  setValue("type", value, { shouldValidate: true })
-                }
+                onClick={() => setValue("type", value, { shouldValidate: true })}
                 className={`group flex flex-col items-center gap-2 rounded-2xl border px-3 py-4 text-center shadow-lg transition-all duration-200 active:scale-[0.98] ${
                   isActive
-                    ? `${activeBorder} ${activeBg} ${activeShadow} text-white ring-1 ring-inset ring-white/10`
+                    ? `${activeBorder} ${activeBg} ${activeShadow} text-white ring-1 ring-white/10 ring-inset`
                     : "border-white/10 bg-white/5 text-slate-300 shadow-black/10 hover:border-white/20 hover:bg-white/8 hover:text-white"
                 }`}
               >

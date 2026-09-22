@@ -1,15 +1,14 @@
 "use client";
 
+import { SlidersHorizontal } from "lucide-react";
 import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
-import { SlidersHorizontal } from "lucide-react";
+
 import { FormInput, ReuseableDialog } from "@/components";
-import {
-  PRICE_TYPE_OPTIONS,
-  STOCK_TYPE_OPTIONS,
-  type PriceFilterType,
-} from "../constants";
+
 import { FilterMultiSelect } from "./filter-multi-select";
+
+import { PRICE_TYPE_OPTIONS, STOCK_TYPE_OPTIONS, type PriceFilterType } from "../constants";
 
 export interface StockFilters {
   brands: string[];
@@ -39,9 +38,9 @@ const FilterForm = ({ filters, brands, onApply, onClose }: FilterFormProps) => {
     defaultValues: filters,
   });
 
-  const brandOptions = brands.map((brand) => ({ label: brand, value: brand }));
+  const brandOptions = brands.map(brand => ({ label: brand, value: brand }));
 
-  const handleApply = form.handleSubmit((values) => {
+  const handleApply = form.handleSubmit(values => {
     const minPrice = String(values.minPrice ?? "").trim();
     const maxPrice = String(values.maxPrice ?? "").trim();
 
@@ -109,21 +108,9 @@ const FilterForm = ({ filters, brands, onApply, onClose }: FilterFormProps) => {
         />
 
         <div className="grid grid-cols-2 gap-3">
-          <FormInput
-            field="minPrice"
-            label="Min Price"
-            type="number"
-            placeholder="0"
-            compact
-          />
+          <FormInput field="minPrice" label="Min Price" type="number" placeholder="0" compact />
 
-          <FormInput
-            field="maxPrice"
-            label="Max Price"
-            type="number"
-            placeholder="Any"
-            compact
-          />
+          <FormInput field="maxPrice" label="Max Price" type="number" placeholder="Any" compact />
         </div>
 
         <div className="flex flex-col gap-3 sm:flex-row">
@@ -177,7 +164,7 @@ export const StockFilterDialog = ({
           <SlidersHorizontal className="h-4 w-4" />
 
           {activeCount > 0 && (
-            <span className="absolute -right-1 -top-1 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-cyan-400 px-1 text-[10px] font-bold text-slate-950">
+            <span className="absolute -top-1 -right-1 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-cyan-400 px-1 text-[10px] font-bold text-slate-950">
               {activeCount}
             </span>
           )}

@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
 import {
   Bug,
   X,
@@ -14,12 +13,10 @@ import {
   Terminal,
   Wifi,
 } from "lucide-react";
-import {
-  useLoggerStore,
-  LogEntry,
-  isNetworkEntry,
-} from "@/lib/dev-logger/logger-store";
+import { useEffect, useMemo, useState } from "react";
+
 import { patchConsole } from "@/lib/dev-logger/console-patch";
+import { useLoggerStore, LogEntry, isNetworkEntry } from "@/lib/dev-logger/logger-store";
 import { patchNetwork } from "@/lib/dev-logger/network-patch";
 
 type FilterTab = "all" | "console" | "network" | "errors";
@@ -63,17 +60,9 @@ const EntryRow = ({ entry }: { entry: LogEntry }) => {
   const network = isNetworkEntry(entry);
   const isError = isEntryError(entry);
 
-  const summary = network
-    ? `${entry.method} ${entry.url}`
-    : entry.message.split("\n")[0];
+  const summary = network ? `${entry.method} ${entry.url}` : entry.message.split("\n")[0];
 
-  const statusBadge = network
-    ? entry.pending
-      ? "…"
-      : entry.error
-        ? "ERR"
-        : entry.status
-    : null;
+  const statusBadge = network ? (entry.pending ? "…" : entry.error ? "ERR" : entry.status) : null;
 
   const handleCopy = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -110,11 +99,11 @@ const EntryRow = ({ entry }: { entry: LogEntry }) => {
       <div
         role="button"
         tabIndex={0}
-        onClick={() => setExpanded((v) => !v)}
-        onKeyDown={(e) => {
+        onClick={() => setExpanded(v => !v)}
+        onKeyDown={e => {
           if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
-            setExpanded((v) => !v);
+            setExpanded(v => !v);
           }
         }}
         className="flex w-full cursor-pointer items-start gap-2 text-left"
@@ -122,9 +111,7 @@ const EntryRow = ({ entry }: { entry: LogEntry }) => {
         {network ? (
           <Wifi className="mt-0.5 h-3.5 w-3.5 shrink-0 text-cyan-300" />
         ) : (
-          <Terminal
-            className={`mt-0.5 h-3.5 w-3.5 shrink-0 ${LEVEL_COLOR[entry.level]}`}
-          />
+          <Terminal className={`mt-0.5 h-3.5 w-3.5 shrink-0 ${LEVEL_COLOR[entry.level]}`} />
         )}
 
         <span className="min-w-0 flex-1">
@@ -137,18 +124,14 @@ const EntryRow = ({ entry }: { entry: LogEntry }) => {
           </span>
           <span className="mt-0.5 flex items-center gap-2 text-[10px] text-slate-500">
             {formatTime(entry.timestamp)}
-            {network && entry.duration !== undefined && (
-              <span>· {entry.duration}ms</span>
-            )}
+            {network && entry.duration !== undefined && <span>· {entry.duration}ms</span>}
           </span>
         </span>
 
         {statusBadge !== null && (
           <span
             className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${
-              isError
-                ? "bg-red-400/15 text-red-300"
-                : "bg-emerald-400/15 text-emerald-300"
+              isError ? "bg-red-400/15 text-red-300" : "bg-emerald-400/15 text-emerald-300"
             }`}
           >
             {statusBadge}
@@ -162,15 +145,11 @@ const EntryRow = ({ entry }: { entry: LogEntry }) => {
             className="rounded-lg p-1 text-slate-500 transition hover:bg-white/10 hover:text-white"
             aria-label="Copy entry"
           >
-            {copied ? (
-              <Check className="h-3 w-3 text-emerald-300" />
-            ) : (
-              <Copy className="h-3 w-3" />
-            )}
+            {copied ? <Check className="h-3 w-3 text-emerald-300" /> : <Copy className="h-3 w-3" />}
           </button>
 
           {copied && (
-            <span className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-slate-800 px-2 py-1 text-[10px] font-medium text-white shadow-lg shadow-black/40">
+            <span className="absolute -top-7 left-1/2 -translate-x-1/2 rounded-md bg-slate-800 px-2 py-1 text-[10px] font-medium whitespace-nowrap text-white shadow-lg shadow-black/40">
               Copied!
             </span>
           )}
@@ -189,32 +168,28 @@ const EntryRow = ({ entry }: { entry: LogEntry }) => {
             <>
               {entry.requestBody !== undefined && (
                 <div>
-                  <p className="mb-1 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+                  <p className="mb-1 text-[10px] font-semibold tracking-widest text-slate-500 uppercase">
                     Request
                   </p>
-                  <pre className="whitespace-pre-wrap break-all font-mono text-[11px] text-slate-300">
+                  <pre className="font-mono text-[11px] break-all whitespace-pre-wrap text-slate-300">
                     {stringifyPretty(entry.requestBody)}
                   </pre>
                 </div>
               )}
               {entry.responseBody !== undefined && (
                 <div>
-                  <p className="mb-1 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+                  <p className="mb-1 text-[10px] font-semibold tracking-widest text-slate-500 uppercase">
                     Response
                   </p>
-                  <pre className="whitespace-pre-wrap break-all font-mono text-[11px] text-slate-300">
+                  <pre className="font-mono text-[11px] break-all whitespace-pre-wrap text-slate-300">
                     {stringifyPretty(entry.responseBody)}
                   </pre>
                 </div>
               )}
-              {entry.error && (
-                <p className="font-mono text-[11px] text-red-300">
-                  {entry.error}
-                </p>
-              )}
+              {entry.error && <p className="font-mono text-[11px] text-red-300">{entry.error}</p>}
             </>
           ) : (
-            <pre className="whitespace-pre-wrap break-all font-mono text-[11px] text-slate-300">
+            <pre className="font-mono text-[11px] break-all whitespace-pre-wrap text-slate-300">
               {entry.message}
             </pre>
           )}
@@ -235,24 +210,19 @@ export const DevLogger = () => {
     patchNetwork();
   }, []);
 
-  const errorCount = useMemo(
-    () => entries.filter(isEntryError).length,
-    [entries],
-  );
+  const errorCount = useMemo(() => entries.filter(isEntryError).length, [entries]);
 
   const filtered = useMemo(() => {
     let list = entries;
 
-    if (tab === "console") list = list.filter((e) => e.kind === "console");
-    if (tab === "network") list = list.filter((e) => e.kind === "network");
+    if (tab === "console") list = list.filter(e => e.kind === "console");
+    if (tab === "network") list = list.filter(e => e.kind === "network");
     if (tab === "errors") list = list.filter(isEntryError);
 
     if (search.trim()) {
       const q = search.toLowerCase();
-      list = list.filter((e) =>
-        (isNetworkEntry(e) ? `${e.method} ${e.url}` : e.message)
-          .toLowerCase()
-          .includes(q),
+      list = list.filter(e =>
+        (isNetworkEntry(e) ? `${e.method} ${e.url}` : e.message).toLowerCase().includes(q),
       );
     }
 
@@ -270,20 +240,20 @@ export const DevLogger = () => {
     <>
       <button
         type="button"
-        onClick={() => setOpen((v) => !v)}
-        className="fixed bottom-5 right-5 z-9999 flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-slate-950 text-cyan-300 shadow-2xl shadow-black/50 backdrop-blur-xl transition hover:bg-slate-900 active:scale-95"
+        onClick={() => setOpen(v => !v)}
+        className="fixed right-5 bottom-5 z-9999 flex h-12 w-12 items-center justify-center rounded-full border border-white/10 bg-slate-950 text-cyan-300 shadow-2xl shadow-black/50 backdrop-blur-xl transition hover:bg-slate-900 active:scale-95"
         aria-label="Toggle dev logger"
       >
         <Bug className="h-5 w-5" />
         {errorCount > 0 && (
-          <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
+          <span className="absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
             {errorCount > 99 ? "99+" : errorCount}
           </span>
         )}
       </button>
 
       {open && (
-        <div className="fixed bottom-20 right-5 z-9999 flex h-125 w-95 max-w-[calc(100vw-2.5rem)] flex-col overflow-hidden rounded-3xl border border-white/10 bg-slate-950 shadow-2xl shadow-black/60 backdrop-blur-xl">
+        <div className="fixed right-5 bottom-20 z-9999 flex h-125 w-95 max-w-[calc(100vw-2.5rem)] flex-col overflow-hidden rounded-3xl border border-white/10 bg-slate-950 shadow-2xl shadow-black/60 backdrop-blur-xl">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.10),transparent_32%)]" />
 
           <div className="relative z-10 flex items-center justify-between border-b border-white/10 px-4 py-3">
@@ -296,11 +266,7 @@ export const DevLogger = () => {
                 className="rounded-lg p-1.5 text-slate-400 transition hover:bg-white/10 hover:text-white"
                 aria-label={paused ? "Resume" : "Pause"}
               >
-                {paused ? (
-                  <Play className="h-3.5 w-3.5" />
-                ) : (
-                  <Pause className="h-3.5 w-3.5" />
-                )}
+                {paused ? <Play className="h-3.5 w-3.5" /> : <Pause className="h-3.5 w-3.5" />}
               </button>
 
               <button
@@ -324,7 +290,7 @@ export const DevLogger = () => {
           </div>
 
           <div className="relative z-10 flex items-center gap-1 border-b border-white/10 px-3 py-2">
-            {TABS.map((t) => (
+            {TABS.map(t => (
               <button
                 key={t.value}
                 type="button"
@@ -345,7 +311,7 @@ export const DevLogger = () => {
               <Search className="h-3.5 w-3.5 shrink-0 text-slate-500" />
               <input
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={e => setSearch(e.target.value)}
                 placeholder="Filter logs..."
                 className="min-w-0 flex-1 bg-transparent text-xs text-white outline-none placeholder:text-slate-500"
               />
@@ -358,7 +324,7 @@ export const DevLogger = () => {
                 {paused ? "Logging paused" : "No logs yet"}
               </p>
             ) : (
-              filtered.map((entry) => <EntryRow key={entry.id} entry={entry} />)
+              filtered.map(entry => <EntryRow key={entry.id} entry={entry} />)
             )}
           </div>
         </div>

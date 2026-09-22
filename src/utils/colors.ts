@@ -27,7 +27,7 @@ const findLooseMatch = (key: string, lookup: Map<string, string>) => {
   if (words.length === 0) return null;
 
   for (const [name, hex] of lookup) {
-    if (words.every((word) => name.includes(word))) {
+    if (words.every(word => name.includes(word))) {
       return hex;
     }
   }

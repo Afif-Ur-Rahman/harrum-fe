@@ -2,9 +2,12 @@
 
 import React from "react";
 import { useFormContext } from "react-hook-form";
-import { OrderFormType, OrderItemFormType } from "../../form";
+
 import { Stock } from "@/types";
+
 import { ItemRow } from "./item-row";
+
+import { OrderFormType, OrderItemFormType } from "../../form";
 
 interface ItemsTableProps {
   items: OrderItemFormType[];
@@ -12,11 +15,7 @@ interface ItemsTableProps {
   removeItem: (index: number) => void;
 }
 
-export const ItemsTable: React.FC<ItemsTableProps> = ({
-  items,
-  stocks,
-  removeItem,
-}) => {
+export const ItemsTable: React.FC<ItemsTableProps> = ({ items, stocks, removeItem }) => {
   useFormContext<OrderFormType>();
 
   return (
@@ -25,7 +24,7 @@ export const ItemsTable: React.FC<ItemsTableProps> = ({
 
       <div className="relative">
         <div className="border-b border-white/10 bg-white/8 px-3 py-2">
-          <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+          <p className="text-[10px] font-semibold tracking-widest text-slate-400 uppercase">
             Order Items
           </p>
           <span />
@@ -37,7 +36,7 @@ export const ItemsTable: React.FC<ItemsTableProps> = ({
               <ItemRow
                 item={item}
                 index={idx}
-                stock={stocks.find((s) => s._id === item.stockId)}
+                stock={stocks.find(s => s._id === item.stockId)}
                 removeItem={removeItem}
                 showBorder={(idx + 1) % 3}
               />

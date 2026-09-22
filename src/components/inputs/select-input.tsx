@@ -1,26 +1,28 @@
-'use client'
+"use client";
 
-import { cn } from '@/utils'
-import { Flex, Select } from '@radix-ui/themes'
-import { Controller, useFormContext } from 'react-hook-form'
-import { BlockLabel } from '../block-label'
+import { Flex, Select } from "@radix-ui/themes";
+import { Controller, useFormContext } from "react-hook-form";
+
+import { cn } from "@/utils";
+
+import { BlockLabel } from "../block-label";
 
 interface SelectInputProps<T> extends React.ComponentProps<typeof Select.Root> {
-  label?: string
-  field?: string
-  options?: { label: string; value: T; disabled?: boolean }[]
-  placeholder?: string
-  buttonClassName?: string
-  className?: string
-  tooltip?: boolean
-  variant?: 'classic' | 'surface' | 'soft' | 'ghost'
-  loading?: boolean
+  label?: string;
+  field?: string;
+  options?: { label: string; value: T; disabled?: boolean }[];
+  placeholder?: string;
+  buttonClassName?: string;
+  className?: string;
+  tooltip?: boolean;
+  variant?: "classic" | "surface" | "soft" | "ghost";
+  loading?: boolean;
 }
 
 const SelectInput = <T extends string>({
   label,
   field,
-  placeholder = 'Select',
+  placeholder = "Select",
   options = [],
   className,
   buttonClassName,
@@ -30,32 +32,28 @@ const SelectInput = <T extends string>({
   loading,
   ...selectProps
 }: SelectInputProps<T>) => {
-  const form = useFormContext()
+  const form = useFormContext();
 
-  const items = options.map((option) => (
-    <Select.Item
-      key={option.value}
-      value={option.value}
-      disabled={option.disabled}
-    >
+  const items = options.map(option => (
+    <Select.Item key={option.value} value={option.value} disabled={option.disabled}>
       {option.label}
     </Select.Item>
-  ))
+  ));
 
   const findLabel = (value: T) => {
-    const selectedOption = options.find((option) => option.value === value)
-    return selectedOption ? selectedOption?.label : ''
-  }
+    const selectedOption = options.find(option => option.value === value);
+    return selectedOption ? selectedOption?.label : "";
+  };
 
   return (
     <Flex align="center" gap="2" className={className}>
       {label && <BlockLabel name={field}>{label}</BlockLabel>}
       <Controller
-        name={field ?? ''}
+        name={field ?? ""}
         control={form.control}
         render={({ field }) => {
-          const { ...rest } = field
-          const selectedLabel = findLabel(rest?.value)
+          const { ...rest } = field;
+          const selectedLabel = findLabel(rest?.value);
 
           return (
             <Select.Root
@@ -65,12 +63,11 @@ const SelectInput = <T extends string>({
               {...selectProps}
             >
               <Select.Trigger
-                variant={variant ?? 'surface'}
+                variant={variant ?? "surface"}
                 placeholder={placeholder}
-                title={tooltip && selectedLabel ? selectedLabel : ''}
-                className={cn('h-(--chip-height)', buttonClassName, {
-                  'loading hide-default-select-icon relative overflow-x-hidden':
-                    loading,
+                title={tooltip && selectedLabel ? selectedLabel : ""}
+                className={cn("h-(--chip-height)", buttonClassName, {
+                  "loading hide-default-select-icon relative overflow-x-hidden": loading,
                 })}
               />
               <Select.Content position="popper" align="center" highContrast>
@@ -80,18 +77,18 @@ const SelectInput = <T extends string>({
                   <Select.Item
                     value="no-data"
                     disabled
-                    className="bg-white h-6 justify-center p-0 text-center text-1"
+                    className="text-1 h-6 justify-center bg-white p-0 text-center"
                   >
                     No data
                   </Select.Item>
                 )}
               </Select.Content>
             </Select.Root>
-          )
+          );
         }}
       />
     </Flex>
-  )
-}
+  );
+};
 
-export { SelectInput }
+export { SelectInput };

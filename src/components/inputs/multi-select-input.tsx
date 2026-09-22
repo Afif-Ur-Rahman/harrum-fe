@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useFormContext } from "react-hook-form";
 import { TextField, Text, Flex, Badge, Checkbox, Button } from "@radix-ui/themes";
 import { X } from "lucide-react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useFormContext } from "react-hook-form";
+
 import { FormFieldError } from "../form";
 
 interface MultiSelectDropdownProps {
@@ -48,13 +49,17 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
   }, [options, addedOptions]);
 
   const filteredOptions = allOptions.filter(opt =>
-    opt.toLowerCase().includes(searchText.toLowerCase())
+    opt.toLowerCase().includes(searchText.toLowerCase()),
   );
 
   const toggleValue = (value: string) => {
     if (multiselect) {
       if (selectedValues.includes(value)) {
-        setValue(field, selectedValues.filter(v => v !== value), { shouldValidate: true });
+        setValue(
+          field,
+          selectedValues.filter(v => v !== value),
+          { shouldValidate: true },
+        );
       } else {
         setValue(field, [...selectedValues, value], { shouldValidate: true });
       }
@@ -100,7 +105,11 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
                       size={14}
                       className="cursor-pointer"
                       onClick={() =>
-                        setValue(field, multiselect ? selectedValues.filter(v => v !== value) : "", { shouldValidate: true })
+                        setValue(
+                          field,
+                          multiselect ? selectedValues.filter(v => v !== value) : "",
+                          { shouldValidate: true },
+                        )
                       }
                     />
                   )}
@@ -117,7 +126,7 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
           value={searchText}
           placeholder={placeholder}
           onFocus={() => setOpen(true)}
-          onChange={(e) => {
+          onChange={e => {
             setSearchText(e.target.value);
             setOpen(true);
           }}
@@ -126,7 +135,7 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
         {!disabled && <FormFieldError name={field} className="text-red-500" />}
 
         {open && (
-          <ul className="absolute top-full mt-1 w-full bg-white/70 backdrop-blur-[5px] border border-gray-300 rounded-md shadow-lg max-h-48 overflow-auto z-50">
+          <ul className="absolute top-full z-50 mt-1 max-h-48 w-full overflow-auto rounded-md border border-gray-300 bg-white/70 shadow-lg backdrop-blur-[5px]">
             {filteredOptions.length > 0 ? (
               filteredOptions.map(option => {
                 const checked = selectedValues.includes(option);
@@ -134,7 +143,7 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
                   <li
                     key={option}
                     onClick={() => toggleValue(option)}
-                    className="px-3 py-2 cursor-pointer text-sm hover:bg-white/20"
+                    className="cursor-pointer px-3 py-2 text-sm hover:bg-white/20"
                   >
                     <Flex align="center" gap="2">
                       {multiselect && <Checkbox checked={checked} />}

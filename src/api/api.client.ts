@@ -7,10 +7,7 @@ import {
 } from "@/types/api";
 import { getErrorMessage } from "@/utils/api";
 
-const GET = async <T>(
-  url: string,
-  options: GetOptions = {}
-): Promise<NetworkResult<T>> => {
+const GET = async <T>(url: string, options: GetOptions = {}): Promise<NetworkResult<T>> => {
   const { ...rest } = options;
 
   const next = rest.next as NextFetchRequestConfig | undefined;
@@ -24,7 +21,7 @@ const GET = async <T>(
     return {
       state: false,
       error: getErrorMessage(data),
-      headers: response.headers
+      headers: response.headers,
     };
   }
 
@@ -42,7 +39,7 @@ interface PostOptions extends RequestInit {
 const POST = async <T>(
   url: string,
   body?: FormData | object,
-  options: PostOptions = {}
+  options: PostOptions = {},
 ): Promise<NetworkResult<T>> => {
   const { ...rest } = options;
 
@@ -76,7 +73,7 @@ const POST = async <T>(
 const PATCH = async <T>(
   url: string,
   body: FormData | object,
-  options: PostOptions = {}
+  options: PostOptions = {},
 ): Promise<NetworkResult<T>> => {
   const { ...rest } = options;
 
@@ -110,7 +107,7 @@ const PATCH = async <T>(
 const PUT = async <T>(
   url: string,
   body: FormData | object,
-  options: PostOptions = {}
+  options: PostOptions = {},
 ): Promise<NetworkResult<T>> => {
   const { ...rest } = options;
   const isBodyFormData = body instanceof FormData;
@@ -144,7 +141,7 @@ type DeleteOptions = RequestInit;
 const DELETE = async <T>(
   url: string,
   body?: object,
-  options: DeleteOptions = {}
+  options: DeleteOptions = {},
 ): Promise<NetworkResult<T>> => {
   const { ...rest } = options;
 

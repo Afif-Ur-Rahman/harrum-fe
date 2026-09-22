@@ -1,6 +1,7 @@
-import { ReactNode } from "react";
 import { Select, Text } from "@radix-ui/themes";
+import { ReactNode } from "react";
 import { useFormContext } from "react-hook-form";
+
 import { FormFieldError } from "@/components/form";
 
 type Options = { label: string | ReactNode; value: string };
@@ -29,24 +30,21 @@ const SelectDropdown = ({
       {type === "dropdown" && (
         <div className="flex flex-col gap-2">
           {label && (
-            <Text className="text-sm mb-1" weight="medium">
+            <Text className="mb-1 text-sm" weight="medium">
               {label}
             </Text>
           )}
           <Select.Root
             size="3"
             value={value}
-            onValueChange={(val) => form?.setValue(field, val)}
+            onValueChange={val => form?.setValue(field, val)}
             disabled={isdisabled}
           >
-            <Select.Trigger
-              placeholder={placeholder}
-              className="w-full! cursor-pointer!"
-            />
+            <Select.Trigger placeholder={placeholder} className="w-full! cursor-pointer!" />
             <Select.Content
               position="popper"
               highContrast
-              className="w-full! cursor-pointer! max-h-50!"
+              className="max-h-50! w-full! cursor-pointer!"
             >
               {options
                 .filter((option: Options) => option.value !== "")
@@ -68,20 +66,19 @@ const SelectDropdown = ({
       {type === "selectoption" && (
         <div className="flex flex-col gap-2">
           {label && (
-            <Text className="text-sm mb-1" weight="medium">
+            <Text className="mb-1 text-sm" weight="medium">
               {label}
             </Text>
           )}
-          <div className="flex gap-2 flex-wrap">
+          <div className="flex flex-wrap gap-2">
             {options.map((option: Options, index: number) => (
               <button
                 key={index}
                 type="button"
                 onClick={() => form.setValue(field, option.value)}
-                className={`px-4 py-1.5 text-sm rounded-full cursor-pointer border-[#D0DAEE] border-[0.5px] ${value === option.value
-                  ? "bg-[#3e1406] text-white"
-                  : "bg-[#F2F2F3] text-gray-700 "
-                  }`}
+                className={`cursor-pointer rounded-full border-[0.5px] border-[#D0DAEE] px-4 py-1.5 text-sm ${
+                  value === option.value ? "bg-[#3e1406] text-white" : "bg-[#F2F2F3] text-gray-700"
+                }`}
               >
                 {option.label}
               </button>

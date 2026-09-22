@@ -2,7 +2,7 @@ let audio: HTMLAudioElement | null = null;
 
 export const initNotificationSound = (
   src: string = "/audio/notification.mp3",
-  volume: number = 0.7
+  volume: number = 0.7,
 ) => {
   if (typeof window === "undefined") return;
 

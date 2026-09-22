@@ -1,23 +1,18 @@
-import { createStock, getAllStocks, getAllVendors } from "@/api/api-call";
-import { Stock } from "@/types";
 import { useEffect, useMemo } from "react";
 import { useState } from "react";
-import { useStockForm, StockFormType } from "./form";
 import { useFieldArray, useWatch } from "react-hook-form";
-import { showToast } from "@/utils/toast";
+
+import { createStock, getAllStocks, getAllVendors } from "@/api/api-call";
 import { usePersistStore } from "@/store/presistStore";
-import { NO_COLOR_VARIANT_TYPES } from "./constants";
+import { Stock } from "@/types";
+import { showToast } from "@/utils/toast";
+
 import { EMPTY_STOCK_FILTERS, type StockFilters } from "./blocks/stock-filters";
+import { NO_COLOR_VARIANT_TYPES } from "./constants";
+import { useStockForm, StockFormType } from "./form";
 
 const useStocks = () => {
-  const {
-    stocks,
-    stocksLoaded,
-    setStocks,
-    vendors,
-    setVendors,
-    vendorsLoaded,
-  } = usePersistStore();
+  const { stocks, stocksLoaded, setStocks, vendors, setVendors, vendorsLoaded } = usePersistStore();
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState<StockFilters>(EMPTY_STOCK_FILTERS);
 
@@ -29,7 +24,7 @@ const useStocks = () => {
 
   const stockOptions = useMemo(() => {
     return Array.isArray(stocks)
-      ? stocks.map((item) => ({
+      ? stocks.map(item => ({
           value: item._id,
           label: `${item.name} - ${item.brand}`,
           stock: item,
@@ -39,7 +34,7 @@ const useStocks = () => {
 
   const vendorOptions = useMemo(
     () =>
-      vendors.map((vendor) => ({
+      vendors.map(vendor => ({
         label: vendor.name,
         value: vendor._id,
       })),
@@ -49,9 +44,7 @@ const useStocks = () => {
   // Unique brands from the loaded stocks, used as filter options
   const brandOptions = useMemo(() => {
     const unique = new Set(
-      (Array.isArray(stocks) ? stocks : [])
-        .map((stock) => stock.brand)
-        .filter(Boolean),
+      (Array.isArray(stocks) ? stocks : []).map(stock => stock.brand).filter(Boolean),
     );
 
     return Array.from(unique).sort((a, b) => a.localeCompare(b));
@@ -69,17 +62,15 @@ const useStocks = () => {
   const filteredStocks = useMemo(() => {
     const query = search.trim().toLowerCase();
 
-    const parsedMin =
-      filters.minPrice !== "" ? Number(filters.minPrice) : Number.NaN;
-    const parsedMax =
-      filters.maxPrice !== "" ? Number(filters.maxPrice) : Number.NaN;
+    const parsedMin = filters.minPrice !== "" ? Number(filters.minPrice) : Number.NaN;
+    const parsedMax = filters.maxPrice !== "" ? Number(filters.maxPrice) : Number.NaN;
 
     const min = Number.isNaN(parsedMin) ? null : parsedMin;
     const max = Number.isNaN(parsedMax) ? null : parsedMax;
 
     const priceKey = `${filters.priceType}Price` as const;
 
-    return stocks.filter((stock) => {
+    return stocks.filter(stock => {
       if (filters.brands.length > 0 && !filters.brands.includes(stock.brand)) {
         return false;
       }
@@ -99,7 +90,7 @@ const useStocks = () => {
 
       const matchesName = stock.name?.toLowerCase().includes(query);
       const matchesBrand = stock.brand?.toLowerCase().includes(query);
-      const matchesColor = stock.variants?.some((variant) =>
+      const matchesColor = stock.variants?.some(variant =>
         variant.color?.toLowerCase().includes(query),
       );
 
@@ -120,16 +111,13 @@ const useStocks = () => {
 
   const isSaveDisabled =
     !stockItems?.length ||
-    stockItems.some((item) => {
+    stockItems.some(item => {
       const purchasePrice = Number(item.purchasePrice);
       const wholesalePrice = Number(item.wholesalePrice);
       const salePrice = Number(item.salePrice);
 
       const invalidBasicFields =
-        !item.name?.trim() ||
-        !item.brand?.trim() ||
-        !item.vendor?.trim() ||
-        !item.size?.trim();
+        !item.name?.trim() || !item.brand?.trim() || !item.vendor?.trim() || !item.size?.trim();
 
       const invalidPrices =
         purchasePrice < 0 ||
@@ -142,7 +130,7 @@ const useStocks = () => {
       const invalidVariants =
         !NO_COLOR_VARIANT_TYPES.includes(item.type) &&
         (!item.variants?.length ||
-          item.variants.some((variant) => {
+          item.variants.some(variant => {
             const qty = Number(variant.quantity);
 
             return !variant.color?.trim() || qty <= 0 || isNaN(qty);
@@ -199,7 +187,7 @@ const useStocks = () => {
   const addExistingStockRow = (stock: Stock) => {
     const currentItems = form.getValues("stockItems") || [];
 
-    const alreadyAdded = currentItems.some((item) => item._id === stock._id);
+    const alreadyAdded = currentItems.some(item => item._id === stock._id);
 
     if (alreadyAdded) {
       showToast("error", "This stock item is already added");
@@ -217,7 +205,7 @@ const useStocks = () => {
       purchasePrice: String(stock.purchasePrice ?? ""),
       wholesalePrice: String(stock.wholesalePrice ?? ""),
       salePrice: String(stock.salePrice ?? ""),
-      variants: stock.variants?.map((variant) => ({
+      variants: stock.variants?.map(variant => ({
         color: variant.color || "",
         quantity: "",
       })),
@@ -226,9 +214,7 @@ const useStocks = () => {
 
   const removeStockRow = (id: string | number) => {
     const index =
-      typeof id === "number"
-        ? id
-        : form.getValues("stockItems").findIndex((item) => item._id === id);
+      typeof id === "number" ? id : form.getValues("stockItems").findIndex(item => item._id === id);
 
     if (index !== -1) {
       remove(index);

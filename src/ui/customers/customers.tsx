@@ -1,11 +1,13 @@
 "use client";
 
 import { Plus, Contact } from "lucide-react";
-import { useCustomers } from "./useCustomers";
-import { CustomerTable, CustomersSearch } from "./blocks";
+
 import { ReuseableDialog } from "@/components";
-import { CustomerForm } from "./form";
 import { PageLayout } from "@/components/layout";
+
+import { CustomerTable, CustomersSearch } from "./blocks";
+import { CustomerForm } from "./form";
+import { useCustomers } from "./useCustomers";
 
 const Customers = () => {
   const {
@@ -32,9 +34,7 @@ const Customers = () => {
         </div>
 
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">
-            Customers
-          </h1>
+          <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">Customers</h1>
           <p className="mt-1 text-xs text-slate-400">
             {customers.length} customer{customers.length !== 1 ? "s" : ""}
             {search ? ` · ${filtered.length} matching` : ""}

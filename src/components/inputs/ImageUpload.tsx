@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import { Flex, Text } from "@radix-ui/themes";
-import { useFormContext } from "react-hook-form";
-import { Input } from "react-aria-components";
 import { PlayCircle } from "lucide-react";
+import Image from "next/image";
+import React, { useState, useEffect } from "react";
+import { Input } from "react-aria-components";
+import { useFormContext } from "react-hook-form";
 
 interface ImageUploadProps {
   image?: string | string[];
@@ -52,25 +52,24 @@ const ImageUpload = ({
 
   const previews =
     selectedFiles.length > 0
-      ? selectedFiles.map((file) => URL.createObjectURL(file))
+      ? selectedFiles.map(file => URL.createObjectURL(file))
       : image
-      ? Array.isArray(image)
-        ? image
-        : [image]
-      : [];
+        ? Array.isArray(image)
+          ? image
+          : [image]
+        : [];
   const renderPreview = (src: string, idx: number) => {
-    const isVideo =
-      src?.endsWith?.(".mp4") || selectedFiles[idx]?.type?.includes("video");
+    const isVideo = src?.endsWith?.(".mp4") || selectedFiles[idx]?.type?.includes("video");
 
     return isVideo ? (
       <div
         key={idx}
-        className={`relative w-24 h-24 border cursor-pointer rounded-md overflow-hidden ${
+        className={`relative h-24 w-24 cursor-pointer overflow-hidden rounded-md border ${
           disabled ? "opacity-60" : ""
         }`}
       >
         <video key={idx} src={src} width={150} height={150} />
-        <PlayCircle className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-8 w-8 text-white opacity-90" />
+        <PlayCircle className="absolute top-1/2 left-1/2 h-8 w-8 -translate-x-1/2 -translate-y-1/2 transform text-white opacity-90" />
       </div>
     ) : (
       <Image
@@ -78,7 +77,7 @@ const ImageUpload = ({
         src={src}
         width={150}
         height={150}
-        className={`border cursor-pointer object-cover rounded-full ${className} ${
+        className={`cursor-pointer rounded-full border object-cover ${className} ${
           disabled ? "opacity-60" : ""
         }`}
         alt="Preview"
@@ -88,16 +87,11 @@ const ImageUpload = ({
 
   return (
     <>
-      <Flex
-        justify="center"
-        align="center"
-        gap="3"
-        className="overflow-y-auto flex-wrap max-h-40"
-      >
+      <Flex justify="center" align="center" gap="3" className="max-h-40 flex-wrap overflow-y-auto">
         <Text
           as="label"
           htmlFor={field}
-          className="block text-sm font-medium text-gray-900 cursor-pointer"
+          className="block cursor-pointer text-sm font-medium text-gray-900"
         >
           {previews.length > 0 ? (
             <Flex gap="2" wrap="wrap">
@@ -105,10 +99,10 @@ const ImageUpload = ({
             </Flex>
           ) : (
             <div
-              className={`flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors ${className} ${disabled ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
+              className={`flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:bg-gray-100 ${className} ${disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer"}`}
             >
               <svg
-                className="w-6 h-6 text-gray-400 mb-1"
+                className="mb-1 h-6 w-6 text-gray-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

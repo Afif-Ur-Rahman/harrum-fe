@@ -1,7 +1,7 @@
 "use client";
 
-import { ReactNode } from "react";
 import * as Popover from "@radix-ui/react-popover";
+import { ReactNode } from "react";
 
 interface TooltipProps {
   content: ReactNode;
@@ -9,17 +9,11 @@ interface TooltipProps {
   className?: string;
 }
 
-export const Tooltip = ({
-  content,
-  children,
-  className = "",
-}: TooltipProps) => {
+export const Tooltip = ({ content, children, className = "" }: TooltipProps) => {
   return (
     <Popover.Root>
       <Popover.Trigger asChild>
-        <span
-          className={`inline-flex min-w-0 max-w-full cursor-help ${className}`}
-        >
+        <span className={`inline-flex max-w-full min-w-0 cursor-help ${className}`}>
           {children}
         </span>
       </Popover.Trigger>
@@ -33,7 +27,7 @@ export const Tooltip = ({
           collisionPadding={12}
           arrowPadding={8}
           avoidCollisions
-          className="z-9999 w-max max-w-[min(24rem,calc(100vw-2rem))] whitespace-normal wrap-break-word rounded-md bg-slate-950 px-3 py-2 text-left text-xs leading-5 text-slate-200 outline-none"
+          className="z-9999 w-max max-w-[min(24rem,calc(100vw-2rem))] rounded-md bg-slate-950 px-3 py-2 text-left text-xs leading-5 wrap-break-word whitespace-normal text-slate-200 outline-none"
         >
           {content}
 

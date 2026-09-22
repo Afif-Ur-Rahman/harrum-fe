@@ -1,11 +1,7 @@
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
-import {
-  CreateEmployeeSchema,
-  EmployeeFormType,
-  EmployeeSchema,
-} from "./schema";
+import { CreateEmployeeSchema, EmployeeFormType, EmployeeSchema } from "./schema";
 
 const EMPTY_EMPLOYEE_VALUES: EmployeeFormType = {
   username: "",

@@ -1,8 +1,9 @@
 "use client";
 
 import { Banknote, Smartphone } from "lucide-react";
-import { formatDateTime, formatPrice } from "@/utils";
+
 import { Receipt } from "@/types";
+import { formatDateTime, formatPrice } from "@/utils";
 
 export const ReceiptRow = ({ receipt }: { receipt: Receipt }) => {
   const isCash = receipt.paymentMethod === "cash";
@@ -18,15 +19,11 @@ export const ReceiptRow = ({ receipt }: { receipt: Receipt }) => {
                 : "border-cyan-300/20 bg-cyan-400/10 text-cyan-300"
             }`}
           >
-            {isCash ? (
-              <Banknote className="h-4 w-4" />
-            ) : (
-              <Smartphone className="h-4 w-4" />
-            )}
+            {isCash ? <Banknote className="h-4 w-4" /> : <Smartphone className="h-4 w-4" />}
           </div>
 
           <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
+            <p className="text-xs font-semibold tracking-widest text-slate-400 uppercase">
               {receipt.paymentMethod}
             </p>
             <p className="mt-0.5 text-xs text-slate-500">

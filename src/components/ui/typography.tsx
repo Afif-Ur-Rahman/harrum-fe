@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
 import clsx from "clsx";
+import React from "react";
 
 interface TypographyProps {
   children: React.ReactNode;
@@ -21,7 +21,5 @@ export const Typography: React.FC<TypographyProps> = ({
     paragraphSmall: "text-xs",
   };
 
-  return (
-    <p className={clsx(base, variants[variant], className)}>{children}</p>
-  );
+  return <p className={clsx(base, variants[variant], className)}>{children}</p>;
 };
