@@ -11,25 +11,15 @@ export interface Bill {
   updatedAt: string;
 }
 
-export interface BillSummary {
-  totalAmount: number;
-  paidAmount: number;
-  remainingAmount: number;
-}
-
 export interface BillResponse {
   message: string;
-  data: BillListData;
+  data: Bill[];
   updatedVendor?: Vendor;
-}
-
-export interface BillListData extends BillSummary {
-  bills: Bill[];
 }
 
 export interface BillListResponse {
   message: string;
-  data: BillListData;
+  data: Bill[];
 }
 
 export interface ResponseForBill {
