@@ -1,24 +1,14 @@
 "use client";
 
-import { Wallet, FileText, Tag, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { FormProvider } from "react-hook-form";
 
 import { FormInput } from "@/components";
 
 import { useExpenseForm } from "./form";
-import { EXPENSE_CATEGORY_OPTIONS, ExpenseFormType } from "./schema";
+import { ExpenseFormType } from "./schema";
 
-const PAYMENT_METHOD_OPTIONS = [
-  { label: "Cash", value: "cash" },
-  { label: "Online", value: "online" },
-];
-
-const DEFAULTS: ExpenseFormType = {
-  amount: "",
-  note: "",
-  category: "Misc",
-  paymentMethod: "cash",
-};
+import { DEFAULT_EXPENSE_FORM, EXPENSE_FIELDS } from "../constants";
 
 export const ExpenseForm = ({
   onSubmitExpense,
@@ -27,52 +17,28 @@ export const ExpenseForm = ({
   onSubmitExpense: (data: ExpenseFormType) => Promise<boolean>;
   loading: boolean;
 }) => {
-  const form = useExpenseForm(DEFAULTS);
+  const form = useExpenseForm(DEFAULT_EXPENSE_FORM);
 
   const handleSubmit = form.handleSubmit(async data => {
     const success = await onSubmitExpense(data);
-    if (success) form.reset(DEFAULTS);
+    if (success) form.reset(DEFAULT_EXPENSE_FORM);
   });
 
   return (
     <FormProvider {...form}>
       <div className="flex w-full flex-col gap-5">
-        <FormInput
-          field="amount"
-          label="Amount"
-          type="number"
-          placeholder="0"
-          icon={Wallet}
-          required
-        />
-
-        <FormInput
-          field="category"
-          label="Category"
-          type="select"
-          placeholder="Select category"
-          options={[...EXPENSE_CATEGORY_OPTIONS]}
-          icon={Tag}
-          required
-        />
-
-        <FormInput
-          field="paymentMethod"
-          label="Payment Method"
-          type="select"
-          placeholder="Select payment method"
-          options={PAYMENT_METHOD_OPTIONS}
-          required
-        />
-
-        <FormInput
-          field="note"
-          label="Note"
-          type="textarea"
-          placeholder="What was this expense for?"
-          icon={FileText}
-          required
-        />
+        {EXPENSE_FIELDS.map(field => (
+          <FormInput
+            key={field.name}
+            field={field.name}
+            label={field.label}
+            type={field.type}
+            placeholder={field.placeholder}
+            icon={field.icon}
+            options={field.options ? [...field.options] : undefined}
+            required={field.required}
+          />
+        ))}
 
         <button
           type="button"

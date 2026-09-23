@@ -29,7 +29,7 @@ export const ExpenseCard = ({ expense }: { expense: Expense }) => {
             <p className="text-xs font-semibold tracking-widest text-slate-400 uppercase">
               {expense.paymentMethod}
             </p>
-            <p className="mt-0.5 text-xs text-slate-500">{formatDateTime(expense.date, true)}</p>
+            <p className="mt-0.5 text-xs text-slate-500">{formatDateTime(expense.date)}</p>
           </div>
         </div>
 

@@ -21,7 +21,8 @@ interface UpdateExpensePayload {
 export const getAllExpenses = async (params?: {
   page?: number;
   limit?: number;
-  category?: ExpenseCategory;
+  categories?: string[];
+  paymentMethods?: string[];
   from?: string;
   to?: string;
 }) => {
@@ -29,7 +30,12 @@ export const getAllExpenses = async (params?: {
     const query = new URLSearchParams();
     if (params?.page) query.set("page", String(params.page));
     if (params?.limit) query.set("limit", String(params.limit));
-    if (params?.category) query.set("category", params.category);
+    if (params?.categories?.length) {
+      params.categories.forEach(c => query.append("category", c));
+    }
+    if (params?.paymentMethods?.length) {
+      params.paymentMethods.forEach(m => query.append("paymentMethod", m));
+    }
     if (params?.from) query.set("from", params.from);
     if (params?.to) query.set("to", params.to);
 

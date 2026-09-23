@@ -12,7 +12,6 @@ import { useExpenses } from "./useExpenses";
 export const Expenses = () => {
   const {
     expenses,
-    filteredExpenses,
     total,
     loading,
     saving,
@@ -38,7 +37,7 @@ export const Expenses = () => {
               <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">Expenses</h1>
               <p className="mt-1 text-xs text-slate-400">
                 {total} expense{total !== 1 ? "s" : ""}
-                {hasActiveFilters ? ` · ${filteredExpenses.length} matching` : ""}
+                {hasActiveFilters ? ` · ${expenses.length} matching` : ""}
               </p>
             </div>
           </div>
@@ -73,18 +72,16 @@ export const Expenses = () => {
       ) : expenses.length === 0 ? (
         <EmptyState
           icon={Wallet2}
-          title="No expenses yet"
-          description="Add your first shop expense using the button above."
-        />
-      ) : filteredExpenses.length === 0 ? (
-        <EmptyState
-          icon={Wallet2}
-          title="No matching expenses"
-          description="Try adjusting the filters to find the expenses you're looking for."
+          title={hasActiveFilters ? "No matching expenses" : "No expenses yet"}
+          description={
+            hasActiveFilters
+              ? "Try adjusting the filters to find the expenses you're looking for."
+              : "Add your first shop expense using the button above."
+          }
         />
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {filteredExpenses.map(expense => (
+          {expenses.map(expense => (
             <ExpenseCard key={expense._id} expense={expense} />
           ))}
         </div>

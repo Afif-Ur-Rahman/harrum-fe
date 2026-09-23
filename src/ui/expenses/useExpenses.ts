@@ -1,14 +1,13 @@
 "use client";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { createExpense, getAllExpenses } from "@/api/api-call/expenses";
 import { Expense } from "@/types";
 import { showToast } from "@/utils/toast";
 
-import { EMPTY_EXPENSE_FILTERS, type ExpenseFilters } from "./blocks/expense-filters";
+import { ExpenseFilters } from "./blocks";
+import { EMPTY_EXPENSE_FILTERS, EXPENSES_PER_PAGE } from "./constants";
 import { ExpenseFormType } from "./form";
-
-const EXPENSES_PER_PAGE = 30;
 
 const useExpenses = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -25,51 +24,29 @@ const useExpenses = () => {
     filters.to !== "",
   ].filter(Boolean).length;
 
-  const filteredExpenses = useMemo(() => {
-    return expenses.filter(expense => {
-      if (filters.categories.length > 0 && !filters.categories.includes(expense.category)) {
-        return false;
-      }
-      if (
-        filters.paymentMethods.length > 0 &&
-        !filters.paymentMethods.includes(expense.paymentMethod)
-      ) {
-        return false;
-      }
-      if (filters.from || filters.to) {
-        const expenseDate = new Date(expense.date);
-        if (filters.from) {
-          const fromDate = new Date(`${filters.from}T00:00:00`);
-          if (expenseDate < fromDate) {
-            return false;
-          }
-        }
-        if (filters.to) {
-          const toDate = new Date(`${filters.to}T23:59:59.999`);
-          if (expenseDate > toDate) {
-            return false;
-          }
-        }
-      }
-      return true;
-    });
-  }, [expenses, filters]);
-
   const fetchExpenses = useCallback(async () => {
-    setLoading(true);
-    const response = await getAllExpenses({ limit: EXPENSES_PER_PAGE });
-    if (response?.error) {
-      showToast("error", response.error);
+    try {
+      setLoading(true);
+      const response = await getAllExpenses({
+        limit: EXPENSES_PER_PAGE,
+        categories: filters.categories,
+        paymentMethods: filters.paymentMethods,
+        from: filters.from || undefined,
+        to: filters.to || undefined,
+      });
+      if (response?.error) {
+        showToast("error", response.error);
+        return;
+      }
+      setExpenses(response?.data?.data?.expenses || []);
+      setTotal(response?.data?.data?.total || 0);
+    } finally {
       setLoading(false);
-      return;
     }
-    setExpenses(response?.data?.data?.expenses || []);
-    setTotal(response?.data?.data?.total || 0);
-    setLoading(false);
-  }, []);
+  }, [filters]);
 
   useEffect(() => {
-    (() => fetchExpenses)();
+    fetchExpenses();
   }, [fetchExpenses]);
 
   const onSubmitExpense = async (data: ExpenseFormType) => {
@@ -94,7 +71,6 @@ const useExpenses = () => {
 
   return {
     expenses,
-    filteredExpenses,
     total,
     loading,
     saving,

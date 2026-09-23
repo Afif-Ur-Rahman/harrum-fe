@@ -1,7 +1,7 @@
 "use client";
 
 import { Select } from "@radix-ui/themes";
-import { format, parse, isValid } from "date-fns";
+import { format, isValid } from "date-fns";
 import { Eye, EyeOff } from "lucide-react";
 import React, { useState } from "react";
 import { Controller, RegisterOptions, useFormContext } from "react-hook-form";
@@ -192,10 +192,13 @@ const FormInput = ({
               control={control}
               rules={rules}
               render={({ field: controllerField }) => {
-                const dateValue =
-                  controllerField.value instanceof Date && isValid(controllerField.value)
-                    ? format(controllerField.value, "yyyy-MM-dd")
-                    : "";
+                let dateValue = "";
+
+                if (controllerField.value instanceof Date && isValid(controllerField.value)) {
+                  dateValue = format(controllerField.value, "yyyy-MM-dd");
+                } else if (typeof controllerField.value === "string" && controllerField.value) {
+                  dateValue = controllerField.value.slice(0, 10);
+                }
 
                 return (
                   <input
@@ -205,14 +208,7 @@ const FormInput = ({
                     onChange={e => {
                       const raw = e.target.value;
 
-                      if (!raw) {
-                        controllerField.onChange(undefined);
-                        return;
-                      }
-
-                      const parsed = parse(raw, "yyyy-MM-dd", new Date());
-
-                      controllerField.onChange(isValid(parsed) ? parsed : undefined);
+                      controllerField.onChange(raw || "");
                     }}
                     onBlur={controllerField.onBlur}
                     className={`${inputClassName} scheme-dark`}

@@ -4,16 +4,15 @@ import { SlidersHorizontal } from "lucide-react";
 import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 
-import { ReuseableDialog } from "@/components";
+import { MultiSelect, ReuseableDialog } from "@/components";
 import { FormInput } from "@/components";
-import { MultiSelect } from "@/components/inputs/multi-select";
+import { toYMD } from "@/utils";
 
-import { EXPENSE_CATEGORY_OPTIONS } from "../form/schema";
-
-const PAYMENT_METHOD_OPTIONS = [
-  { label: "Cash", value: "cash" },
-  { label: "Online", value: "online" },
-];
+import {
+  EMPTY_EXPENSE_FILTERS,
+  EXPENSE_CATEGORY_OPTIONS,
+  PAYMENT_METHOD_OPTIONS,
+} from "../constants";
 
 export interface ExpenseFilters {
   categories: string[];
@@ -21,13 +20,6 @@ export interface ExpenseFilters {
   from: string;
   to: string;
 }
-
-export const EMPTY_EXPENSE_FILTERS: ExpenseFilters = {
-  categories: [],
-  paymentMethods: [],
-  from: "",
-  to: "",
-};
 
 interface FilterFormProps {
   filters: ExpenseFilters;
@@ -46,8 +38,8 @@ const FilterForm = ({ filters, onApply, onClose }: FilterFormProps) => {
   }));
 
   const handleApply = form.handleSubmit(values => {
-    const from = String(values.from ?? "").trim();
-    const to = String(values.to ?? "").trim();
+    const from = toYMD(values.from);
+    const to = toYMD(values.to);
 
     if (from && to && new Date(from) > new Date(to)) {
       form.setError("to", {

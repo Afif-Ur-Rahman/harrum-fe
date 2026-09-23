@@ -1,14 +1,5 @@
 import { z } from "zod";
 
-export const EXPENSE_CATEGORY_OPTIONS = [
-  { label: "Rent", value: "Rent" },
-  { label: "Utilities", value: "Utilities" },
-  { label: "Salary", value: "Salary" },
-  { label: "Transport", value: "Transport" },
-  { label: "Maintenance", value: "Maintenance" },
-  { label: "Misc", value: "Misc" },
-] as const;
-
 export const ExpenseSchema = z.object({
   amount: z
     .string()

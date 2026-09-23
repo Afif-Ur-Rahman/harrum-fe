@@ -71,3 +71,15 @@ export const formatDateTime = (dateString: string, fullDate?: boolean) => {
     hour12: true,
   });
 };
+
+export const toYMD = (v: unknown): string => {
+  if (!v) return "";
+  if (typeof v === "string") return v.trim().slice(0, 10);
+  if (v instanceof Date && !isNaN(v.getTime())) {
+    const y = v.getFullYear();
+    const m = String(v.getMonth() + 1).padStart(2, "0");
+    const d = String(v.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  }
+  return "";
+};
