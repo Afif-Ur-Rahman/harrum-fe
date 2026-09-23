@@ -35,6 +35,7 @@ export const VariantRow = ({
           placeholder="Color"
           options={colorOptions}
           compact
+          borderRounded="rounded-lg"
         />
       </div>
 
@@ -45,6 +46,7 @@ export const VariantRow = ({
           placeholder="0"
           max={maxQuantity}
           compact
+          borderRounded="rounded-lg"
         />
       </div>
 

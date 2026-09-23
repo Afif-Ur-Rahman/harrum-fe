@@ -26,6 +26,7 @@ interface FormInputProps {
   rows?: number;
   capitalizeFirst?: boolean;
   compact?: boolean;
+  borderRounded?: string;
 }
 
 const capitalizeFirstLetter = (value: string) => {
@@ -47,6 +48,7 @@ const FormInput = ({
   rows = 3,
   capitalizeFirst = true,
   compact = false,
+  borderRounded = "rounded-2xl",
 }: FormInputProps) => {
   const { register, control } = useFormContext();
   const [show, setShow] = useState(false);
@@ -136,7 +138,7 @@ const FormInput = ({
         <div
           className={`flex w-full max-w-full min-w-0 ${
             isTextarea ? "items-start" : "items-center"
-          } gap-2.5 overflow-hidden rounded-2xl border border-white/10 bg-white/8 px-4 ${wrapperPaddingY} text-sm shadow-lg shadow-black/10 backdrop-blur-xl transition-all focus-within:border-cyan-300/60 focus-within:bg-white/12 focus-within:ring-2 focus-within:ring-cyan-300/10`}
+          } gap-2.5 overflow-hidden ${borderRounded} border border-white/10 bg-white/8 px-4 ${wrapperPaddingY} text-sm shadow-lg shadow-black/10 backdrop-blur-xl transition-all focus-within:border-cyan-300/60 focus-within:bg-white/12 focus-within:ring-2 focus-within:ring-cyan-300/10`}
         >
           {Icon && (
             <Icon className={`h-4 w-4 shrink-0 text-slate-300 ${isTextarea ? "mt-1" : ""}`} />
@@ -164,7 +166,7 @@ const FormInput = ({
 
                   <Select.Content
                     position="popper"
-                    className="max-w-[calc(100vw-2rem)] rounded-2xl! border! border-white/10! bg-slate-900/95! shadow-2xl! shadow-black/40! backdrop-blur-xl!"
+                    className={`max-w-[calc(100vw-2rem)] ${borderRounded}! border! border-white/10! bg-slate-900/95! shadow-2xl! shadow-black/40! backdrop-blur-xl!`}
                   >
                     {options.length > 0 ? (
                       options.map(option => (
@@ -172,7 +174,7 @@ const FormInput = ({
                           key={option.value}
                           value={option.value}
                           disabled={option.disabled}
-                          className="cursor-pointer! rounded-xl! text-white transition-colors! data-highlighted:bg-cyan-400/20! data-highlighted:text-cyan-200! data-[state=checked]:bg-cyan-400/25!"
+                          className={`cursor-pointer! ${borderRounded}! text-white transition-colors! data-highlighted:bg-cyan-400/20! data-highlighted:text-cyan-200! data-[state=checked]:bg-cyan-400/25!`}
                         >
                           {option.label}
                         </Select.Item>

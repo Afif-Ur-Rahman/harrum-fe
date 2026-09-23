@@ -41,7 +41,8 @@ export const ItemsTable: React.FC<ItemsTableProps> = ({ items, stocks, removeIte
     },
     {
       key: "quantity",
-      header: "Quantity / Colors",
+      header: "Colors / Quantity",
+      align: "left" as const,
       render: (row: OrderItemFormType, index: number) => (
         <ItemCells
           item={row}

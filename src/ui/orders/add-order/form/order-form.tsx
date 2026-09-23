@@ -62,6 +62,7 @@ export const OrderForm = ({
               required={item.required}
               options={item.options}
               compact
+              borderRounded={item.border}
             />
           ))}
 
@@ -73,6 +74,7 @@ export const OrderForm = ({
             required
             options={salesmanOptions}
             compact
+            borderRounded="rounded-lg"
           />
 
           <ItemSearch

@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus, Hash } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 
@@ -91,7 +91,6 @@ export const ItemCells = ({ index, stock, mode }: ItemCellsProps) => {
 
   const canAddMoreColors = fields.length < (stock?.variants?.length || 0);
 
-  // ---------- PRICE CELL ----------
   if (mode === "price") {
     return (
       <PriceSelector
@@ -105,26 +104,27 @@ export const ItemCells = ({ index, stock, mode }: ItemCellsProps) => {
     );
   }
 
-  // ---------- QUANTITY / COLORS CELL ----------
   if (isNoColorType) {
     return (
-      <div className="flex flex-col gap-1.5">
-        <div className="flex items-center justify-between gap-2 text-[11px] text-slate-400">
-          <span className="flex items-center gap-1.5">
-            <Hash className="h-3.5 w-3.5 text-cyan-300" />
-            Qty
-          </span>
-          <span>
-            {stock?.quantity} {stock?.size}
-          </span>
+      <div className="flex w-full items-center gap-2">
+        <div className="flex w-66 justify-between gap-2">
+          <div className="flex flex-1 items-center justify-between gap-2 text-slate-400">
+            Quantity:
+            <span>
+              {stock?.quantity} {stock?.size}
+            </span>
+          </div>
+          <div className="w-16">
+            <FormInput
+              field={`items.${index}.quantity`}
+              type="number"
+              placeholder="0"
+              max={stock?.quantity}
+              compact
+              borderRounded="rounded-lg"
+            />
+          </div>
         </div>
-        <FormInput
-          field={`items.${index}.quantity`}
-          type="number"
-          placeholder="0"
-          max={stock?.quantity}
-          compact
-        />
       </div>
     );
   }

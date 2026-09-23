@@ -27,6 +27,7 @@ interface StockItemField {
   required?: boolean;
   options?: FieldOption[];
   showWhen?: (values: Record<string, string>) => boolean;
+  border?: string;
 }
 
 interface VariantField {
@@ -34,6 +35,7 @@ interface VariantField {
   type: FieldType;
   placeholder: string;
   icon?: React.ElementType;
+  border?: string;
 }
 
 export const NO_COLOR_VARIANT_TYPES = ["perfume", "body_spray", "accessories"];
@@ -45,6 +47,7 @@ export const STOCK_ITEM_FIELDS: StockItemField[] = [
     placeholder: "Name",
     icon: Type,
     required: true,
+    border: "rounded-lg",
   },
   {
     name: "brand",
@@ -52,6 +55,7 @@ export const STOCK_ITEM_FIELDS: StockItemField[] = [
     placeholder: "Brand",
     icon: Building2,
     required: true,
+    border: "rounded-lg",
   },
   {
     name: "vendor",
@@ -60,6 +64,7 @@ export const STOCK_ITEM_FIELDS: StockItemField[] = [
     icon: Truck,
     required: true,
     options: [],
+    border: "rounded-lg",
   },
   {
     name: "type",
@@ -97,6 +102,7 @@ export const STOCK_ITEM_FIELDS: StockItemField[] = [
     ],
     icon: Shapes,
     required: true,
+    border: "rounded-lg",
   },
   {
     name: "size",
@@ -118,6 +124,7 @@ export const STOCK_ITEM_FIELDS: StockItemField[] = [
     ],
     icon: Ruler,
     required: true,
+    border: "rounded-lg",
   },
   {
     name: "quantity",
@@ -126,6 +133,7 @@ export const STOCK_ITEM_FIELDS: StockItemField[] = [
     icon: Hash,
     required: true,
     showWhen: values => NO_COLOR_VARIANT_TYPES.includes(values.type),
+    border: "rounded-lg",
   },
   {
     name: "purchasePrice",
@@ -133,6 +141,7 @@ export const STOCK_ITEM_FIELDS: StockItemField[] = [
     placeholder: "Purchase price",
     icon: ShoppingCart,
     required: true,
+    border: "rounded-lg",
   },
   {
     name: "wholesalePrice",
@@ -140,6 +149,7 @@ export const STOCK_ITEM_FIELDS: StockItemField[] = [
     placeholder: "Wholesale price",
     icon: Store,
     required: true,
+    border: "rounded-lg",
   },
   {
     name: "salePrice",
@@ -147,6 +157,7 @@ export const STOCK_ITEM_FIELDS: StockItemField[] = [
     placeholder: "Sale price",
     icon: BadgeDollarSign,
     required: true,
+    border: "rounded-lg",
   },
 ];
 
@@ -156,12 +167,14 @@ export const VARIANT_FIELDS: VariantField[] = [
     type: "text",
     placeholder: "Color",
     icon: Palette,
+    border: "rounded-lg",
   },
   {
     name: "quantity",
     type: "number",
     placeholder: "0",
     icon: undefined,
+    border: "rounded-lg",
   },
 ];
 

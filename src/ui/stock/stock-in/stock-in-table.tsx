@@ -114,6 +114,7 @@ const StockRow = ({
               icon={item.icon}
               options={options}
               required={item.required}
+              borderRounded={item.border}
               compact
             />
           );
@@ -146,7 +147,7 @@ const StockRow = ({
                   key={field.id}
                   className="grid grid-cols-[1fr_130px_40px] items-center gap-2 bg-white/3 px-3 py-2 transition hover:bg-white/5 max-sm:grid-cols-1"
                 >
-                  {VARIANT_FIELDS.map(({ name, type, placeholder, icon }) => (
+                  {VARIANT_FIELDS.map(({ name, type, placeholder, icon, border }) => (
                     <FormInput
                       key={name}
                       field={`stockItems.${idx}.variants.${variantIdx}.${name}`}
@@ -157,6 +158,7 @@ const StockRow = ({
                           : placeholder
                       }
                       icon={icon}
+                      borderRounded={border}
                       compact
                     />
                   ))}

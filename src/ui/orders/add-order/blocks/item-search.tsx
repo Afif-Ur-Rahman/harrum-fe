@@ -55,7 +55,7 @@ export const ItemSearch = ({ stockOptions, selectedStockIds, onSelectItem }: Ite
   return (
     <div className="relative">
       <div
-        className={`flex h-8.5 items-center gap-2 rounded-2xl border px-3 shadow-lg shadow-black/10 transition-all ${
+        className={`flex h-8.5 items-center gap-2 rounded-lg border px-3 shadow-lg shadow-black/10 transition-all ${
           open
             ? "border-cyan-300/60 bg-white/12 ring-2 ring-cyan-300/10"
             : "border-white/10 bg-white/8 hover:bg-white/10"
