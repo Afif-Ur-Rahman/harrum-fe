@@ -8,3 +8,4 @@ export * from "./select-input";
 export * from "./text-area-input";
 export * from "./text-input";
 export * from "./multi-select-input";
+export * from "./multi-select";

@@ -4,64 +4,70 @@ import { SlidersHorizontal } from "lucide-react";
 import { useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 
-import { FormInput, MultiSelect, ReuseableDialog } from "@/components";
+import { ReuseableDialog } from "@/components";
+import { FormInput } from "@/components";
+import { MultiSelect } from "@/components/inputs/multi-select";
 
-import { PRICE_TYPE_OPTIONS, STOCK_TYPE_OPTIONS, type PriceFilterType } from "../constants";
+import { EXPENSE_CATEGORY_OPTIONS } from "../form/schema";
 
-export interface StockFilters {
-  brands: string[];
-  types: string[];
-  priceType: PriceFilterType;
-  minPrice: string;
-  maxPrice: string;
+const PAYMENT_METHOD_OPTIONS = [
+  { label: "Cash", value: "cash" },
+  { label: "Online", value: "online" },
+];
+
+export interface ExpenseFilters {
+  categories: string[];
+  paymentMethods: string[];
+  from: string;
+  to: string;
 }
 
-export const EMPTY_STOCK_FILTERS: StockFilters = {
-  brands: [],
-  types: [],
-  priceType: "sale",
-  minPrice: "",
-  maxPrice: "",
+export const EMPTY_EXPENSE_FILTERS: ExpenseFilters = {
+  categories: [],
+  paymentMethods: [],
+  from: "",
+  to: "",
 };
 
 interface FilterFormProps {
-  filters: StockFilters;
-  brands: string[];
-  onApply: (filters: StockFilters) => void;
+  filters: ExpenseFilters;
+  onApply: (filters: ExpenseFilters) => void;
   onClose: () => void;
 }
 
-const FilterForm = ({ filters, brands, onApply, onClose }: FilterFormProps) => {
-  const form = useForm<StockFilters>({
+const FilterForm = ({ filters, onApply, onClose }: FilterFormProps) => {
+  const form = useForm<ExpenseFilters>({
     defaultValues: filters,
   });
 
-  const brandOptions = brands.map(brand => ({ label: brand, value: brand }));
+  const categoryOptions = EXPENSE_CATEGORY_OPTIONS.map(option => ({
+    label: option.label,
+    value: option.value,
+  }));
 
   const handleApply = form.handleSubmit(values => {
-    const minPrice = String(values.minPrice ?? "").trim();
-    const maxPrice = String(values.maxPrice ?? "").trim();
+    const from = String(values.from ?? "").trim();
+    const to = String(values.to ?? "").trim();
 
-    if (minPrice && maxPrice && Number(minPrice) > Number(maxPrice)) {
-      form.setError("maxPrice", {
+    if (from && to && new Date(from) > new Date(to)) {
+      form.setError("to", {
         type: "validate",
-        message: "Max price must be greater than or equal to min price",
+        message: "End date must be after start date",
       });
       return;
     }
 
     onApply({
-      brands: values.brands ?? [],
-      types: values.types ?? [],
-      priceType: values.priceType,
-      minPrice,
-      maxPrice,
+      categories: values.categories ?? [],
+      paymentMethods: values.paymentMethods ?? [],
+      from,
+      to,
     });
     onClose();
   });
 
   const handleClear = () => {
-    onApply(EMPTY_STOCK_FILTERS);
+    onApply(EMPTY_EXPENSE_FILTERS);
     onClose();
   };
 
@@ -69,46 +75,36 @@ const FilterForm = ({ filters, brands, onApply, onClose }: FilterFormProps) => {
     <FormProvider {...form}>
       <div className="flex w-full flex-col gap-2">
         <Controller
-          name="brands"
+          name="categories"
           control={form.control}
           render={({ field }) => (
             <MultiSelect
-              label="Brand"
-              placeholder="Select brands"
-              options={brandOptions}
+              label="Category"
+              placeholder="Select categories"
+              options={categoryOptions}
               value={field.value ?? []}
-              onChange={field.onChange}
+              onChange={value => form.setValue("categories", value)}
             />
           )}
         />
-
         <Controller
-          name="types"
+          name="paymentMethods"
           control={form.control}
           render={({ field }) => (
             <MultiSelect
-              label="Type"
-              placeholder="Select types"
-              options={STOCK_TYPE_OPTIONS}
+              label="Payment Method"
+              placeholder="Select payment methods"
+              options={PAYMENT_METHOD_OPTIONS}
               value={field.value ?? []}
-              onChange={field.onChange}
+              onChange={value => form.setValue("paymentMethods", value)}
             />
           )}
-        />
-
-        <FormInput
-          field="priceType"
-          label="Price Type"
-          type="select"
-          placeholder="Select price type"
-          options={[...PRICE_TYPE_OPTIONS]}
-          compact
         />
 
         <div className="grid grid-cols-2 gap-3">
-          <FormInput field="minPrice" label="Min Price" type="number" placeholder="0" compact />
+          <FormInput field="from" label="From" type="date" placeholder="Start date" compact />
 
-          <FormInput field="maxPrice" label="Max Price" type="number" placeholder="Any" compact />
+          <FormInput field="to" label="To" type="date" placeholder="End date" compact />
         </div>
 
         <div className="flex flex-col gap-3 sm:flex-row">
@@ -133,30 +129,28 @@ const FilterForm = ({ filters, brands, onApply, onClose }: FilterFormProps) => {
   );
 };
 
-interface StockFilterDialogProps {
-  filters: StockFilters;
-  brands: string[];
+interface ExpenseFilterDialogProps {
+  filters: ExpenseFilters;
   activeCount: number;
-  onApply: (filters: StockFilters) => void;
+  onApply: (filters: ExpenseFilters) => void;
 }
 
-export const StockFilterDialog = ({
+export const ExpenseFilterDialog = ({
   filters,
-  brands,
   activeCount,
   onApply,
-}: StockFilterDialogProps) => {
+}: ExpenseFilterDialogProps) => {
   const [open, setOpen] = useState(false);
 
   return (
     <ReuseableDialog
-      title="Filter Stocks"
+      title="Filter Expenses"
       open={open}
       setOpen={setOpen}
       triggerButton={
         <button
           type="button"
-          aria-label="Filter stocks"
+          aria-label="Filter expenses"
           className="relative flex h-10.5 w-10.5 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/8 text-slate-300 shadow-lg shadow-black/10 backdrop-blur-xl transition hover:bg-white/12 hover:text-white active:scale-[0.98]"
         >
           <SlidersHorizontal className="h-4 w-4" />
@@ -168,14 +162,7 @@ export const StockFilterDialog = ({
           )}
         </button>
       }
-      content={
-        <FilterForm
-          filters={filters}
-          brands={brands}
-          onApply={onApply}
-          onClose={() => setOpen(false)}
-        />
-      }
+      content={<FilterForm filters={filters} onApply={onApply} onClose={() => setOpen(false)} />}
     />
   );
 };

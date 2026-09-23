@@ -6,26 +6,20 @@ import { useState } from "react";
 
 const DIALOG_PORTAL_ID = "dialog-dropdown-portal";
 
-interface FilterOption {
+interface Option {
   label: string;
   value: string;
 }
 
-interface FilterMultiSelectProps {
+interface MultiSelectProps {
   label: string;
   placeholder: string;
-  options: FilterOption[];
+  options: Option[];
   value: string[];
   onChange: (value: string[]) => void;
 }
 
-export const FilterMultiSelect = ({
-  label,
-  placeholder,
-  options,
-  value,
-  onChange,
-}: FilterMultiSelectProps) => {
+export const MultiSelect = ({ label, placeholder, options, value, onChange }: MultiSelectProps) => {
   const [open, setOpen] = useState(false);
   const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null);
 
