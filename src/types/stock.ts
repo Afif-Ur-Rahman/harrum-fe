@@ -1,3 +1,5 @@
+import { Vendor } from "./vendors";
+
 export interface StockVariant {
   color: string;
   quantity: number;
@@ -5,7 +7,7 @@ export interface StockVariant {
 
 export interface StockHistory {
   _id: string;
-  vendor?: string;
+  vendor: Pick<Vendor, "_id" | "name" | "phone"> | string;
   purchasePrice: number;
   wholesalePrice: number;
   salePrice: number;
@@ -18,7 +20,7 @@ export interface Stock {
   _id: string;
   name: string;
   brand: string;
-  vendor?: string;
+  vendor: Pick<Vendor, "_id" | "name" | "phone"> | string;
   type: string;
   purchasePrice: number;
   wholesalePrice: number;

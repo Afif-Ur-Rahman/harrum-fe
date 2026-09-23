@@ -1,13 +1,14 @@
 "use client";
 
+import { Trash2 } from "lucide-react";
 import React from "react";
-import { useFormContext } from "react-hook-form";
 
+import { Table } from "@/components";
 import { Stock } from "@/types";
 
-import { ItemRow } from "./item-row";
+import { ItemCells } from "./item-cells";
 
-import { OrderFormType, OrderItemFormType } from "../../form";
+import { OrderItemFormType } from "../../form";
 
 interface ItemsTableProps {
   items: OrderItemFormType[];
@@ -16,34 +17,56 @@ interface ItemsTableProps {
 }
 
 export const ItemsTable: React.FC<ItemsTableProps> = ({ items, stocks, removeItem }) => {
-  useFormContext<OrderFormType>();
+  const columns = [
+    {
+      key: "name",
+      header: "Item",
+      align: "left" as const,
+      render: (row: OrderItemFormType) => (
+        <span className="font-semibold text-white">{row.name}</span>
+      ),
+    },
+    {
+      key: "price",
+      header: "Price",
+      className: "w-40",
+      render: (row: OrderItemFormType, index: number) => (
+        <ItemCells
+          item={row}
+          index={index}
+          stock={stocks.find(s => s._id === row.stockId)}
+          mode="price"
+        />
+      ),
+    },
+    {
+      key: "quantity",
+      header: "Quantity / Colors",
+      render: (row: OrderItemFormType, index: number) => (
+        <ItemCells
+          item={row}
+          index={index}
+          stock={stocks.find(s => s._id === row.stockId)}
+          mode="quantity"
+        />
+      ),
+    },
+    {
+      key: "actions",
+      header: "",
+      align: "right" as const,
+      render: (_: OrderItemFormType, index: number) => (
+        <button
+          type="button"
+          onClick={() => removeItem(index)}
+          className="flex h-8 w-8 items-center justify-center rounded-xl border border-red-300/20 bg-red-400/10 text-red-300 transition hover:bg-red-400/15 hover:text-red-200 active:scale-[0.98]"
+          aria-label="Remove item"
+        >
+          <Trash2 className="h-3.5 w-3.5" />
+        </button>
+      ),
+    },
+  ];
 
-  return (
-    <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/8 shadow-2xl shadow-black/20 backdrop-blur-xl">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.10),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(244,114,182,0.08),transparent_36%)]" />
-
-      <div className="relative">
-        <div className="border-b border-white/10 bg-white/8 px-3 py-2">
-          <p className="text-[10px] font-semibold tracking-widest text-slate-400 uppercase">
-            Order Items
-          </p>
-          <span />
-        </div>
-
-        <div className="columns-1 gap-2 p-2 sm:columns-2 lg:columns-3">
-          {items.map((item, idx) => (
-            <div key={item.stockId || idx} className="mb-2 break-inside-avoid">
-              <ItemRow
-                item={item}
-                index={idx}
-                stock={stocks.find(s => s._id === item.stockId)}
-                removeItem={removeItem}
-                showBorder={(idx + 1) % 3}
-              />
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+  return <Table title="Order Items" data={items} columns={columns} />;
 };

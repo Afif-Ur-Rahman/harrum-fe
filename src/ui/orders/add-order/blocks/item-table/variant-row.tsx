@@ -27,18 +27,18 @@ export const VariantRow = ({
   removeDisabled,
 }: VariantRowProps) => {
   return (
-    <div className="grid grid-cols-[1fr_auto_auto] items-center gap-3 bg-white/3 px-4 py-2 transition hover:bg-white/5">
-      <div className="col-span-1 min-w-0">
+    <div className="relative flex items-center gap-1.5 border-r-3 border-white/10 pr-3 last:border-r-0 last:pr-0">
+      <div className="w-fit min-w-48">
         <FormInput
           field={`items.${itemIndex}.variants.${variantIndex}.color`}
           type="select"
-          placeholder="Select color"
+          placeholder="Color"
           options={colorOptions}
           compact
         />
       </div>
 
-      <div className="w-24">
+      <div className="w-16">
         <FormInput
           field={`items.${itemIndex}.variants.${variantIndex}.quantity`}
           type="number"
@@ -48,17 +48,17 @@ export const VariantRow = ({
         />
       </div>
 
-      <div className="flex justify-end">
+      {!removeDisabled && (
         <button
           type="button"
           onClick={onRemove}
           disabled={removeDisabled}
-          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-xl border border-red-300/20 bg-white/5 text-red-300 transition hover:bg-red-400/10 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-30"
+          className="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full border border-red-300/30 bg-slate-950 text-red-300 shadow-sm transition hover:bg-red-400/20 disabled:cursor-not-allowed disabled:opacity-30"
           aria-label="Remove color"
         >
-          <X className="h-3 w-3" />
+          <X className="h-2.5 w-2.5" />
         </button>
-      </div>
+      )}
     </div>
   );
 };

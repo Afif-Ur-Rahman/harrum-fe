@@ -98,7 +98,7 @@ function Table<T>({ data, columns, isLoading, onRowClick, title, getRowClassName
                     <RadixTable.Cell
                       key={String(col.key)}
                       align={getAlign(colIndex, col)}
-                      className={`px-4! py-4! text-sm! text-slate-300! ${col.className || ""}`}
+                      className={`px-4! py-2! text-sm! text-slate-300! ${col.className || ""}`}
                     >
                       {col.render ? col.render(row, rowIndex) : String(row[col.key])}
                     </RadixTable.Cell>

@@ -194,11 +194,13 @@ const useStocks = () => {
       return;
     }
 
+    const vendor = typeof stock.vendor === "object" ? stock.vendor?.name : stock.vendor;
+
     append({
       _id: stock._id,
       name: stock.name || "",
       brand: stock.brand || "",
-      vendor: stock.vendor || "",
+      vendor: vendor || "",
       type: stock.type || "",
       size: stock.size || "meters",
       quantity: "",

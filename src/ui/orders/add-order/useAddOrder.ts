@@ -39,6 +39,17 @@ const useAddOrder = () => {
 
   const form = useOrderForm(initialValues);
 
+  const filteredStocks = useMemo(() => {
+    return stocks.map(stock => {
+      if (!stock.variants?.length) return stock;
+
+      return {
+        ...stock,
+        variants: stock.variants.filter(v => Number(v.quantity) > 0),
+      };
+    });
+  }, [stocks]);
+
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "items",
@@ -137,7 +148,7 @@ const useAddOrder = () => {
       hasVariants: true,
       variants: [
         {
-          color: stock.variants?.[0]?.color || "",
+          color: "",
           quantity: "",
           price: "0",
         },
@@ -180,7 +191,7 @@ const useAddOrder = () => {
   }, []);
 
   return {
-    stocks,
+    stocks: filteredStocks,
     stockOptions,
     salesmanOptions,
     form,
