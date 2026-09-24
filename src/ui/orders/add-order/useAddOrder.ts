@@ -42,14 +42,24 @@ const useAddOrder = () => {
   const form = useOrderForm(initialValues);
 
   const filteredStocks = useMemo(() => {
-    return stocks.map(stock => {
-      if (!stock.variants?.length) return stock;
+    return stocks
+      .map(stock => {
+        if (!stock.variants?.length) {
+          return Number(stock.quantity) > 0 ? stock : null;
+        }
 
-      return {
-        ...stock,
-        variants: stock.variants.filter(v => Number(v.quantity) > 0),
-      };
-    });
+        const availableVariants = stock.variants.filter(v => Number(v.quantity) > 0);
+
+        if (availableVariants.length === 0) {
+          return null;
+        }
+
+        return {
+          ...stock,
+          variants: availableVariants,
+        };
+      })
+      .filter((stock): stock is Stock => stock !== null);
   }, [stocks]);
 
   const { fields, append, remove } = useFieldArray({
@@ -74,12 +84,12 @@ const useAddOrder = () => {
   }, 0);
 
   const stockOptions = useMemo(() => {
-    return stocks.map(item => ({
+    return filteredStocks.map(item => ({
       value: item._id,
       label: `${item.name} - ${item.brand}`,
       stock: item,
     }));
-  }, [stocks]);
+  }, [filteredStocks]);
 
   const salesmanOptions = useMemo(() => {
     const allEmployees = [...(employees.salesman || []), ...(employees.accountant || [])];
