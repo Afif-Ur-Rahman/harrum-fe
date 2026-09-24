@@ -27,7 +27,7 @@ export const getAllOrders = async (params?: {
   }
 };
 
-export const createOrder = async (data: OrderFormType) => {
+export const createOrder = async (data: Omit<OrderFormType, "print">) => {
   try {
     const response = await serverAction({
       url: "/orders",

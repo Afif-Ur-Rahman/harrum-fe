@@ -10,6 +10,7 @@ export const orderItemSchema = z
   .object({
     stockId: z.string().min(1, "Item is required"),
     name: z.string().min(1),
+    size: z.string().optional(),
     priceType: z.enum(["purchase", "wholesale", "sale", "custom"]).default("sale"),
     hasVariants: z.boolean().default(true),
     quantity: z.string().optional(),
@@ -42,6 +43,7 @@ export const orderFormSchema = z.object({
   totalPrice: z.string(),
   discount: z.string().optional().default("0"),
   isPaid: z.boolean().default(true),
+  print: z.boolean().default(true),
   items: z.array(orderItemSchema).min(1, "At least one item is required"),
 });
 

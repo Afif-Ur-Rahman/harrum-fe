@@ -4,3 +4,4 @@ export * from "./formData";
 export * from "./guest-id";
 export * from "./price-format";
 export * from "./colors";
+export * from "./print-invoice";

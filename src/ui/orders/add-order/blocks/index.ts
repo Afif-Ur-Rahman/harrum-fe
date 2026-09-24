@@ -3,3 +3,4 @@ export * from "./item-table";
 export * from "./price-selector";
 export * from "./order-total";
 export * from "./paid-checkbox";
+export * from "./print-checkbox";

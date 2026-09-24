@@ -1,9 +1,9 @@
 "use client";
 
-import { User, Calendar, BadgeDollarSign } from "lucide-react";
+import { User, Calendar, BadgeDollarSign, Printer } from "lucide-react";
 
 import { Order } from "@/types";
-import { formatDateTime, formatPrice } from "@/utils";
+import { formatDateTime, formatPrice, printOrder } from "@/utils";
 
 import { ItemDetails } from "./item-details";
 
@@ -20,15 +20,27 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
           <span className="text-xs text-slate-400">{formatDateTime(order.createdAt, true)}</span>
         </div>
 
-        <span
-          className={`rounded-full px-2.5 py-1 text-[10px] font-semibold tracking-widest uppercase ${
-            order.isPaid
-              ? "bg-emerald-400/10 text-emerald-300 ring-1 ring-emerald-300/30 ring-inset"
-              : "bg-amber-400/10 text-amber-300 ring-1 ring-amber-300/30 ring-inset"
-          }`}
-        >
-          {order.isPaid ? "Paid" : "Unpaid"}
-        </span>
+        <div className="flex items-center gap-2">
+          <span
+            className={`rounded-full px-2.5 py-1 text-[10px] font-semibold tracking-widest uppercase ${
+              order.isPaid
+                ? "bg-emerald-400/10 text-emerald-300 ring-1 ring-emerald-300/30 ring-inset"
+                : "bg-amber-400/10 text-amber-300 ring-1 ring-amber-300/30 ring-inset"
+            }`}
+          >
+            {order.isPaid ? "Paid" : "Unpaid"}
+          </span>
+
+          <button
+            type="button"
+            onClick={() => printOrder(order)}
+            aria-label="Print invoice"
+            title="Print invoice"
+            className="flex h-7 w-7 items-center justify-center rounded-lg border border-white/10 bg-white/8 text-slate-300 transition hover:bg-white/12 hover:text-cyan-300 active:scale-[0.98]"
+          >
+            <Printer className="h-3.5 w-3.5" />
+          </button>
+        </div>
       </div>
 
       <div className="space-y-4 px-4 py-4">

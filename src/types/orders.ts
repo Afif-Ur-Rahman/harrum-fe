@@ -21,6 +21,7 @@ export interface OrderItem {
   name: string;
   priceType: "purchase" | "wholesale" | "sale" | "custom";
   quantity?: number;
+  size?: string;
   price?: number;
   isReturned?: boolean;
   variants: OrderVariant[];

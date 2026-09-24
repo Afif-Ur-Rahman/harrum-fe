@@ -10,7 +10,7 @@ import { CUSTOMER_FORM_FIELDS } from "./constants";
 
 import { OrderFormType } from ".";
 
-import { ItemSearch, ItemsTable, OrderTotal, PaidCheckbox } from "../blocks";
+import { ItemSearch, ItemsTable, OrderTotal, PaidCheckbox, PrintCheckbox } from "../blocks";
 
 interface StockOption {
   value: string;
@@ -101,6 +101,7 @@ export const OrderForm = ({
         <div className="flex flex-wrap items-center gap-5">
           <OrderTotal orderTotal={orderTotal} />
           <PaidCheckbox />
+          <PrintCheckbox />
         </div>
 
         <button

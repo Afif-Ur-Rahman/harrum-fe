@@ -9,6 +9,7 @@ import { getAllStocks } from "@/api/api-call/stock";
 import { usePersistStore } from "@/store/presistStore";
 import { Stock } from "@/types";
 import { NO_COLOR_VARIANT_TYPES } from "@/ui/stock/constants";
+import { printOrder } from "@/utils";
 import { showToast } from "@/utils/toast";
 
 import { useOrderForm, OrderFormType } from "./form";
@@ -34,6 +35,7 @@ const useAddOrder = () => {
     totalPrice: "0",
     discount: "0",
     isPaid: true,
+    print: true,
     items: [],
   };
 
@@ -132,6 +134,7 @@ const useAddOrder = () => {
       append({
         stockId: stock._id,
         name: `${stock.name} - ${stock.brand}`,
+        size: stock.size,
         priceType: "sale",
         hasVariants: false,
         quantity: "",
@@ -144,6 +147,7 @@ const useAddOrder = () => {
     append({
       stockId: stock._id,
       name: `${stock.name} - ${stock.brand}`,
+      size: stock.size,
       priceType: "sale",
       hasVariants: true,
       variants: [
@@ -163,7 +167,10 @@ const useAddOrder = () => {
   const onSubmitOrder = async (data: OrderFormType) => {
     setSubmitting(true);
 
-    const response = await createOrder(data);
+    // `print` is frontend-only, never sent to the backend
+    const { print, ...orderPayload } = data;
+
+    const response = await createOrder(orderPayload);
 
     if (response?.error || !response?.data) {
       showToast("error", response?.error || "Failed to create order");
@@ -177,9 +184,17 @@ const useAddOrder = () => {
 
     showToast("success", response.data.message || "Order created successfully");
 
+    if (print) {
+      printOrder(
+        response.data.data,
+        salesmanOptions.find(option => option.value === data.salesmanId)?.label,
+      );
+    }
+
     form.reset({
       ...initialValues,
       salesmanId: data.salesmanId,
+      print: data.print,
     });
 
     setSubmitting(false);
