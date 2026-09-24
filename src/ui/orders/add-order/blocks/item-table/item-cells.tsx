@@ -7,6 +7,7 @@ import { useFieldArray, useFormContext } from "react-hook-form";
 import { FormInput } from "@/components";
 import { Stock } from "@/types";
 import { NO_COLOR_VARIANT_TYPES } from "@/ui/stock/constants";
+import { formatPrice } from "@/utils";
 
 import { VariantRow } from "./variant-row";
 
@@ -18,7 +19,7 @@ interface ItemCellsProps {
   item: OrderItemFormType;
   index: number;
   stock?: Stock;
-  mode: "price" | "quantity";
+  mode: "price" | "quantity" | "total";
 }
 
 export const ItemCells = ({ index, stock, mode }: ItemCellsProps) => {
@@ -44,20 +45,26 @@ export const ItemCells = ({ index, stock, mode }: ItemCellsProps) => {
     ? itemQuantity
     : selectedVariants.map(v => v.quantity).join("|");
 
+  const unitPrice = getUnitPrice(stock, priceType, customPrice);
+
+  const totalPrice = unitPrice * totalQuantity;
+
   useEffect(() => {
     if (!isNoColorType) return;
-    const unitPrice = getUnitPrice(stock, priceType, customPrice);
-    const qty = Number(itemQuantity) || 0;
-    setValue(`items.${index}.price`, String(unitPrice * qty), { shouldDirty: true });
+
+    setValue(`items.${index}.price`, String(unitPrice * (Number(itemQuantity) || 0)), {
+      shouldDirty: true,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isNoColorType, quantitiesKey, priceType, customPrice, stock, index]);
 
   useEffect(() => {
     if (isNoColorType) return;
-    const unitPrice = getUnitPrice(stock, priceType, customPrice);
+
     selectedVariants.forEach((variant, variantIdx) => {
       const qty = Number(variant.quantity) || 0;
       const computedPrice = String(unitPrice * qty);
+
       if (variant.price !== computedPrice) {
         setValue(`items.${index}.variants.${variantIdx}.price`, computedPrice, {
           shouldDirty: true,
@@ -69,12 +76,14 @@ export const ItemCells = ({ index, stock, mode }: ItemCellsProps) => {
 
   const getColorOptions = (variantIdx: number) => {
     const currentColor = selectedVariants[variantIdx]?.color;
+
     return (
       stock?.variants
         ?.filter(variant => {
           const alreadyUsed = selectedVariants.some(
             (v, i) => i !== variantIdx && v.color === variant.color,
           );
+
           return !alreadyUsed || variant.color === currentColor;
         })
         .map(variant => ({
@@ -86,6 +95,7 @@ export const ItemCells = ({ index, stock, mode }: ItemCellsProps) => {
 
   const getMaxQuantity = (variantIdx: number) => {
     const color = selectedVariants[variantIdx]?.color;
+
     return stock?.variants?.find(v => v.color === color)?.quantity;
   };
 
@@ -98,15 +108,24 @@ export const ItemCells = ({ index, stock, mode }: ItemCellsProps) => {
         totalQuantity={totalQuantity}
         value={priceType}
         customPrice={customPrice}
-        onChange={value => setValue(`items.${index}.priceType`, value, { shouldValidate: true })}
+        onChange={value =>
+          setValue(`items.${index}.priceType`, value, {
+            shouldValidate: true,
+          })
+        }
         onCustomPriceChange={setCustomPrice}
+        display="unit"
       />
     );
   }
 
+  if (mode === "total") {
+    return <span className="font-semibold text-white">{formatPrice(totalPrice)}</span>;
+  }
+
   if (isNoColorType) {
     return (
-      <div className="flex w-full items-center gap-2">
+      <div className="flex items-center gap-2">
         <div className="flex w-66 justify-between gap-2">
           <div className="flex flex-1 items-center justify-between gap-2 text-slate-400">
             Quantity:
@@ -114,6 +133,7 @@ export const ItemCells = ({ index, stock, mode }: ItemCellsProps) => {
               {stock?.quantity} {stock?.size}
             </span>
           </div>
+
           <div className="w-16">
             <FormInput
               field={`items.${index}.quantity`}

@@ -1,7 +1,7 @@
 "use client";
 
 import * as Popover from "@radix-ui/react-popover";
-import { Check, BadgeDollarSign } from "lucide-react";
+import { BadgeDollarSign, Check } from "lucide-react";
 
 import { Stock } from "@/types";
 import { formatPrice } from "@/utils";
@@ -32,6 +32,7 @@ interface PriceSelectorProps {
   customPrice: string;
   onChange: (value: PriceType) => void;
   onCustomPriceChange: (value: string) => void;
+  display?: "unit" | "total";
 }
 
 export const PriceSelector = ({
@@ -41,18 +42,29 @@ export const PriceSelector = ({
   customPrice,
   onChange,
   onCustomPriceChange,
+  display = "total",
 }: PriceSelectorProps) => {
-  const total = getUnitPrice(stock, value, customPrice) * (totalQuantity || 0);
+  const unitPrice = getUnitPrice(stock, value, customPrice);
+  const total = unitPrice * (totalQuantity || 0);
 
   return (
     <Popover.Root>
       <Popover.Trigger asChild>
         <button
           type="button"
-          className="flex items-center gap-2 px-3 py-2 text-sm font-semibold text-white transition active:scale-[0.98]"
+          className="flex items-center gap-2 px-3 py-2 text-sm transition active:scale-[0.98]"
         >
-          <BadgeDollarSign className="h-3.5 w-3.5 text-cyan-300" />
-          <span>{formatPrice(total)}</span>
+          <BadgeDollarSign className="h-3.5 w-3.5 shrink-0 text-cyan-300" />
+
+          {display === "unit" ? (
+            <span className="flex items-center gap-1.5 whitespace-nowrap text-gray-300">
+              <span>
+                {formatPrice(unitPrice)}/{stock?.size?.replace(/s$/, "")}
+              </span>
+            </span>
+          ) : (
+            <span className="font-semibold">{formatPrice(total)}</span>
+          )}
         </button>
       </Popover.Trigger>
 
@@ -107,7 +119,9 @@ export const PriceSelector = ({
                       className="ml-auto max-w-24 min-w-6 rounded-lg border border-white/10 bg-white/8 px-2 py-1 text-right text-sm text-white outline-none placeholder:text-slate-500 focus:border-cyan-300/60"
                     />
                   ) : (
-                    <span className="font-semibold">{getUnitPrice(stock, option.value)}</span>
+                    <span className="font-semibold">
+                      {formatPrice(getUnitPrice(stock, option.value))}
+                    </span>
                   )}
                 </button>
               );

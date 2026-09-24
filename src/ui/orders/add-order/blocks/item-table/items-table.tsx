@@ -27,6 +27,19 @@ export const ItemsTable: React.FC<ItemsTableProps> = ({ items, stocks, removeIte
       ),
     },
     {
+      key: "quantity",
+      header: "Colors / Quantity",
+      align: "left" as const,
+      render: (row: OrderItemFormType, index: number) => (
+        <ItemCells
+          item={row}
+          index={index}
+          stock={stocks.find(s => s._id === row.stockId)}
+          mode="quantity"
+        />
+      ),
+    },
+    {
       key: "price",
       header: "Price",
       className: "w-40",
@@ -40,15 +53,15 @@ export const ItemsTable: React.FC<ItemsTableProps> = ({ items, stocks, removeIte
       ),
     },
     {
-      key: "quantity",
-      header: "Colors / Quantity",
-      align: "left" as const,
+      key: "total-price",
+      header: "Total Price",
+      className: "w-40",
       render: (row: OrderItemFormType, index: number) => (
         <ItemCells
           item={row}
           index={index}
           stock={stocks.find(s => s._id === row.stockId)}
-          mode="quantity"
+          mode="total"
         />
       ),
     },
