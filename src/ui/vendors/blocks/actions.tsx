@@ -14,8 +14,7 @@ import { useState } from "react";
 import { getAllBills, getAllReceipts } from "@/api/api-call";
 import { useNavigation } from "@/lib/useNavigation";
 import { Vendor } from "@/types";
-import { formatDateTime } from "@/utils";
-import { printStatement } from "@/utils/print-statement";
+import { formatDateTime, printStatement } from "@/utils";
 
 interface ActionsProps {
   vendor: Vendor;

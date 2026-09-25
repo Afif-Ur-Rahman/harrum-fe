@@ -8,8 +8,7 @@ import { getAllOrders, getAllReceipts } from "@/api/api-call";
 import { ReuseableDialog } from "@/components";
 import { Customer } from "@/types";
 import { ReceiptForm, ReceiptHistory } from "@/ui/receipts";
-import { formatDateTime } from "@/utils";
-import { printStatement } from "@/utils/print-statement";
+import { formatDateTime, printStatement } from "@/utils";
 
 import { CustomerOrders } from "./customer-orders";
 
