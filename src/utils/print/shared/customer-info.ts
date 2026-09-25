@@ -1,7 +1,7 @@
 import { escapeHtml, money } from "./helpers";
-import type { StatementData } from "../types";
+import { CustomerData } from "./types";
 
-export const CustomerInfo = (data: StatementData) => `
+export const CustomerInfo = (data: CustomerData) => `
   <div class="customer-box">
     <div class="field">
       <span class="lbl">${data.partyType}</span>

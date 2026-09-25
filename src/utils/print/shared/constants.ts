@@ -66,4 +66,4 @@ export const ICONS = {
   </svg>`,
 };
 
-export const STATEMENT_LOGO = "/app-logo.png";
+export const LOGO = "/app-logo.png";

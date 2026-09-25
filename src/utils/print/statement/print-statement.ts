@@ -1,5 +1,7 @@
-import { Html, StatementFileName } from "./blocks";
+import { StatementHtml } from "./html";
 import type { StatementData } from "./types";
+
+import { StatementFileName } from "../shared";
 
 export const printStatement = async (data: StatementData) => {
   if (typeof window === "undefined") return;
@@ -25,7 +27,7 @@ export const printStatement = async (data: StatementData) => {
   const fileName = StatementFileName(data.partyName, new Date());
 
   doc.open();
-  doc.write(Html(data));
+  doc.write(StatementHtml(data));
   doc.close();
 
   const images = Array.from(doc.images);

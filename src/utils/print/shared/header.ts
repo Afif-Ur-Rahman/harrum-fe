@@ -1,10 +1,10 @@
-import { CONTACT_INFO, CONTACT_LINKS, ICONS, STATEMENT_LOGO } from "../constants";
+import { CONTACT_INFO, CONTACT_LINKS, ICONS, LOGO } from "./constants";
 
 export const Header = (origin: string) => `
   <div class="header">
     <div class="logo">
       <img
-        src="${origin}${STATEMENT_LOGO}"
+        src="${origin}${LOGO}"
         alt="Harrum Cloth House"
       />
     </div>

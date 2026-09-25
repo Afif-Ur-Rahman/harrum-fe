@@ -1,5 +1,6 @@
-import { escapeHtml, money } from "./helpers";
 import type { StatementPayment } from "../types";
+
+import { escapeHtml, money } from "../../shared";
 
 export const PaymentsTable = (payments: StatementPayment[]) => {
   if (payments.length === 0) return "";

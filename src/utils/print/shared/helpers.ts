@@ -5,7 +5,7 @@ export const escapeHtml = (value: string) =>
 
 export const money = (value: number) => `${formatPrice(value)}/-`;
 
-export const buildFileNameSafeDate = (date: Date) => {
+export const FileNameSafeDate = (date: Date) => {
   const y = date.getFullYear();
   const m = String(date.getMonth() + 1).padStart(2, "0");
   const d = String(date.getDate()).padStart(2, "0");
@@ -19,7 +19,7 @@ export const StatementFileName = (partyName: string, date: Date) => {
     .replace(/[^a-zA-Z0-9\s-]/g, "")
     .replace(/\s+/g, "-");
 
-  return `Statement-${safeName}-${buildFileNameSafeDate(date)}`;
+  return `Statement-${safeName}-${FileNameSafeDate(date)}`;
 };
 
 export const getOrigin = () => (typeof window !== "undefined" ? window.location.origin : "");

@@ -1,5 +1,6 @@
-import { escapeHtml, money } from "./helpers";
 import type { StatementOrder } from "../types";
+
+import { escapeHtml, money } from "../../shared";
 
 export const OrdersTable = (orders: StatementOrder[]) => {
   if (orders.length === 0) return "";

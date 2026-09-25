@@ -1,13 +1,9 @@
-import { BillsTable } from "./bills-table";
-import { CustomerInfo } from "./customer-info";
-import { Header } from "./header";
-import { StatementFileName, getOrigin } from "./helpers";
-import { OrdersTable } from "./orders-table";
-import { PaymentsTable } from "./payments-table";
-import { STATEMENT_STYLES } from "./styles";
-import type { StatementData } from "../types";
+import { BillsTable, OrdersTable, PaymentsTable, STATEMENT_STYLES } from "./blocks";
+import type { StatementData } from "./types";
 
-export const Html = (data: StatementData) => {
+import { CustomerInfo, getOrigin, Header, StatementFileName } from "../shared";
+
+export const StatementHtml = (data: StatementData) => {
   const now = new Date();
 
   const generatedOn = now.toLocaleString("en-US", {
