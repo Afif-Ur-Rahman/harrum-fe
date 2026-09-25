@@ -64,7 +64,8 @@ export const InvoiceHtml = (data: InvoiceData) => {
       partyType: "Customer",
       partyName: data.customerName,
       phone: data.phone,
-      remainingAmount: 0,
+      email: data.email,
+      date: data.date,
     })}
 
     ${InvoiceItemsTable(data.items)}

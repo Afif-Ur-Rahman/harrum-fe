@@ -1,4 +1,5 @@
 import { Order } from "@/types";
+import { formatDateTime } from "@/utils";
 
 import { InvoiceHtml } from "./html";
 import { InvoiceItems } from "./items";
@@ -50,25 +51,6 @@ export const printInvoice = async (data: InvoiceData) => {
     new Promise<void>(resolve => setTimeout(resolve, 2000)),
   ]);
 
-  const invoice = doc.querySelector<HTMLElement>(".invoice");
-
-  if (invoice) {
-    const heightMm = Math.ceil(invoice.offsetHeight * (210 / 1210)) + 1;
-
-    const pageStyle = doc.createElement("style");
-
-    pageStyle.textContent = `
-      @page {
-        size: 210mm ${heightMm}mm;
-        margin: 0;
-      }
-    `;
-
-    doc.head.appendChild(pageStyle);
-
-    invoice.style.zoom = "0.656";
-  }
-
   iframe.contentWindow?.focus();
   iframe.contentWindow?.print();
 
@@ -87,7 +69,8 @@ export const printOrder = (order: Order, salesmanName?: string) => {
     customerName: order.customerName,
     orderId: order._id,
     phone: order.phone,
-    date: new Date(order.createdAt),
+    email: order.email || "-",
+    date: formatDateTime(order.createdAt, true),
     items,
     total,
     discount: order.discount,

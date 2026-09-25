@@ -69,7 +69,7 @@ export const Actions: React.FC<ActionsProps> = ({ customer, onEdit, onCustomerUp
       partyType: "Customer",
       partyName: customer.name,
       phone: customer.phone,
-      email: customer.email,
+      email: customer.email || "-",
       remainingAmount: customer.remainingAmount,
       payments,
       orders,

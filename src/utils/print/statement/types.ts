@@ -30,7 +30,7 @@ export interface StatementData {
   partyType: "Customer" | "Vendor";
   partyName: string;
   phone: string;
-  email?: string;
+  email: string;
   remainingAmount: number;
   payments: StatementPayment[];
   orders?: StatementOrder[];

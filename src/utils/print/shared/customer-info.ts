@@ -13,20 +13,27 @@ export const CustomerInfo = (data: CustomerData) => `
       <span class="val">${escapeHtml(data.phone)}</span>
     </div>
 
+    <div class="field">
+      <span class="lbl">Email</span>
+      <span class="val">${escapeHtml(data.email)}</span>
+    </div>
+
     ${
-      data.email
-        ? `
-          <div class="field">
-            <span class="lbl">Email</span>
-            <span class="val">${escapeHtml(data.email)}</span>
-          </div>
-        `
+      data.remainingAmount != null
+        ? `<div class="field balance">
+            <span class="lbl">Remaining Balance</span>
+            <span class="val">${money(data.remainingAmount)}</span>
+          </div>`
         : ""
     }
 
-    <div class="field balance">
-      <span class="lbl">Remaining Balance</span>
-      <span class="val">${money(data.remainingAmount)}</span>
-    </div>
+    ${
+      data.date
+        ? `<div class="field">
+            <span class="lbl">Date</span>
+            <span class="val">${escapeHtml(data.date)}</span>
+          </div>`
+        : ""
+    }
   </div>
 `;

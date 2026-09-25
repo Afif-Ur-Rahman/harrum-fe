@@ -12,6 +12,8 @@ export interface InvoiceData {
   customerName: string;
   orderId: string;
   phone: string;
+  date: string;
+  email: string;
   items: InvoiceItem[];
   total: number;
   discount: number;
