@@ -71,7 +71,7 @@ export const Actions: React.FC<ActionsProps> = ({
       partyType: "Vendor",
       partyName: vendor.name,
       phone: vendor.phone,
-      email: vendor.email,
+      email: vendor.email || "-",
       remainingAmount: vendor.remainingAmount,
       payments,
       bills,
