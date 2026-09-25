@@ -34,15 +34,17 @@ const OnboardingLayout: React.FC<OnboardingProps> = ({
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.68)_0%,rgba(15,23,42,0.60)_45%,rgba(2,6,23,0.88)_100%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.20),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(244,114,182,0.18),transparent_38%)]" />
 
-          <div className="relative z-10 flex h-full flex-col justify-between p-7 lg:p-10">
-            <Image
-              src="/app-logo.png"
-              alt="Harrum Cloth House"
-              width={1162}
-              height={982}
-              className="w-50 object-contain"
-              priority
-            />
+          <div className="relative z-10 flex h-full flex-col p-7 lg:justify-between lg:p-10">
+            <div className="flex flex-1 items-center justify-center lg:flex-none lg:justify-start">
+              <Image
+                src="/app-logo.png"
+                alt="Harrum Cloth House"
+                width={1162}
+                height={982}
+                className="w-50 object-contain"
+                priority
+              />
+            </div>
 
             <div className="hidden lg:block">
               <p className="mb-3 text-xs font-medium tracking-[0.2em] text-cyan-300 uppercase">
@@ -61,12 +63,6 @@ const OnboardingLayout: React.FC<OnboardingProps> = ({
                 A complete suite for managing your clothing store — from products and orders to
                 inventory and analytics.
               </p>
-            </div>
-
-            <div className="lg:hidden">
-              {heading && <p className="text-2xl font-bold text-white">{heading}</p>}
-
-              {text && <p className="mt-1 text-sm text-slate-300">{text}</p>}
             </div>
           </div>
         </div>
