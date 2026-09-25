@@ -1,11 +1,11 @@
 "use client";
 
 import { Flex } from "@radix-ui/themes";
-import { Eye } from "lucide-react";
+import { Eye, Printer } from "lucide-react";
 
 import { ReuseableDialog, Table } from "@/components";
 import { Order } from "@/types";
-import { formatDateTime, formatPrice } from "@/utils";
+import { formatDateTime, formatPrice, printOrder } from "@/utils";
 
 import { OrderDetails } from "./order-details";
 
@@ -100,6 +100,16 @@ export const OrdersTable: React.FC<OrdersTableProps> = ({
       header: "Actions",
       render: (row: Order) => (
         <Flex justify="end" align="center" gap="2">
+          <button
+            type="button"
+            onClick={() => printOrder(row)}
+            aria-label="Print invoice"
+            title="Print invoice"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-white/8 text-slate-300 transition hover:bg-white/12 hover:text-cyan-300 active:scale-[0.98]"
+          >
+            <Printer className="h-3.5 w-3.5" />
+          </button>
+
           <ReuseableDialog
             title={`Order — ${row.customerName}`}
             triggerButton={

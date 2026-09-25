@@ -1,12 +1,15 @@
 "use client";
 
 import { DropdownMenu } from "@radix-ui/themes";
-import { MoreVertical, Pen, Wallet, Receipt as ReceiptIcon, Eye } from "lucide-react";
+import { MoreVertical, Pen, Wallet, Receipt as ReceiptIcon, Eye, FileBarChart } from "lucide-react";
 import { useState } from "react";
 
+import { getAllOrders, getAllReceipts } from "@/api/api-call";
 import { ReuseableDialog } from "@/components";
 import { Customer } from "@/types";
 import { ReceiptForm, ReceiptHistory } from "@/ui/receipts";
+import { formatDateTime } from "@/utils";
+import { printStatement } from "@/utils/print-statement";
 
 import { CustomerOrders } from "./customer-orders";
 
@@ -28,8 +31,52 @@ export const Actions: React.FC<ActionsProps> = ({ customer, onEdit, onCustomerUp
   const [paymentOpen, setPaymentOpen] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [ordersOpen, setOrdersOpen] = useState(false);
+  const [printing, setPrinting] = useState(false);
 
   const hasBalance = customer.remainingAmount > 0;
+
+  const handlePrintStatement = async () => {
+    setPrinting(true);
+
+    const [receiptsRes, ordersRes] = await Promise.all([
+      getAllReceipts({ party: customer._id, type: "Customer", limit: 500 }),
+      getAllOrders({ customerId: customer._id, limit: 500 }),
+    ]);
+
+    const payments = (receiptsRes?.data?.data?.receipts || []).map(r => ({
+      date: formatDateTime(r.createdAt, true),
+      amount: r.amount,
+      method: r.paymentMethod,
+      note: r.note,
+    }));
+
+    const orders = (ordersRes?.data?.data?.orders || []).map(o => ({
+      orderId: o._id,
+      date: formatDateTime(o.createdAt, true),
+      items: o.items.flatMap(item =>
+        item.variants?.length
+          ? item.variants.map(v => ({
+              name: `${item.name} (${v.color})`,
+              quantity: `${v.quantity} pcs`,
+            }))
+          : [{ name: item.name, quantity: `${item.quantity ?? 0} ${item.size ?? ""}`.trim() }],
+      ),
+      discount: o.discount,
+      total: o.totalPrice,
+      isPaid: o.isPaid,
+    }));
+
+    await printStatement({
+      customerName: customer.name,
+      phone: customer.phone,
+      email: customer.email,
+      remainingAmount: customer.remainingAmount,
+      payments,
+      orders,
+    });
+
+    setPrinting(false);
+  };
 
   const actionButtons: ActionButton[] = [
     {
@@ -59,6 +106,13 @@ export const Actions: React.FC<ActionsProps> = ({ customer, onEdit, onCustomerUp
       disabled: false,
       onSelect: () => setOrdersOpen(true),
       hoverClass: "data-highlighted:bg-cyan-400/20! data-highlighted:text-cyan-200!",
+    },
+    {
+      label: "Print Statement",
+      icon: FileBarChart,
+      disabled: printing,
+      onSelect: handlePrintStatement,
+      hoverClass: "data-highlighted:bg-fuchsia-400/20! data-highlighted:text-fuchsia-200!",
     },
   ];
 
