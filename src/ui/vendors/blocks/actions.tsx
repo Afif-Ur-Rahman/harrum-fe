@@ -1,10 +1,21 @@
 "use client";
 
 import { DropdownMenu } from "@radix-ui/themes";
-import { MoreVertical, Pen, Wallet, Receipt as ReceiptIcon, PackageSearch } from "lucide-react";
+import {
+  MoreVertical,
+  Pen,
+  Wallet,
+  Receipt as ReceiptIcon,
+  PackageSearch,
+  FileBarChart,
+} from "lucide-react";
+import { useState } from "react";
 
+import { getAllBills, getAllReceipts } from "@/api/api-call";
 import { useNavigation } from "@/lib/useNavigation";
 import { Vendor } from "@/types";
+import { formatDateTime } from "@/utils";
+import { printStatement } from "@/utils/print-statement";
 
 interface ActionsProps {
   vendor: Vendor;
@@ -28,10 +39,46 @@ export const Actions: React.FC<ActionsProps> = ({
   onPaymentHistory,
 }) => {
   const router = useNavigation();
+  const [printing, setPrinting] = useState(false);
   const hasBalance = vendor.remainingAmount > 0;
 
   const stopPropagation = (e: React.SyntheticEvent) => {
     e.stopPropagation();
+  };
+
+  const handlePrintStatement = async () => {
+    setPrinting(true);
+
+    const [receiptsRes, billsRes] = await Promise.all([
+      getAllReceipts({ party: vendor._id, type: "Vendor", limit: 500 }),
+      getAllBills(vendor._id),
+    ]);
+
+    const payments = (receiptsRes?.data?.data?.receipts || []).map(r => ({
+      date: formatDateTime(r.createdAt, true),
+      amount: r.amount,
+      method: r.paymentMethod,
+      note: r.note,
+    }));
+
+    const bills = (billsRes?.data?.data || []).map(b => ({
+      billId: b.billId,
+      date: formatDateTime(b.createdAt, true),
+      note: b.note,
+      amount: b.amount,
+    }));
+
+    await printStatement({
+      partyType: "Vendor",
+      partyName: vendor.name,
+      phone: vendor.phone,
+      email: vendor.email,
+      remainingAmount: vendor.remainingAmount,
+      payments,
+      bills,
+    });
+
+    setPrinting(false);
   };
 
   const actionButtons: ActionButton[] = [
@@ -61,6 +108,13 @@ export const Actions: React.FC<ActionsProps> = ({
       icon: PackageSearch,
       disabled: false,
       onSelect: () => router.push(`/super-admin/vendors/${vendor._id}/stocks`),
+      hoverClass: "data-highlighted:bg-fuchsia-400/20! data-highlighted:text-fuchsia-200!",
+    },
+    {
+      label: "Print Statement",
+      icon: FileBarChart,
+      disabled: printing,
+      onSelect: handlePrintStatement,
       hoverClass: "data-highlighted:bg-fuchsia-400/20! data-highlighted:text-fuchsia-200!",
     },
   ];

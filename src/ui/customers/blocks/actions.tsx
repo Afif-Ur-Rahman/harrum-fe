@@ -67,7 +67,8 @@ export const Actions: React.FC<ActionsProps> = ({ customer, onEdit, onCustomerUp
     }));
 
     await printStatement({
-      customerName: customer.name,
+      partyType: "Customer",
+      partyName: customer.name,
       phone: customer.phone,
       email: customer.email,
       remainingAmount: customer.remainingAmount,

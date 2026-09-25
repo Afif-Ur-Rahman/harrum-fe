@@ -21,14 +21,41 @@ export interface StatementOrder {
   isPaid: boolean;
 }
 
+export interface StatementBill {
+  billId: string;
+  date: string;
+  note?: string;
+  amount: number;
+}
+
 export interface StatementData {
-  customerName: string;
+  partyType: "Customer" | "Vendor";
+  partyName: string;
   phone: string;
   email?: string;
   remainingAmount: number;
   payments: StatementPayment[];
-  orders: StatementOrder[];
+  orders?: StatementOrder[];
+  bills?: StatementBill[];
 }
+
+const origin = typeof window !== "undefined" ? window.location.origin : "";
+
+const PHONE_NUMBER = "0333-9072225";
+const FACEBOOK_HANDLE = "Harrum Cloth House";
+const GMAIL_ADDRESS = "Harrumcloth@gmail.com";
+
+const toIntlPhone = (phone: string) => {
+  const digits = phone.replace(/\D/g, "");
+  return digits.startsWith("0") ? `92${digits.slice(1)}` : digits;
+};
+
+const CONTACT_LINKS = {
+  phone: `tel:+${toIntlPhone(PHONE_NUMBER)}`,
+  whatsapp: `https://wa.me/${toIntlPhone(PHONE_NUMBER)}`,
+  facebook: `https://facebook.com/profile.php?id=100071621821943`,
+  gmail: `mailto:${GMAIL_ADDRESS}`,
+};
 
 const escapeHtml = (value: string) =>
   value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -43,6 +70,22 @@ const ICONS = {
   whatsapp: `<svg viewBox="0 0 24 24" width="26" height="26"><rect width="24" height="24" rx="5" fill="#25d366"/><path d="M12 4a8 8 0 0 0-6.9 12L4 20l4.1-1.1A8 8 0 1 0 12 4z" fill="none" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/><g transform="translate(7.3 7.3) scale(0.4)"><path d="${HANDSET_PATH}" fill="#fff"/></g></svg>`,
   facebook: `<svg viewBox="0 0 24 24" width="26" height="26"><rect width="24" height="24" rx="5" fill="#1877f2"/><path d="M13.5 20v-6.5h2.3l.4-2.7h-2.7V9.2c0-.8.3-1.3 1.4-1.3h1.4V5.5c-.3 0-1.1-.1-2.1-.1-2.1 0-3.4 1.3-3.4 3.500v1.800H8.500v2.700h2.300V20h2.700z" fill="#fff"/></svg>`,
   gmail: `<svg viewBox="0 0 24 24" width="26" height="26"><path d="M3 19V7l9 7 9-7v12" fill="none" stroke="#d93025" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/></svg>`,
+};
+
+const buildFileNameSafeDate = (date: Date) => {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+};
+
+const buildStatementFileName = (partyName: string, date: Date) => {
+  const safeName = partyName
+    .trim()
+    .replace(/[^a-zA-Z0-9\s-]/g, "")
+    .replace(/\s+/g, "-");
+
+  return `Statement-${safeName}-${buildFileNameSafeDate(date)}`;
 };
 
 const buildPaymentsTable = (payments: StatementPayment[]) => {
@@ -135,7 +178,50 @@ const buildOrdersTable = (orders: StatementOrder[]) => {
     </div>`;
 };
 
+const buildBillsTable = (bills: StatementBill[]) => {
+  if (bills.length === 0) return "";
+
+  const rows = bills
+    .map(
+      (b, i) => `
+      <tr>
+        <td class="idx">${i + 1}</td>
+        <td>${escapeHtml(b.billId)}</td>
+        <td>${escapeHtml(b.date)}</td>
+        <td>${b.note ? escapeHtml(b.note) : "-"}</td>
+        <td class="num">${money(b.amount)}</td>
+      </tr>`,
+    )
+    .join("");
+
+  const total = bills.reduce((sum, b) => sum + b.amount, 0);
+
+  const totalRow = `
+      <tr class="total-row">
+        <td colspan="4" class="label">Total Billed</td>
+        <td class="num total">${money(total)}</td>
+      </tr>`;
+
+  return `
+    <div class="section">
+      <div class="section-title">Bill History</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th class="idx">#</th>
+            <th>Bill ID</th>
+            <th>Date</th>
+            <th>Note</th>
+            <th class="num">Amount</th>
+          </tr>
+        </thead>
+        <tbody>${rows}${totalRow}</tbody>
+      </table>
+    </div>`;
+};
+
 const buildHtml = (data: StatementData) => {
+  const now = new Date();
   const generatedOn = new Date().toLocaleString("en-US", {
     day: "2-digit",
     month: "short",
@@ -145,17 +231,28 @@ const buildHtml = (data: StatementData) => {
     hour12: true,
   });
 
+  const fileName = buildStatementFileName(data.partyName, now);
+
+  const secondaryHtml =
+    data.partyType === "Vendor"
+      ? buildBillsTable(data.bills || [])
+      : buildOrdersTable(data.orders || []);
+
+  const hasSecondary =
+    data.partyType === "Vendor" ? (data.bills?.length ?? 0) > 0 : (data.orders?.length ?? 0) > 0;
+
   return `<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8" />
-<title>Account Statement - ${escapeHtml(data.customerName)}</title>
+<title>${fileName}</title>
 <style>
   @page { size: A4; margin: 6mm 12mm 14mm; }
   * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   html, body { margin: 0; padding: 0; background: #fff; font-family: Arial, Helvetica, sans-serif; color: #111; }
 
-  .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #ed1c24; padding-bottom: 12px; }  .logo img { height: auto; width: 200px; display: block; }
+  .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #ed1c24; padding-bottom: 12px; }
+  .logo img { height: auto; width: 200px; display: block; }
   .contacts {
     display: grid;
     grid-template-columns: repeat(2, auto);
@@ -163,7 +260,8 @@ const buildHtml = (data: StatementData) => {
     align-items: center;
     justify-content: end;
   }
-  .contact { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 13px; white-space: nowrap; }
+  .contact { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 13px; white-space: nowrap; text-decoration: none; color: inherit; }
+  .contact:hover { opacity: 0.8; }
   .contact svg { flex-shrink: 0; }
 
   .title-row { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 18px; }
@@ -209,10 +307,10 @@ const buildHtml = (data: StatementData) => {
   <div class="header">
     <div class="logo"><img src="${origin}/app-logo.png" alt="Harrum Cloth House" /></div>
     <div class="contacts">
-      <div class="contact">${ICONS.phone}<span>0333-9072225</span></div>
-      <div class="contact">${ICONS.whatsapp}<span>0333-9072225</span></div>
-      <div class="contact">${ICONS.facebook}<span>/Harrumclothhouse</span></div>
-      <div class="contact">${ICONS.gmail}<span>Harrumcloth@gmail.com</span></div>
+      <a class="contact" href="${CONTACT_LINKS.phone}">${ICONS.phone}<span>${PHONE_NUMBER}</span></a>
+      <a class="contact" href="${CONTACT_LINKS.whatsapp}" target="_blank" rel="noopener noreferrer">${ICONS.whatsapp}<span>${PHONE_NUMBER}</span></a>
+      <a class="contact" href="${CONTACT_LINKS.facebook}" target="_blank" rel="noopener noreferrer">${ICONS.facebook}<span>${FACEBOOK_HANDLE}</span></a>
+      <a class="contact" href="${CONTACT_LINKS.gmail}">${ICONS.gmail}<span>${GMAIL_ADDRESS}</span></a>
     </div>
   </div>
 
@@ -223,8 +321,8 @@ const buildHtml = (data: StatementData) => {
 
   <div class="customer-box">
     <div class="field">
-      <span class="lbl">Customer</span>
-      <span class="val">${escapeHtml(data.customerName)}</span>
+      <span class="lbl">${data.partyType}</span>
+      <span class="val">${escapeHtml(data.partyName)}</span>
     </div>
     <div class="field">
       <span class="lbl">Phone</span>
@@ -242,11 +340,13 @@ const buildHtml = (data: StatementData) => {
   </div>
 
   ${buildPaymentsTable(data.payments)}
-  ${buildOrdersTable(data.orders)}
+  ${secondaryHtml}
 
   ${
-    data.payments.length === 0 && data.orders.length === 0
-      ? `<div class="no-data">No payments or orders found for this customer.</div>`
+    data.payments.length === 0 && !hasSecondary
+      ? `<div class="no-data">No payments or ${
+          data.partyType === "Vendor" ? "bills" : "orders"
+        } found for this ${data.partyType.toLowerCase()}.</div>`
       : ""
   }
 
@@ -273,6 +373,8 @@ export const printStatement = async (data: StatementData) => {
     return;
   }
 
+  const fileName = buildStatementFileName(data.partyName, new Date());
+
   doc.open();
   doc.write(buildHtml(data));
   doc.close();
@@ -292,10 +394,20 @@ export const printStatement = async (data: StatementData) => {
     new Promise<void>(resolve => setTimeout(resolve, 2000)),
   ]);
 
+  const originalTitle = document.title;
+  document.title = fileName;
+
   iframe.contentWindow?.focus();
   iframe.contentWindow?.print();
 
+  const restoreTitle = () => {
+    document.title = originalTitle;
+    iframe.contentWindow?.removeEventListener("afterprint", restoreTitle);
+  };
+  iframe.contentWindow?.addEventListener("afterprint", restoreTitle);
+
   setTimeout(() => {
     if (iframe.parentNode) document.body.removeChild(iframe);
-  }, 1000);
+    document.title = originalTitle;
+  }, 1500);
 };
