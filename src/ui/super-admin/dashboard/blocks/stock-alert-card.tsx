@@ -1,7 +1,6 @@
 import { TriangleAlert } from "lucide-react";
 
-import { stockAlerts } from "../data";
-import { getStatusStyles } from "../utils";
+import { getStatusStyles, stockAlerts } from "../constants";
 
 export const StockAlertCard = () => {
   return (

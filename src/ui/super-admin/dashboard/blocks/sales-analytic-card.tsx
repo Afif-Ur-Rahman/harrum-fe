@@ -1,4 +1,4 @@
-import { salesBars } from "../data";
+import { salesBars } from "../constants";
 
 export const SalesAnalyticsCard = () => {
   return (

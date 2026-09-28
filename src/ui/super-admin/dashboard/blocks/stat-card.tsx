@@ -1,6 +1,6 @@
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 
-import type { StatItem } from "../types";
+import { StatItem } from "@/types";
 
 interface StatCardProps {
   item: StatItem;

@@ -1,6 +1,6 @@
 import { PackageCheck } from "lucide-react";
 
-import { productColors, topProducts } from "../data";
+import { productColors, topProducts } from "../constants";
 
 export const ProductMixCard = () => {
   return (

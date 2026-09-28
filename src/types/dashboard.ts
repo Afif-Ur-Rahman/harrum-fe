@@ -1,21 +1,60 @@
-export interface Chart {
-  categories: string[];
-  series: { name: string; data: number[] }[];
+import type { ElementType } from "react";
+
+export type Trend = "up" | "down";
+
+export type StatKey = "revenue" | "salesReturn" | "expenses" | "netIncome";
+
+export interface DashboardStat {
+  key: StatKey;
+  title: string;
+  value: string;
+  change: string;
+  trend: Trend;
+  subtitle: string;
 }
 
-export interface DashboardResponse {
+export interface DashboardStatsResponse {
   message: string;
   data: {
-    totalOrdersPrice: number;
-    pendingOrdersPrice: number;
-    totalOrdersCount: number;
-    chart: Chart | null;
-    recentOrders: any[];
+    stats: DashboardStat[];
   };
 }
 
-export interface ResponseForDashboard {
+export interface ResponseForDashboardStats {
   state: boolean;
-  data?: DashboardResponse;
+  data?: DashboardStatsResponse;
   error?: string;
+}
+
+export interface StatItem {
+  title: string;
+  value: string;
+  change: string;
+  trend: Trend;
+  subtitle: string;
+  icon: ElementType;
+  accent: string;
+  glow: string;
+  invertTrendColor?: boolean;
+}
+
+export interface SalesBarItem {
+  label: string;
+  purchase: number;
+  income: number;
+}
+
+export interface StockAlertItem {
+  id: string;
+  date: string;
+  quantity: string;
+  threshold: string;
+  status: "Critical" | "Low" | "Moderate";
+}
+
+export interface TopProductItem {
+  name: string;
+  orders: number;
+  revenue: string;
+  share: number;
 }

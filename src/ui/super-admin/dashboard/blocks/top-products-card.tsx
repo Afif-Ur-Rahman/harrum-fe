@@ -1,4 +1,4 @@
-import { topProducts } from "../data";
+import { topProducts } from "../constants";
 
 export const TopProductsCard = () => {
   return (
