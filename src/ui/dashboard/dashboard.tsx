@@ -13,11 +13,15 @@ import { statStyles } from "./constants";
 import { useDashboard } from "./useDashboard";
 
 export const SuperAdminDashboard = () => {
-  const { stats, statsLoading } = useDashboard();
+  const { stats, hero, statsLoading } = useDashboard();
 
   return (
     <PageLayout>
-      <DashboardHero />
+      <DashboardHero
+        totalOrders={hero.totalOrders}
+        orderGrowth={hero.orderGrowth}
+        loading={statsLoading}
+      />
 
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 2xl:grid-cols-4">
         {statsLoading
@@ -37,7 +41,7 @@ export const SuperAdminDashboard = () => {
         <ProductMixCard />
       </section>
 
-      <section className="">
+      <section>
         <SalesAnalyticsCard />
       </section>
     </PageLayout>

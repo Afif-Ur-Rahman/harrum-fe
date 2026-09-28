@@ -11,8 +11,13 @@ export const useDashboard = () => {
     { value: "Current Month", label: "Current Month" },
     { value: "custom", label: "Custom" },
   ];
+
   const [selectedStatus, setSelectedStatus] = useState("Current Month");
   const [stats, setStats] = useState<DashboardStat[]>([]);
+  const [hero, setHero] = useState({
+    totalOrders: 0,
+    orderGrowth: 0,
+  });
   const [statsLoading, setStatsLoading] = useState(true);
 
   useEffect(() => {
@@ -27,7 +32,16 @@ export const useDashboard = () => {
         return;
       }
 
-      setStats(res?.data?.data?.stats || []);
+      const data = res?.data?.data;
+
+      setStats(data?.stats || []);
+      setHero(
+        data?.hero || {
+          totalOrders: 0,
+          orderGrowth: 0,
+        },
+      );
+
       setStatsLoading(false);
     };
 
@@ -39,6 +53,7 @@ export const useDashboard = () => {
     selectedStatus,
     setSelectedStatus,
     stats,
+    hero,
     statsLoading,
   };
 };

@@ -1,27 +1,31 @@
 import { Sparkles } from "lucide-react";
 
-const heroStats = [
-  {
-    label: "Live Orders",
-    value: "1,284",
-    valueClassName: "text-white",
-    className: "bg-black/20",
-  },
-  {
-    label: "Pending Alerts",
-    value: "16",
-    valueClassName: "text-amber-300",
-    className: "bg-black/20",
-  },
-  {
-    label: "Growth Score",
-    value: "92%",
-    valueClassName: "text-white",
-    className: "col-span-2 bg-linear-to-r from-cyan-500/20 to-fuchsia-500/20 sm:col-span-1",
-  },
-];
+interface DashboardHeroProps {
+  totalOrders: number;
+  orderGrowth: number;
+  loading?: boolean;
+}
 
-export const DashboardHero = () => {
+export const DashboardHero = ({
+  totalOrders,
+  orderGrowth,
+  loading = false,
+}: DashboardHeroProps) => {
+  const heroStats = [
+    {
+      label: "Total Orders",
+      value: totalOrders.toLocaleString(),
+      valueClassName: "text-white",
+      className: "bg-black/20",
+    },
+    {
+      label: "Order Growth",
+      value: `${orderGrowth >= 0 ? "+" : ""}${orderGrowth.toFixed(1)}%`,
+      valueClassName: orderGrowth >= 0 ? "text-emerald-300" : "text-rose-300",
+      className: "col-span-2 bg-linear-to-r from-cyan-500/20 to-fuchsia-500/20 sm:col-span-1",
+    },
+  ];
+
   return (
     <section className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/8 p-5 shadow-2xl shadow-black/30 backdrop-blur-xl sm:p-6">
       <div className="absolute inset-y-0 right-0 hidden w-1/2 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.12),transparent_55%)] lg:block" />
@@ -41,18 +45,26 @@ export const DashboardHero = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:min-w-105">
-          {heroStats.map(item => (
-            <div
-              key={item.label}
-              className={`rounded-2xl border border-white/10 p-4 ${item.className}`}
-            >
-              <p className="mb-1 text-xs font-semibold tracking-widest text-slate-400 uppercase">
-                {item.label}
-              </p>
-              <p className={`text-2xl font-bold ${item.valueClassName}`}>{item.value}</p>
-            </div>
-          ))}
+        <div className="grid grid-cols-2 gap-3">
+          {loading
+            ? Array.from({ length: 2 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="h-22 w-32 animate-pulse rounded-2xl border border-white/10 bg-white/5"
+                />
+              ))
+            : heroStats.map(item => (
+                <div
+                  key={item.label}
+                  className={`rounded-2xl border border-white/10 p-4 ${item.className}`}
+                >
+                  <p className="mb-1 text-xs font-semibold tracking-widest text-slate-400 uppercase">
+                    {item.label}
+                  </p>
+
+                  <p className={`text-2xl font-bold ${item.valueClassName}`}>{item.value}</p>
+                </div>
+              ))}
         </div>
       </div>
     </section>

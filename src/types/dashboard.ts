@@ -4,6 +4,11 @@ export type Trend = "up" | "down";
 
 export type StatKey = "revenue" | "salesReturn" | "expenses" | "netIncome";
 
+export interface DashboardHero {
+  totalOrders: number;
+  orderGrowth: number;
+}
+
 export interface DashboardStat {
   key: StatKey;
   title: string;
@@ -16,6 +21,7 @@ export interface DashboardStat {
 export interface DashboardStatsResponse {
   message: string;
   data: {
+    hero: DashboardHero;
     stats: DashboardStat[];
   };
 }
