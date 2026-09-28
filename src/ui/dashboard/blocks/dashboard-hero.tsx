@@ -16,7 +16,7 @@ export const DashboardHero = ({
       label: "Total Orders",
       value: totalOrders.toLocaleString(),
       valueClassName: "text-white",
-      className: "bg-black/20",
+      className: "col-span-2 bg-black/20 sm:col-span-1",
     },
     {
       label: "Order Growth",

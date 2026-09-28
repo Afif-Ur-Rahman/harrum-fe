@@ -1,87 +1,93 @@
-import { TriangleAlert } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
 
-import { getStatusStyles, stockAlerts } from "../constants";
+import { StockAlertItem } from "@/types";
 
-export const StockAlertCard = () => {
+interface StockAlertCardProps {
+  alerts: StockAlertItem[];
+  loading?: boolean;
+}
+
+export const StockAlertCard = ({ alerts, loading = false }: StockAlertCardProps) => {
+  const lowStockCount = alerts.filter(alert => alert.status === "Low").length;
+  const criticalStockCount = alerts.filter(alert => alert.status === "Critical").length;
+
   return (
-    <div className="overflow-hidden rounded-[28px] border border-white/10 bg-white/8 p-5 shadow-2xl shadow-black/25 backdrop-blur-xl sm:p-6">
-      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p className="text-sm tracking-[0.2em] text-rose-200 uppercase">Inventory Watch</p>
-          <h2 className="mt-2 text-2xl font-semibold text-white">Stock Alert</h2>
-        </div>
+    <section className="flex min-h-0 flex-col rounded-[26px] border border-white/10 bg-white/8 p-5 shadow-2xl shadow-black/20 backdrop-blur-xl">
+      <div className="mb-5 flex shrink-0 items-start justify-between gap-3">
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <h2 className="text-sm font-semibold whitespace-nowrap text-white">Stock Alerts</h2>
 
-        <div className="inline-flex items-center gap-2 rounded-full bg-rose-500/10 px-3 py-1.5 text-sm text-rose-100">
-          <TriangleAlert className="h-4 w-4" />6 urgent products need attention
-        </div>
-      </div>
+            {!loading && (
+              <div className="flex flex-wrap items-center gap-1.5">
+                <span className="rounded-full border border-amber-400/20 bg-amber-400/10 px-2 py-0.5 text-[10px] font-semibold whitespace-nowrap text-amber-300">
+                  {lowStockCount} Low
+                </span>
 
-      <div className="hidden overflow-hidden rounded-2xl border border-white/10 lg:block">
-        <table className="min-w-full text-left">
-          <thead className="bg-white/5 text-sm tracking-[0.18em] text-slate-400 uppercase">
-            <tr>
-              <th className="px-5 py-4">Order ID</th>
-              <th className="px-5 py-4">Date</th>
-              <th className="px-5 py-4">Quantity</th>
-              <th className="px-5 py-4">Alert Amt.</th>
-              <th className="px-5 py-4">Status</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {stockAlerts.map(item => (
-              <tr key={item.id} className="border-t border-white/10 text-sm text-slate-200">
-                <td className="px-5 py-4 font-medium text-white">{item.id}</td>
-                <td className="px-5 py-4">{item.date}</td>
-                <td className="px-5 py-4">{item.quantity}</td>
-                <td className="px-5 py-4">{item.threshold}</td>
-                <td className="px-5 py-4">
-                  <span
-                    className={`inline-flex rounded-full px-3 py-1 text-xs font-medium ${getStatusStyles(
-                      item.status,
-                    )}`}
-                  >
-                    {item.status}
-                  </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <div className="space-y-4 lg:hidden">
-        {stockAlerts.map(item => (
-          <div key={item.id} className="rounded-2xl border border-white/10 bg-black/20 p-4">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className="text-base font-semibold text-white">{item.id}</p>
-                <p className="mt-1 text-sm text-slate-400">{item.date}</p>
+                <span className="rounded-full border border-rose-400/20 bg-rose-400/10 px-2 py-0.5 text-[10px] font-semibold whitespace-nowrap text-rose-300">
+                  {criticalStockCount} Critical
+                </span>
               </div>
-
-              <span
-                className={`inline-flex rounded-full px-3 py-1 text-xs font-medium ${getStatusStyles(
-                  item.status,
-                )}`}
-              >
-                {item.status}
-              </span>
-            </div>
-
-            <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-              <div className="rounded-xl bg-white/5 p-3">
-                <p className="text-slate-400">Quantity</p>
-                <p className="mt-1 font-medium text-slate-100">{item.quantity}</p>
-              </div>
-
-              <div className="rounded-xl bg-white/5 p-3">
-                <p className="text-slate-400">Alert Amt.</p>
-                <p className="mt-1 font-medium text-slate-100">{item.threshold}</p>
-              </div>
-            </div>
+            )}
           </div>
-        ))}
+
+          <p className="mt-1 text-xs text-slate-500">Products that need attention</p>
+        </div>
+
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-amber-400/20 bg-amber-400/10">
+          <AlertTriangle className="h-4 w-4 text-amber-300" />
+        </div>
       </div>
-    </div>
+
+      <div className="min-h-0 overflow-y-auto pr-1">
+        {loading ? (
+          <div className="space-y-3">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div key={index} className="h-16 animate-pulse rounded-2xl bg-white/5" />
+            ))}
+          </div>
+        ) : alerts.length === 0 ? (
+          <div className="flex min-h-24 items-center justify-center rounded-2xl border border-dashed border-white/10">
+            <p className="text-xs text-slate-500">No stock alerts</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {alerts.map((alert, index) => (
+              <div
+                key={`${alert.id}-${index}`}
+                className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-black/10 p-3"
+              >
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-medium text-white">{alert.name}</p>
+
+                  <p className="mt-1 text-xs text-slate-500">
+                    {alert.brand}
+                    {alert.color ? ` • ${alert.color}` : ""}
+                  </p>
+                </div>
+
+                <div className="shrink-0 text-right">
+                  <p
+                    className={`text-xs font-semibold ${
+                      alert.status === "Critical"
+                        ? "text-rose-300"
+                        : alert.status === "Low"
+                          ? "text-amber-300"
+                          : "text-slate-300"
+                    }`}
+                  >
+                    {alert.status}
+                  </p>
+
+                  <p className="mt-1 text-xs text-slate-500">
+                    {alert.quantity} / {alert.threshold}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
   );
 };

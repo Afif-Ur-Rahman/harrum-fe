@@ -18,11 +18,23 @@ export interface DashboardStat {
   subtitle: string;
 }
 
+export interface StockAlertItem {
+  id: string;
+  name: string;
+  brand: string;
+  color?: string;
+  date: string;
+  quantity: string;
+  threshold: string;
+  status: "Critical" | "Low" | "Moderate";
+}
+
 export interface DashboardStatsResponse {
   message: string;
   data: {
     hero: DashboardHero;
     stats: DashboardStat[];
+    stockAlerts: StockAlertItem[];
   };
 }
 
@@ -48,14 +60,6 @@ export interface SalesBarItem {
   label: string;
   purchase: number;
   income: number;
-}
-
-export interface StockAlertItem {
-  id: string;
-  date: string;
-  quantity: string;
-  threshold: string;
-  status: "Critical" | "Low" | "Moderate";
 }
 
 export interface TopProductItem {
