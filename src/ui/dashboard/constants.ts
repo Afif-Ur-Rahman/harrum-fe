@@ -29,55 +29,6 @@ export const statStyles: Record<
   },
 };
 
-export const salesBars: any[] = [
-  { label: "Jan", purchase: 62, income: 85 },
-  { label: "Feb", purchase: 74, income: 61 },
-  { label: "Mar", purchase: 68, income: 92 },
-  { label: "Apr", purchase: 84, income: 70 },
-  { label: "May", purchase: 58, income: 88 },
-  { label: "Jun", purchase: 79, income: 96 },
-];
-
-export const stockAlerts: any[] = [
-  {
-    id: "#ST-1021",
-    date: "07 May 2026",
-    quantity: "12 pcs",
-    threshold: "20 pcs",
-    status: "Critical",
-  },
-  {
-    id: "#ST-1038",
-    date: "07 May 2026",
-    quantity: "18 pcs",
-    threshold: "25 pcs",
-    status: "Low",
-  },
-  {
-    id: "#ST-1052",
-    date: "06 May 2026",
-    quantity: "09 pcs",
-    threshold: "15 pcs",
-    status: "Critical",
-  },
-  {
-    id: "#ST-1084",
-    date: "05 May 2026",
-    quantity: "21 pcs",
-    threshold: "30 pcs",
-    status: "Moderate",
-  },
-];
-
-export const topProducts: any[] = [
-  { name: "Premium Hoodie", orders: 426, revenue: "$12.4K", share: 34 },
-  { name: "Oversized T-Shirt", orders: 388, revenue: "$10.1K", share: 28 },
-  { name: "Slim Fit Jeans", orders: 310, revenue: "$8.7K", share: 22 },
-  { name: "Casual Shirt", orders: 215, revenue: "$6.2K", share: 16 },
-];
-
-export const productColors = ["bg-cyan-400", "bg-pink-400", "bg-violet-400", "bg-amber-400"];
-
 export const getStatusStyles = (status: StockAlertItem["status"]) => {
   if (status === "Critical") {
     return "bg-rose-500/15 text-rose-200 ring-1 ring-inset ring-rose-400/30";
@@ -89,3 +40,22 @@ export const getStatusStyles = (status: StockAlertItem["status"]) => {
 
   return "bg-sky-500/15 text-sky-100 ring-1 ring-inset ring-sky-300/30";
 };
+
+export const productColors = [
+  "bg-cyan-400",
+  "bg-pink-400",
+  "bg-violet-400",
+  "bg-amber-400",
+  "bg-emerald-400",
+];
+
+export const productColorHex = ["#22d3ee", "#f472b6", "#a78bfa", "#f59e0b", "#34d399"];
+
+export const salesBars: any[] = [
+  { label: "Jan", purchase: 62, income: 85 },
+  { label: "Feb", purchase: 74, income: 61 },
+  { label: "Mar", purchase: 68, income: 92 },
+  { label: "Apr", purchase: 84, income: 70 },
+  { label: "May", purchase: 58, income: 88 },
+  { label: "Jun", purchase: 79, income: 96 },
+];

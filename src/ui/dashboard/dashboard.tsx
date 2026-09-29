@@ -13,7 +13,7 @@ import { statStyles } from "./constants";
 import { useDashboard } from "./useDashboard";
 
 export const SuperAdminDashboard = () => {
-  const { stats, hero, stockAlerts, statsLoading, onDismissAlert } = useDashboard();
+  const { stats, hero, stockAlerts, topProducts, statsLoading, onDismissAlert } = useDashboard();
 
   return (
     <PageLayout>
@@ -42,9 +42,13 @@ export const SuperAdminDashboard = () => {
             ))}
       </section>
 
-      <section className="grid grid-cols-1 gap-6 xl:h-165 xl:min-h-0 xl:grid-cols-[1.7fr_1fr]">
+      <section className="grid grid-cols-1 gap-6 xl:h-140 xl:min-h-0 xl:grid-cols-[1.7fr_1fr]">
         <StockAlertCard alerts={stockAlerts} loading={statsLoading} onDismiss={onDismissAlert} />
-        <ProductMixCard />
+        <ProductMixCard
+          products={topProducts.products}
+          totalUnits={topProducts.totalUnits}
+          loading={statsLoading}
+        />
       </section>
 
       <section>

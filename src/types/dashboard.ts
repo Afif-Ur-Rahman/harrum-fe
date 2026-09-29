@@ -31,12 +31,25 @@ export interface StockAlertItem {
   status: "Critical" | "Low" | "Moderate";
 }
 
+export interface TopProductItem {
+  stockId: string;
+  name: string;
+  size?: string;
+  units: number;
+  revenue: number;
+  share: number;
+}
+
 export interface DashboardStatsResponse {
   message: string;
   data: {
     hero: DashboardHero;
     stats: DashboardStat[];
     stockAlerts: StockAlertItem[];
+    topProducts: {
+      products: TopProductItem[];
+      totalUnits: number;
+    };
   };
 }
 
@@ -62,11 +75,4 @@ export interface SalesBarItem {
   label: string;
   purchase: number;
   income: number;
-}
-
-export interface TopProductItem {
-  name: string;
-  orders: number;
-  revenue: string;
-  share: number;
 }

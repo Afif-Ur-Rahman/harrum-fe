@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { dismissStockAlert, getDashboardStats } from "@/api/api-call";
-import { DashboardStat, StockAlertItem } from "@/types";
+import { DashboardStat, StockAlertItem, TopProductItem } from "@/types";
 import { showToast } from "@/utils/toast";
 
 export const useDashboard = () => {
@@ -14,14 +14,19 @@ export const useDashboard = () => {
 
   const [selectedStatus, setSelectedStatus] = useState("Current Month");
 
-  const [stats, setStats] = useState<DashboardStat[]>([]);
-
   const [hero, setHero] = useState({
     totalOrders: 0,
     orderGrowth: 0,
   });
 
+  const [stats, setStats] = useState<DashboardStat[]>([]);
+
   const [stockAlerts, setStockAlerts] = useState<StockAlertItem[]>([]);
+
+  const [topProducts, setTopProducts] = useState<{
+    products: TopProductItem[];
+    totalUnits: number;
+  }>({ products: [], totalUnits: 0 });
 
   const [statsLoading, setStatsLoading] = useState(true);
 
@@ -63,6 +68,8 @@ export const useDashboard = () => {
 
       setStockAlerts(data?.stockAlerts || []);
 
+      setTopProducts(data?.topProducts || { products: [], totalUnits: 0 });
+
       setStatsLoading(false);
     };
 
@@ -76,6 +83,7 @@ export const useDashboard = () => {
     stats,
     hero,
     stockAlerts,
+    topProducts,
     statsLoading,
     onDismissAlert,
   };
