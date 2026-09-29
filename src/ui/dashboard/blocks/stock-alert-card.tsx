@@ -1,13 +1,14 @@
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, X } from "lucide-react";
 
 import { StockAlertItem } from "@/types";
 
 interface StockAlertCardProps {
   alerts: StockAlertItem[];
   loading?: boolean;
+  onDismiss: (alert: StockAlertItem) => void;
 }
 
-export const StockAlertCard = ({ alerts, loading = false }: StockAlertCardProps) => {
+export const StockAlertCard = ({ alerts, loading = false, onDismiss }: StockAlertCardProps) => {
   const lowStockCount = alerts.filter(alert => alert.status === "Low").length;
   const criticalStockCount = alerts.filter(alert => alert.status === "Critical").length;
 
@@ -39,7 +40,7 @@ export const StockAlertCard = ({ alerts, loading = false }: StockAlertCardProps)
         </div>
       </div>
 
-      <div className="min-h-0 overflow-y-auto pr-1">
+      <div className="min-h-0 overflow-y-auto pt-2 pr-3">
         {loading ? (
           <div className="space-y-3">
             {Array.from({ length: 4 }).map((_, index) => (
@@ -55,8 +56,16 @@ export const StockAlertCard = ({ alerts, loading = false }: StockAlertCardProps)
             {alerts.map((alert, index) => (
               <div
                 key={`${alert.id}-${index}`}
-                className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-black/10 p-3"
+                className="relative flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-black/10 p-3"
               >
+                <button
+                  type="button"
+                  onClick={() => onDismiss(alert)}
+                  aria-label={`Dismiss alert for ${alert.name}`}
+                  className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full border border-white/10 bg-slate-900 text-slate-400 shadow-md transition hover:bg-rose-500/20 hover:text-rose-200 active:scale-95"
+                >
+                  <X className="h-3 w-3" />
+                </button>
                 <div className="min-w-0">
                   <p className="truncate text-sm font-medium text-white">{alert.name}</p>
 

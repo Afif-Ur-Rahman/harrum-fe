@@ -20,6 +20,8 @@ export interface DashboardStat {
 
 export interface StockAlertItem {
   id: string;
+  stockId: string;
+  variantId?: string;
   name: string;
   brand: string;
   color?: string;

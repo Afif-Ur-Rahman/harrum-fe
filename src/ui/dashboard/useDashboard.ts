@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { getDashboardStats } from "@/api/api-call/dashboard";
+import { dismissStockAlert, getDashboardStats } from "@/api/api-call";
 import { DashboardStat, StockAlertItem } from "@/types";
 import { showToast } from "@/utils/toast";
 
@@ -24,6 +24,19 @@ export const useDashboard = () => {
   const [stockAlerts, setStockAlerts] = useState<StockAlertItem[]>([]);
 
   const [statsLoading, setStatsLoading] = useState(true);
+
+  const onDismissAlert = async (alert: StockAlertItem) => {
+    const previous = stockAlerts;
+
+    setStockAlerts(prev => prev.filter(item => item.id !== alert.id));
+
+    const res = await dismissStockAlert(alert.stockId, alert.variantId);
+
+    if (!res || res.error) {
+      setStockAlerts(previous);
+      showToast("error", res?.error || "Failed to dismiss alert");
+    }
+  };
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -64,5 +77,6 @@ export const useDashboard = () => {
     hero,
     stockAlerts,
     statsLoading,
+    onDismissAlert,
   };
 };
