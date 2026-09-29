@@ -6,7 +6,7 @@ import { ReuseableDialog } from "@/components";
 import { PageLayout } from "@/components/layout";
 import { Loader } from "@/components/ui/loader";
 
-import { EmployeeForm, EmployeesSearch, EmployeeTable } from "./blocks";
+import { EmployeeCards, EmployeeForm, EmployeesSearch } from "./blocks";
 import { ROLE_STYLES } from "./constants";
 import { useEmployees } from "./useEmployee";
 
@@ -87,7 +87,7 @@ const Employees = () => {
           <Loader label="employees" />
         </div>
       ) : (
-        <EmployeeTable
+        <EmployeeCards
           filtered={filtered}
           onDeleteEmployee={onDeleteEmployee}
           onEditEmployee={employee => {
