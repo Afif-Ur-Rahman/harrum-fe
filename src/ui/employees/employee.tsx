@@ -13,8 +13,10 @@ import { useEmployees } from "./useEmployee";
 const Employees = () => {
   const {
     loading,
+    permissionLoading,
     onAddEmployee,
     onUpdateEmployee,
+    onUpdatePermissions,
     onDeleteEmployee,
     open,
     setOpen,
@@ -94,6 +96,8 @@ const Employees = () => {
             setSelectedEmployee(employee);
             setEditOpen(true);
           }}
+          onUpdatePermissions={onUpdatePermissions}
+          permissionLoading={permissionLoading}
           roleStyles={ROLE_STYLES}
         />
       )}

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
+import { updateEmployeePermissions } from "@/api/api-call";
 import {
   createEmployees,
   deleteEmployee,
@@ -8,6 +9,7 @@ import {
 } from "@/api/api-call/employee";
 import { usePersistStore } from "@/store/presistStore";
 import { Employee, Employees } from "@/types/employees";
+import { PagePermission } from "@/types/permissions";
 import { showToast } from "@/utils/toast";
 
 import { EmployeeFormType } from "./schema";
@@ -31,6 +33,7 @@ const useEmployees = () => {
   const [editOpen, setEditOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
   const [loading, setLoading] = useState<boolean>(!employeesLoaded);
+  const [permissionLoading, setPermissionLoading] = useState(false);
 
   useEffect(() => {
     const fetchAllEmployees = async () => {
@@ -128,6 +131,58 @@ const useEmployees = () => {
     }
   };
 
+  const onUpdatePermissions = async (employeeId: string, pages: PagePermission[]) => {
+    try {
+      setPermissionLoading(true);
+
+      const res = await updateEmployeePermissions(employeeId, { pages });
+
+      if (res?.error) {
+        showToast("error", res.error);
+        return false;
+      }
+
+      const updatedPermissions = res?.data?.data;
+
+      if (!updatedPermissions) {
+        showToast("error", "Updated permissions were not returned by the server");
+        return false;
+      }
+
+      const updateEmployeePermissionsInList = (list: Employee[]) =>
+        list.map(employee =>
+          employee._id === employeeId
+            ? {
+                ...employee,
+                permissions: updatedPermissions.pages,
+              }
+            : employee,
+        );
+
+      setEmployees({
+        salesman: updateEmployeePermissionsInList(employees.salesman),
+        accountant: updateEmployeePermissionsInList(employees.accountant),
+      });
+
+      if (selectedEmployee?._id === employeeId) {
+        setSelectedEmployee({
+          ...selectedEmployee,
+          permissions: updatedPermissions.pages,
+        });
+      }
+
+      showToast("success", "Permissions updated successfully");
+
+      return true;
+    } catch (error) {
+      showToast("error", (error as Error).message || "Failed to update permissions");
+
+      return false;
+    } finally {
+      setPermissionLoading(false);
+    }
+  };
+
   const onDeleteEmployee = async (id: string) => {
     try {
       const res = await deleteEmployee(id);
@@ -145,6 +200,10 @@ const useEmployees = () => {
       };
 
       setEmployees(updatedEmployees);
+
+      if (selectedEmployee?._id === id) {
+        setSelectedEmployee(null);
+      }
 
       return {
         state: true,
@@ -188,6 +247,7 @@ const useEmployees = () => {
 
   return {
     loading,
+    permissionLoading,
     open,
     setOpen,
     editOpen,
@@ -196,6 +256,7 @@ const useEmployees = () => {
     setSelectedEmployee,
     onAddEmployee,
     onUpdateEmployee,
+    onUpdatePermissions,
     onDeleteEmployee,
     flatEmployees,
     search,

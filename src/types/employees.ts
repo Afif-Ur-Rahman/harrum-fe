@@ -1,3 +1,5 @@
+import { PagePermission } from "./permissions";
+
 export type EmployeeRole = "salesman" | "accountant";
 
 export interface Employee {
@@ -10,6 +12,7 @@ export interface Employee {
   guardianPhone: string;
   permanentAddress: string;
   currentAddress: string;
+  permissions: PagePermission[];
 }
 
 export interface Employees {
