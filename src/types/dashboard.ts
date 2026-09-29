@@ -40,16 +40,22 @@ export interface TopProductItem {
   share: number;
 }
 
+export interface SalesAnalyticsPoint {
+  label: string;
+  date: string;
+  revenue: number;
+  orders: number;
+  netIncome: number;
+}
+
 export interface DashboardStatsResponse {
   message: string;
   data: {
     hero: DashboardHero;
     stats: DashboardStat[];
     stockAlerts: StockAlertItem[];
-    topProducts: {
-      products: TopProductItem[];
-      totalUnits: number;
-    };
+    topProducts: { products: TopProductItem[]; totalUnits: number };
+    salesAnalytics: SalesAnalyticsPoint[];
   };
 }
 
@@ -69,10 +75,4 @@ export interface StatItem {
   accent: string;
   glow: string;
   invertTrendColor?: boolean;
-}
-
-export interface SalesBarItem {
-  label: string;
-  purchase: number;
-  income: number;
 }

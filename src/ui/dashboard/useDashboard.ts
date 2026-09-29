@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { dismissStockAlert, getDashboardStats } from "@/api/api-call";
-import { DashboardStat, StockAlertItem, TopProductItem } from "@/types";
+import { DashboardStat, SalesAnalyticsPoint, StockAlertItem, TopProductItem } from "@/types";
 import { showToast } from "@/utils/toast";
 
 export const useDashboard = () => {
@@ -27,6 +27,8 @@ export const useDashboard = () => {
     products: TopProductItem[];
     totalUnits: number;
   }>({ products: [], totalUnits: 0 });
+
+  const [salesAnalytics, setSalesAnalytics] = useState<SalesAnalyticsPoint[]>([]);
 
   const [statsLoading, setStatsLoading] = useState(true);
 
@@ -57,18 +59,16 @@ export const useDashboard = () => {
 
       const data = res?.data?.data;
 
-      setStats(data?.stats || []);
-
       setHero(
         data?.hero || {
           totalOrders: 0,
           orderGrowth: 0,
         },
       );
-
+      setStats(data?.stats || []);
       setStockAlerts(data?.stockAlerts || []);
-
       setTopProducts(data?.topProducts || { products: [], totalUnits: 0 });
+      setSalesAnalytics(data?.salesAnalytics || []);
 
       setStatsLoading(false);
     };
@@ -80,10 +80,11 @@ export const useDashboard = () => {
     statusOptions,
     selectedStatus,
     setSelectedStatus,
-    stats,
     hero,
+    stats,
     stockAlerts,
     topProducts,
+    salesAnalytics,
     statsLoading,
     onDismissAlert,
   };

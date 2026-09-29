@@ -13,7 +13,8 @@ import { statStyles } from "./constants";
 import { useDashboard } from "./useDashboard";
 
 export const SuperAdminDashboard = () => {
-  const { stats, hero, stockAlerts, topProducts, statsLoading, onDismissAlert } = useDashboard();
+  const { hero, stats, stockAlerts, topProducts, salesAnalytics, statsLoading, onDismissAlert } =
+    useDashboard();
 
   return (
     <PageLayout>
@@ -51,8 +52,8 @@ export const SuperAdminDashboard = () => {
         />
       </section>
 
-      <section>
-        <SalesAnalyticsCard />
+      <section className="hidden sm:block">
+        <SalesAnalyticsCard data={salesAnalytics} loading={statsLoading} />
       </section>
     </PageLayout>
   );
