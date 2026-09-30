@@ -4,7 +4,7 @@ import { LineChart } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useMemo, useState } from "react";
 
-import { SalesAnalyticsPoint } from "@/types";
+import { DashboardFilterValue, SalesAnalyticsPoint } from "@/types";
 import { formatPrice } from "@/utils";
 
 import type { ApexOptions } from "apexcharts";
@@ -45,26 +45,70 @@ const SERIES: SeriesConfig[] = [
   },
 ];
 
-const AXIS_LABEL_STYLE = { colors: "#94a3b8", fontSize: "11px" };
+const AXIS_LABEL_STYLE = {
+  colors: "#94a3b8",
+  fontSize: "11px",
+};
+
+const MAX_X_AXIS_TICKS = 30;
 
 const formatCompact = (value: number) =>
-  new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 }).format(value);
+  new Intl.NumberFormat("en-US", {
+    notation: "compact",
+    maximumFractionDigits: 1,
+  }).format(value);
+
+const formatDate = (value: string) => {
+  const [year, month, day] = value.split("-").map(Number);
+
+  return new Date(year, month - 1, day).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+};
+
+const getChartDescription = (filter: DashboardFilterValue) => {
+  if (filter.filter === "today") {
+    return "Hourly trend for today";
+  }
+
+  if (filter.filter === "last_week") {
+    return "Daily trend for the last 7 days";
+  }
+
+  if (filter.filter === "last_month") {
+    return "Daily trend for the last 30 days";
+  }
+
+  if (filter.from && filter.to) {
+    return `Daily trend for ${formatDate(filter.from)} – ${formatDate(filter.to)}`;
+  }
+
+  return "Daily trend for the selected dates";
+};
 
 interface SalesAnalyticsCardProps {
   data: SalesAnalyticsPoint[];
+  filter: DashboardFilterValue;
   loading?: boolean;
 }
 
-export const SalesAnalyticsCard = ({ data, loading = false }: SalesAnalyticsCardProps) => {
+export const SalesAnalyticsCard = ({ data, filter, loading = false }: SalesAnalyticsCardProps) => {
   const [hidden, setHidden] = useState<SeriesKey[]>([]);
 
   const visible = SERIES.filter(series => !hidden.includes(series.key));
 
   const toggle = (key: SeriesKey) => {
     setHidden(prev => {
-      if (prev.includes(key)) return prev.filter(item => item !== key);
-      // never hide the last visible line
-      if (prev.length >= SERIES.length - 1) return prev;
+      if (prev.includes(key)) {
+        return prev.filter(item => item !== key);
+      }
+
+      if (prev.length >= SERIES.length - 1) {
+        return prev;
+      }
+
       return [...prev, key];
     });
   };
@@ -78,26 +122,37 @@ export const SalesAnalyticsCard = ({ data, loading = false }: SalesAnalyticsCard
     [visible, data],
   );
 
+  const chartDescription = useMemo(() => getChartDescription(filter), [filter]);
+
   const options = useMemo<ApexOptions>(() => {
     const netVisible = visible.some(series => series.key === "netIncome");
+
     const hasNegativeNet = netVisible && data.some(point => point.netIncome < 0);
 
     const yaxis: Record<string, unknown>[] = [];
+
     let moneyAnchor: string | null = null;
 
     visible.forEach(series => {
       if (series.axis === "money") {
         if (!moneyAnchor) {
           moneyAnchor = series.name;
+
           yaxis.push({
             seriesName: series.name,
             min: hasNegativeNet ? undefined : 0,
-            labels: { style: AXIS_LABEL_STYLE, formatter: (value: number) => formatCompact(value) },
+            labels: {
+              style: AXIS_LABEL_STYLE,
+              formatter: (value: number) => formatCompact(value),
+            },
           });
         } else {
-          // shares the anchor's scale, no axis of its own
-          yaxis.push({ seriesName: moneyAnchor, show: false });
+          yaxis.push({
+            seriesName: moneyAnchor,
+            show: false,
+          });
         }
+
         return;
       }
 
@@ -119,31 +174,80 @@ export const SalesAnalyticsCard = ({ data, loading = false }: SalesAnalyticsCard
         height: 320,
         background: "transparent",
         fontFamily: "inherit",
-        toolbar: { show: false },
-        zoom: { enabled: false },
+        toolbar: {
+          show: false,
+        },
+        zoom: {
+          enabled: false,
+        },
       },
-      theme: { mode: "dark" },
+
+      theme: {
+        mode: "dark",
+      },
+
       colors: visible.map(series => series.color),
-      stroke: { curve: "smooth", width: 3 },
-      markers: { size: 0, hover: { size: 5 } },
-      dataLabels: { enabled: false },
-      legend: { show: false },
-      grid: { borderColor: "rgba(255,255,255,0.06)", strokeDashArray: 4 },
+
+      stroke: {
+        curve: "smooth",
+        width: 3,
+      },
+
+      markers: {
+        size: 0,
+        hover: {
+          size: 5,
+        },
+      },
+
+      dataLabels: {
+        enabled: false,
+      },
+
+      legend: {
+        show: false,
+      },
+
+      grid: {
+        borderColor: "rgba(255,255,255,0.06)",
+        strokeDashArray: 4,
+      },
+
       xaxis: {
         categories: data.map(point => point.label),
-        axisBorder: { show: false },
-        axisTicks: { show: false },
-        tooltip: { enabled: false },
-        labels: { rotate: 0, hideOverlappingLabels: true, style: AXIS_LABEL_STYLE },
+
+        tickAmount: data.length > 1 ? Math.min(MAX_X_AXIS_TICKS, data.length - 1) : 1,
+
+        axisBorder: {
+          show: false,
+        },
+
+        axisTicks: {
+          show: false,
+        },
+
+        tooltip: {
+          enabled: false,
+        },
+
+        labels: {
+          rotate: 0,
+          hideOverlappingLabels: true,
+          style: AXIS_LABEL_STYLE,
+        },
       },
+
       yaxis: yaxis as ApexOptions["yaxis"],
+
       tooltip: {
         theme: "dark",
         shared: true,
         intersect: false,
+
         x: {
           formatter: (value, opts) => data[opts?.dataPointIndex ?? -1]?.date ?? String(value),
         },
+
         y: visible.map(series => ({
           formatter: (value: number) => series.format(value),
         })),
@@ -161,7 +265,8 @@ export const SalesAnalyticsCard = ({ data, loading = false }: SalesAnalyticsCard
 
           <div className="min-w-0">
             <h2 className="text-sm font-semibold text-white">Sales Analytics</h2>
-            <p className="mt-1 text-xs text-slate-500">Daily trend for this month</p>
+
+            <p className="mt-1 text-xs text-slate-500">{chartDescription}</p>
           </div>
         </div>
 
@@ -190,6 +295,7 @@ export const SalesAnalyticsCard = ({ data, loading = false }: SalesAnalyticsCard
                     backgroundColor: isHidden ? "#475569" : series.color,
                   }}
                 />
+
                 {series.name}
               </button>
             );

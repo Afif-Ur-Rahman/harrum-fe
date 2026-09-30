@@ -54,17 +54,18 @@ export const SuperAdminDashboard = () => {
             ))}
       </section>
 
-      <section className="grid grid-cols-1 gap-6 xl:h-140 xl:min-h-0 xl:grid-cols-[1.7fr_1fr]">
+      <section className="grid grid-cols-1 gap-6 xl:h-150 xl:min-h-0 xl:grid-cols-[1.7fr_1fr]">
         <StockAlertCard alerts={stockAlerts} loading={statsLoading} onDismiss={onDismissAlert} />
         <ProductMixCard
           products={topProducts.products}
           totalUnits={topProducts.totalUnits}
+          filter={filter}
           loading={statsLoading}
         />
       </section>
 
       <section className="hidden sm:block">
-        <SalesAnalyticsCard data={salesAnalytics} loading={statsLoading} />
+        <SalesAnalyticsCard data={salesAnalytics} filter={filter} loading={statsLoading} />{" "}
       </section>
     </PageLayout>
   );

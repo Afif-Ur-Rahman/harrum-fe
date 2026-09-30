@@ -13,7 +13,7 @@ export const StockAlertCard = ({ alerts, loading = false, onDismiss }: StockAler
   const criticalStockCount = alerts.filter(alert => alert.status === "Critical").length;
 
   return (
-    <section className="flex min-h-0 flex-col rounded-[26px] border border-white/10 bg-white/8 p-5 shadow-2xl shadow-black/20 backdrop-blur-xl">
+    <section className="flex h-full min-h-0 flex-col rounded-[26px] border border-white/10 bg-white/8 p-5 shadow-2xl shadow-black/20 backdrop-blur-xl">
       <div className="mb-5 flex shrink-0 items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
@@ -40,7 +40,7 @@ export const StockAlertCard = ({ alerts, loading = false, onDismiss }: StockAler
         </div>
       </div>
 
-      <div className="min-h-0 overflow-y-auto pt-2 pr-3">
+      <div className="max-h-92.5 min-h-0 overflow-y-auto pt-2 pr-3 xl:max-h-none xl:flex-1">
         {loading ? (
           <div className="space-y-3">
             {Array.from({ length: 4 }).map((_, index) => (
@@ -66,6 +66,7 @@ export const StockAlertCard = ({ alerts, loading = false, onDismiss }: StockAler
                 >
                   <X className="h-3 w-3" />
                 </button>
+
                 <div className="min-w-0">
                   <p className="truncate text-sm font-medium text-white">{alert.name}</p>
 
