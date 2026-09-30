@@ -13,8 +13,17 @@ import { statStyles } from "./constants";
 import { useDashboard } from "./useDashboard";
 
 export const SuperAdminDashboard = () => {
-  const { hero, stats, stockAlerts, topProducts, salesAnalytics, statsLoading, onDismissAlert } =
-    useDashboard();
+  const {
+    filter,
+    onFilterChange,
+    hero,
+    stats,
+    stockAlerts,
+    topProducts,
+    salesAnalytics,
+    statsLoading,
+    onDismissAlert,
+  } = useDashboard();
 
   return (
     <PageLayout>
@@ -22,6 +31,8 @@ export const SuperAdminDashboard = () => {
         totalOrders={hero.totalOrders}
         orderGrowth={hero.orderGrowth}
         loading={statsLoading}
+        filter={filter}
+        onFilterChange={onFilterChange}
       />
 
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 2xl:grid-cols-4">

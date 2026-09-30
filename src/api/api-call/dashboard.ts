@@ -1,11 +1,22 @@
-import { ResponseForDashboardStats } from "@/types";
+import { DashboardStatsParams, ResponseForDashboardStats } from "@/types";
 
 import { serverAction } from "../server-action";
 
-export const getDashboardStats = async () => {
+export const getDashboardStats = async (params?: DashboardStatsParams) => {
   try {
+    const query = new URLSearchParams();
+
+    if (params?.filter) query.set("filter", params.filter);
+
+    if (params?.filter === "custom") {
+      if (params.from) query.set("from", params.from);
+      if (params.to) query.set("to", params.to);
+    }
+
+    const queryString = query.toString();
+
     const response = await serverAction({
-      url: "/dashboard/stats",
+      url: `/dashboard/stats${queryString ? `?${queryString}` : ""}`,
       method: "GET",
     });
     return response as ResponseForDashboardStats;

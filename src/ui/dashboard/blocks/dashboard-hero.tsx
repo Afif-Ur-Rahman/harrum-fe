@@ -1,15 +1,23 @@
 import { Sparkles } from "lucide-react";
 
+import type { DashboardFilterValue } from "@/types";
+
+import { DashboardFilterBar } from "./dashboard-filter";
+
 interface DashboardHeroProps {
   totalOrders: number;
   orderGrowth: number;
   loading?: boolean;
+  filter: DashboardFilterValue;
+  onFilterChange: (value: DashboardFilterValue) => void;
 }
 
 export const DashboardHero = ({
   totalOrders,
   orderGrowth,
   loading = false,
+  filter,
+  onFilterChange,
 }: DashboardHeroProps) => {
   const heroStats = [
     {
@@ -27,8 +35,10 @@ export const DashboardHero = ({
   ];
 
   return (
-    <section className="relative overflow-hidden rounded-[28px] border border-white/10 bg-white/8 p-5 shadow-2xl shadow-black/30 backdrop-blur-xl sm:p-6">
-      <div className="absolute inset-y-0 right-0 hidden w-1/2 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.12),transparent_55%)] lg:block" />
+    <section className="relative rounded-[28px] border border-white/10 bg-white/8 p-5 shadow-2xl shadow-black/30 backdrop-blur-xl sm:p-6">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[28px]">
+        <div className="absolute inset-y-0 right-0 hidden w-1/2 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.12),transparent_55%)] lg:block" />
+      </div>
 
       <div className="relative flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
         <div className="max-w-3xl">
@@ -43,6 +53,10 @@ export const DashboardHero = ({
             Monitor revenue, stock pressure, product demand, and purchase momentum from one
             responsive dashboard built for desktop, tablet, and mobile.
           </p>
+
+          <div className="mt-4">
+            <DashboardFilterBar value={filter} onChange={onFilterChange} disabled={loading} />
+          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-3">

@@ -1,5 +1,19 @@
 import type { ElementType } from "react";
 
+export type DashboardFilter = "today" | "last_week" | "last_month" | "custom";
+
+export interface DashboardFilterValue {
+  filter: DashboardFilter;
+  from: string;
+  to: string;
+}
+
+export interface DashboardStatsParams {
+  filter: DashboardFilter;
+  from?: string;
+  to?: string;
+}
+
 export type Trend = "up" | "down";
 
 export type StatKey = "revenue" | "salesReturn" | "expenses" | "netIncome";
