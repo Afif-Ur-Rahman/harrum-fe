@@ -41,7 +41,6 @@ export interface StockAlertItem {
   color?: string;
   date: string;
   quantity: string;
-  threshold: string;
   status: "Critical" | "Low" | "Moderate";
 }
 

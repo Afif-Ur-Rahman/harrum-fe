@@ -50,12 +50,3 @@ export const productColors = [
 ];
 
 export const productColorHex = ["#22d3ee", "#f472b6", "#a78bfa", "#f59e0b", "#34d399"];
-
-export const salesBars: any[] = [
-  { label: "Jan", purchase: 62, income: 85 },
-  { label: "Feb", purchase: 74, income: 61 },
-  { label: "Mar", purchase: 68, income: 92 },
-  { label: "Apr", purchase: 84, income: 70 },
-  { label: "May", purchase: 58, income: 88 },
-  { label: "Jun", purchase: 79, income: 96 },
-];

@@ -88,9 +88,7 @@ export const StockAlertCard = ({ alerts, loading = false, onDismiss }: StockAler
                     {alert.status}
                   </p>
 
-                  <p className="mt-1 text-xs text-slate-500">
-                    {alert.quantity} / {alert.threshold}
-                  </p>
+                  <p className="mt-1 text-xs text-slate-500">{alert.quantity}</p>
                 </div>
               </div>
             ))}

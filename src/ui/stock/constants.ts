@@ -84,6 +84,10 @@ export const STOCK_ITEM_FIELDS: StockItemField[] = [
         value: "latha",
       },
       {
+        label: "Boski",
+        value: "boski",
+      },
+      {
         label: "Shawl",
         value: "shawl",
       },
