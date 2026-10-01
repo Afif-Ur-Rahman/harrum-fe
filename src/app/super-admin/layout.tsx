@@ -6,7 +6,7 @@ import { getAuthCookies } from "@/utils/cookies";
 export default async function OwnerLayout({ children }: { children: React.ReactNode }) {
   const authCookies = await getAuthCookies();
 
-  if (!authCookies?.user || authCookies.user.type !== "owner") {
+  if (!authCookies?.user) {
     redirect("/auth/login");
   }
 

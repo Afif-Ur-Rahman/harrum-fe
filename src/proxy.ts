@@ -4,6 +4,7 @@ import { getAuthCookies } from "@/utils/cookies";
 
 import { createHeaders } from "./api";
 import { API_URL } from "./constants";
+import { canAccessPath, getDefaultRoute } from "./utils/permissions";
 
 const NO_AUTH_PATHS = [
   "/auth/login",
@@ -86,10 +87,8 @@ const middleware = async (request: NextRequest) => {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
-  if (pathname.startsWith("/super-admin")) {
-    if (user?.type !== "owner") {
-      return NextResponse.redirect(new URL("/", request.url));
-    }
+  if (pathname.startsWith("/super-admin") && !canAccessPath(user, pathname)) {
+    return NextResponse.redirect(new URL(getDefaultRoute(user), request.url));
   }
 
   return NextResponse.next({ headers });

@@ -4,7 +4,7 @@ import { CaretRightIcon } from "@radix-ui/react-icons";
 import { Flex } from "@radix-ui/themes";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { FaBarsStaggered } from "react-icons/fa6";
 
 import { logout } from "@/api/api-call/auth-api";
@@ -13,7 +13,7 @@ import { useNavigation } from "@/lib/useNavigation";
 import { usePersistStore } from "@/store/presistStore";
 import { clearClientAuthCookies } from "@/utils/client-cookies";
 
-import { ACCOUNTANT_NAV_TABS, OWNER_NAV_TABS } from "./constants";
+import { getNavTabs } from "./constants";
 
 import { NavigationLink } from "../navigation-link";
 
@@ -144,7 +144,7 @@ export const AppSidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
-  const NAV_TABS = user?.type === "owner" ? OWNER_NAV_TABS : ACCOUNTANT_NAV_TABS;
+  const navTabs = useMemo(() => getNavTabs(user), [user]);
 
   const handleLogout = async () => {
     try {
@@ -193,7 +193,7 @@ export const AppSidebar = () => {
 
           <nav className="mt-4 border-b border-white/10 pb-4">
             <ul className="flex flex-col gap-2 px-3">
-              {NAV_TABS.map(tab => (
+              {navTabs.map(tab => (
                 <NavigationItem
                   key={tab.href}
                   {...tab}
@@ -229,7 +229,7 @@ export const AppSidebar = () => {
         type={user?.type}
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
-        tabs={NAV_TABS}
+        tabs={navTabs}
         logout={handleLogout}
       />
     </div>

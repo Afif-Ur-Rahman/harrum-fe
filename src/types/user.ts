@@ -1,3 +1,5 @@
+import { PagePermission } from "./permissions";
+
 export interface User {
   oldPassword: string;
   newPassword: string;
@@ -16,6 +18,7 @@ export interface User {
   guardianPhone?: string;
   permanentAddress?: string;
   currentAddress?: string;
+  permissions?: PagePermission[];
 }
 export interface UserResponse {
   message: string;

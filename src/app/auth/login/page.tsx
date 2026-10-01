@@ -11,6 +11,7 @@ import { useNavigation } from "@/lib/useNavigation";
 import { usePersistStore } from "@/store/presistStore";
 import PasswordForgotDialog from "@/ui/password-forgot/dialog";
 import { setClientAuthCookies } from "@/utils/client-cookies";
+import { getDefaultRoute } from "@/utils/permissions";
 import { showToast } from "@/utils/toast";
 
 import { useLoginForm } from "./form";
@@ -73,13 +74,7 @@ function Login() {
       showToast("success", result?.data?.message || "Login Successfully");
       setIsLoading(false);
 
-      if (user.type === "owner") {
-        router.replace("/super-admin/dashboard");
-      } else if (user.type === "accountant") {
-        router.replace("/accountant/dashboard");
-      } else {
-        router.replace("/auth/login");
-      }
+      router.replace(getDefaultRoute(user));
     })();
   };
 
