@@ -18,7 +18,7 @@ export const VendorStocks = ({ vendorId }: { vendorId: string }) => {
       {/* Header */}
       <div className="mb-4 flex items-center gap-3">
         <NavigationLink
-          href="/super-admin/vendors"
+          href="/vendors"
           className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/8 text-slate-300 shadow-lg shadow-black/10 backdrop-blur-xl transition hover:bg-white/12 hover:text-white active:scale-[0.98]"
           aria-label="Back to vendors"
         >

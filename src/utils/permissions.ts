@@ -3,13 +3,13 @@ import type { PermissionPage, User } from "@/types";
 type PermissionUser = Pick<User, "type" | "permissions"> | null | undefined;
 
 export const PAGE_ROUTES: Record<PermissionPage, string> = {
-  dashboard: "/super-admin/dashboard",
-  orders: "/super-admin/orders",
-  customers: "/super-admin/customers",
-  vendors: "/super-admin/vendors",
-  stocks: "/super-admin/stocks",
-  expenses: "/super-admin/expenses",
-  employees: "/super-admin/employees",
+  dashboard: "/dashboard",
+  orders: "/orders",
+  customers: "/customers",
+  vendors: "/vendors",
+  stocks: "/stocks",
+  expenses: "/expenses",
+  employees: "/employees",
 };
 
 export const hasPermission = (user: PermissionUser, page: PermissionPage) => {
@@ -35,5 +35,5 @@ export const getDefaultRoute = (user: PermissionUser) => {
   if (user.type === "owner") return PAGE_ROUTES.dashboard;
 
   const first = (Object.keys(PAGE_ROUTES) as PermissionPage[]).find(p => hasPermission(user, p));
-  return first ? PAGE_ROUTES[first] : "/super-admin/profile";
+  return first ? PAGE_ROUTES[first] : "/profile";
 };

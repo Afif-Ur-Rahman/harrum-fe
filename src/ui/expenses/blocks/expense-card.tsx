@@ -39,7 +39,9 @@ export const ExpenseCard = ({ expense }: { expense: Expense }) => {
         </span>
       </div>
 
-      <p className="rounded-xl bg-black/20 px-3 py-2 text-sm text-slate-300">{expense.note}</p>
+      {expense.note && (
+        <p className="rounded-xl bg-black/20 px-3 py-2 text-sm text-slate-300">{expense.note}</p>
+      )}
 
       <div className="flex flex-wrap items-center justify-between gap-2">
         <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/8 px-2.5 py-1 text-[11px] font-semibold text-slate-300">

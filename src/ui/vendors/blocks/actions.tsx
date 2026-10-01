@@ -106,7 +106,7 @@ export const Actions: React.FC<ActionsProps> = ({
       label: "View Stocks",
       icon: PackageSearch,
       disabled: false,
-      onSelect: () => router.push(`/super-admin/vendors/${vendor._id}/stocks`),
+      onSelect: () => router.push(`/vendors/${vendor._id}/stocks`),
       hoverClass: "data-highlighted:bg-fuchsia-400/20! data-highlighted:text-fuchsia-200!",
     },
     {

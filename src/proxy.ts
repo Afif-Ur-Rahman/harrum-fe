@@ -4,7 +4,7 @@ import { getAuthCookies } from "@/utils/cookies";
 
 import { createHeaders } from "./api";
 import { API_URL } from "./constants";
-import { canAccessPath, getDefaultRoute } from "./utils/permissions";
+import { canAccessPath, getDefaultRoute, PAGE_ROUTES } from "./utils/permissions";
 
 const NO_AUTH_PATHS = [
   "/auth/login",
@@ -23,8 +23,10 @@ const PUBLIC_PWA_FILES = [
   "/favicon.ico",
 ];
 
+const APP_PATH_PREFIXES = [...Object.values(PAGE_ROUTES), "/profile"];
+
 const isPathMatch = (pathname: string, paths: string[]) =>
-  paths.some(path => pathname.startsWith(path));
+  paths.some(path => pathname === path || pathname.startsWith(`${path}/`));
 
 export const config = {
   matcher: [
@@ -78,7 +80,7 @@ const middleware = async (request: NextRequest) => {
 
   if (isNoAuthRoute) {
     if (isAuthenticated) {
-      return NextResponse.redirect(new URL("/", request.url));
+      return NextResponse.redirect(new URL(getDefaultRoute(user), request.url));
     }
     return NextResponse.next({ headers });
   }
@@ -87,7 +89,7 @@ const middleware = async (request: NextRequest) => {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
-  if (pathname.startsWith("/super-admin") && !canAccessPath(user, pathname)) {
+  if (isPathMatch(pathname, APP_PATH_PREFIXES) && !canAccessPath(user, pathname)) {
     return NextResponse.redirect(new URL(getDefaultRoute(user), request.url));
   }
 

@@ -83,7 +83,7 @@ export const VendorTable: React.FC<VendorTableProps> = ({
         data={filtered}
         columns={columns}
         isLoading={loading}
-        onRowClick={vendor => router.push(`/super-admin/vendors/${vendor._id}/bills`)}
+        onRowClick={vendor => router.push(`/vendors/${vendor._id}/bills`)}
         getRowClassName={() => "bg-cyan-400/5 hover:bg-cyan-400/10"}
       />
 
