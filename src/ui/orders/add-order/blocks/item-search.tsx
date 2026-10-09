@@ -102,7 +102,11 @@ export const ItemSearch = ({ stockOptions, selectedStockIds, onSelectItem }: Ite
   };
 
   return (
-    <div className="relative" data-search-dropdown>
+    <div
+      className="relative"
+      data-search-dropdown
+      data-search-dropdown-open={showList ? "true" : "false"}
+    >
       <div
         className={`flex h-8.5 items-center gap-2 rounded-lg border px-3 shadow-lg shadow-black/10 transition-all ${
           open

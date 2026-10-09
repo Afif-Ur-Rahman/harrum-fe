@@ -168,7 +168,11 @@ export const PhoneSearch = ({ customers, placeholder = "Phone" }: PhoneSearchPro
   };
 
   return (
-    <div className="relative w-full max-w-full min-w-0" data-search-dropdown>
+    <div
+      className="relative w-full max-w-full min-w-0"
+      data-search-dropdown
+      data-search-dropdown-open={showList ? "true" : "false"}
+    >
       <div className="flex w-full max-w-full min-w-0 flex-col gap-1.5">
         <div
           className={`flex w-full max-w-full min-w-0 items-center gap-2.5 overflow-hidden rounded-lg border bg-white/8 px-4 py-1.5 text-sm shadow-lg shadow-black/10 backdrop-blur-xl transition-all ${

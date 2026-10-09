@@ -162,13 +162,13 @@ export function FormArrowKeyNavigation() {
       if (!isNavigableControl(target)) return;
 
       // Allow local handlers for open dropdowns / combobox / search lists
+      // Let dropdowns handle arrow keys only while they are open.
       if (
         target.closest('[role="listbox"]') ||
         target.closest("[data-radix-select-content]") ||
-        target.closest("[data-search-dropdown]") ||
-        target.closest("[data-phone-search]") ||
-        target.getAttribute("aria-expanded") === "true" ||
-        target.hasAttribute("data-form-arrow-nav-ignore")
+        target.closest('[data-search-dropdown-open="true"]') ||
+        target.closest("[data-form-arrow-nav-ignore]") ||
+        target.getAttribute("aria-expanded") === "true"
       ) {
         return;
       }
