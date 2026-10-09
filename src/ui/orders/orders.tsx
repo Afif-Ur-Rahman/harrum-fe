@@ -8,6 +8,7 @@ import { OrderForm, useAddOrder } from "./add-order";
 
 const Orders = () => {
   const {
+    customers,
     stocks,
     stockOptions,
     salesmanOptions,
@@ -53,6 +54,7 @@ const Orders = () => {
           </div>
 
           <OrderForm
+            customers={customers}
             form={form}
             stocks={stocks}
             stockOptions={stockOptions}

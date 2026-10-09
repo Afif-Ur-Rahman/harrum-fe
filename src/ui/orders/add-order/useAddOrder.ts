@@ -3,11 +3,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { useFieldArray, useWatch } from "react-hook-form";
 
-import { createOrder } from "@/api/api-call";
+import { createOrder, getAllCustomers } from "@/api/api-call";
 import { getAllEmployees } from "@/api/api-call/employee";
 import { getAllStocks } from "@/api/api-call/stock";
 import { usePersistStore } from "@/store/presistStore";
-import { Stock } from "@/types";
+import { Customer, Stock } from "@/types";
 import { NO_COLOR_VARIANT_TYPES } from "@/ui/stock/constants";
 import { printOrder } from "@/utils";
 import { showToast } from "@/utils/toast";
@@ -24,6 +24,8 @@ const useAddOrder = () => {
     setEmployees,
     updateStocksByIds,
   } = usePersistStore();
+
+  const [customers, setCustomers] = useState<Customer[]>([]);
 
   const [submitting, setSubmitting] = useState(false);
 
@@ -137,6 +139,19 @@ const useAddOrder = () => {
     }
   };
 
+  const getCustomers = async () => {
+    const response = await getAllCustomers();
+
+    if (response?.error) {
+      showToast("error", response.error);
+      return;
+    }
+
+    const data = response?.data?.data || [];
+
+    setCustomers(data);
+  };
+
   const addOrderItem = (stock: Stock) => {
     const isNoColorType = NO_COLOR_VARIANT_TYPES.includes(stock.type);
 
@@ -211,11 +226,12 @@ const useAddOrder = () => {
   };
 
   useEffect(() => {
-    Promise.all([getStocks(), getEmployees()]);
+    Promise.all([getStocks(), getEmployees(), getCustomers()]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {
+    customers,
     stocks: filteredStocks,
     stockOptions,
     salesmanOptions,

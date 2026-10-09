@@ -4,13 +4,20 @@ import { Save, PackagePlus, UserCheck } from "lucide-react";
 import { FormProvider, UseFormReturn } from "react-hook-form";
 
 import { EmptyState, FormInput } from "@/components";
-import { Stock } from "@/types";
+import { Customer, Stock } from "@/types";
 
 import { CUSTOMER_FORM_FIELDS } from "./constants";
 
 import { OrderFormType } from ".";
 
-import { ItemSearch, ItemsTable, OrderTotal, PaidCheckbox, PrintCheckbox } from "../blocks";
+import {
+  ItemSearch,
+  ItemsTable,
+  OrderTotal,
+  PaidCheckbox,
+  PhoneSearch,
+  PrintCheckbox,
+} from "../blocks";
 
 interface StockOption {
   value: string;
@@ -24,6 +31,7 @@ interface SalesmanOption {
 }
 
 interface OrderFormProps {
+  customers: Customer[];
   form: UseFormReturn<OrderFormType>;
   stocks: Stock[];
   stockOptions: StockOption[];
@@ -37,6 +45,7 @@ interface OrderFormProps {
 }
 
 export const OrderForm = ({
+  customers,
   form,
   stocks,
   stockOptions,
@@ -52,19 +61,23 @@ export const OrderForm = ({
     <FormProvider {...form}>
       <section className="relative sm:pt-3">
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-3">
-          {CUSTOMER_FORM_FIELDS.map(item => (
-            <FormInput
-              key={item.field}
-              field={item.field}
-              placeholder={item.placeholder}
-              icon={item.icon}
-              type={item.type}
-              required={item.required}
-              options={item.options}
-              compact
-              borderRounded={item.border}
-            />
-          ))}
+          {CUSTOMER_FORM_FIELDS.map(item =>
+            item.field === "phone" ? (
+              <PhoneSearch key={item.field} customers={customers} placeholder={item.placeholder} />
+            ) : (
+              <FormInput
+                key={item.field}
+                field={item.field}
+                placeholder={item.placeholder}
+                icon={item.icon}
+                type={item.type}
+                required={item.required}
+                options={item.options}
+                compact
+                borderRounded={item.border}
+              />
+            ),
+          )}
 
           <FormInput
             field="salesmanId"

@@ -4,3 +4,4 @@ export * from "./price-selector";
 export * from "./order-total";
 export * from "./paid-checkbox";
 export * from "./print-checkbox";
+export * from "./phone-search";

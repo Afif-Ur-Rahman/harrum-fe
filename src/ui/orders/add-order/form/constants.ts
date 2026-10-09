@@ -14,6 +14,13 @@ interface CustomerFormField {
 
 export const CUSTOMER_FORM_FIELDS: CustomerFormField[] = [
   {
+    field: "phone",
+    placeholder: "Phone",
+    icon: Phone,
+    required: true,
+    border: "rounded-lg",
+  },
+  {
     field: "customerName",
     placeholder: "Customer Name",
     icon: User,
@@ -26,13 +33,6 @@ export const CUSTOMER_FORM_FIELDS: CustomerFormField[] = [
     icon: Mail,
     type: "email",
     required: false,
-    border: "rounded-lg",
-  },
-  {
-    field: "phone",
-    placeholder: "Phone",
-    icon: Phone,
-    required: true,
     border: "rounded-lg",
   },
 ];

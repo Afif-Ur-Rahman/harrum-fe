@@ -16,7 +16,7 @@ export const NAV_TABS: {
   { href: "/stocks", label: "Stocks", icon: Boxes, permission: "stocks" },
   { href: "/expenses", label: "Expenses", icon: Wallet2, permission: "expenses" },
   { href: "/employees", label: "Employees", icon: Users, permission: "employees" },
-  { href: "/profile", label: "Profile", icon: User }, // always visible
+  { href: "/profile", label: "Profile", icon: User },
 ];
 
 export const getNavTabs = (user: Parameters<typeof hasPermission>[0]) =>
