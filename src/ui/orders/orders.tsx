@@ -28,17 +28,18 @@ const Orders = () => {
         <div className="absolute top-0 left-1/2 -z-10 h-64 w-64 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-3xl" />
 
         <div className="p-4 sm:p-6 xl:p-8">
-          <div className="mb-2 flex flex-wrap items-center justify-between gap-4">
-            <div className="flex flex-1 items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/8">
+          <div className="mb-5 flex flex-col gap-4 sm:mb-6 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex min-w-0 items-start gap-3">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/8">
                 <ShoppingBag className="h-5 w-5 text-cyan-300" />
               </div>
 
-              <div className="flex flex-1 flex-col">
+              <div className="min-w-0 flex-1">
                 <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">
                   Create Order
                 </h1>
-                <p className="mt-1 text-xs text-slate-400">
+
+                <p className="mt-1 max-w-sm text-xs leading-5 text-slate-400 sm:text-sm">
                   Add customer details and select items to create a new order
                 </p>
               </div>
@@ -46,9 +47,9 @@ const Orders = () => {
 
             <NavigationLink
               href="/orders/all"
-              className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/8 px-4 py-2.5 text-sm font-medium text-slate-300 shadow-lg shadow-black/10 backdrop-blur-xl transition hover:bg-white/12 hover:text-white active:scale-[0.98]"
+              className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/8 px-4 py-3 text-sm font-medium text-slate-300 shadow-lg shadow-black/10 backdrop-blur-xl transition hover:bg-white/12 hover:text-white active:scale-[0.98] sm:w-auto sm:shrink-0 sm:rounded-2xl sm:py-2.5"
             >
-              <ClipboardList className="h-4 w-4" />
+              <ClipboardList className="h-4 w-4 shrink-0" />
               <span>View All Orders</span>
             </NavigationLink>
           </div>

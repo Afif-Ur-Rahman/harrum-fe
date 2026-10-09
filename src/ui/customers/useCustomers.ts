@@ -6,36 +6,61 @@ import {
   getAllCustomers,
   updateCustomer,
 } from "@/api/api-call/customers";
+import { usePersistStore } from "@/store/presistStore";
 import { Customer } from "@/types";
 import { showToast } from "@/utils/toast";
 
 import { CustomerFormType } from "./form";
 
 const useCustomers = () => {
-  const [customers, setCustomers] = useState<Customer[]>([]);
+  const {
+    customers,
+    setCustomers,
+    setCustomersLoaded,
+    addCustomer,
+    updateCustomerById,
+    removeCustomerById,
+  } = usePersistStore();
+
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
 
-  const fetchCustomers = async () => {
-    setLoading(true);
-    const res = await getAllCustomers();
-
-    if (res?.error) {
-      showToast("error", res.error);
-      setLoading(false);
-      return;
-    }
-
-    setCustomers(res?.data?.data || []);
-    setLoading(false);
-  };
-
   useEffect(() => {
-    (() => fetchCustomers())();
-  }, []);
+    let cancelled = false;
+
+    const fetchCustomers = async () => {
+      try {
+        const res = await getAllCustomers();
+
+        if (cancelled) return;
+
+        if (res?.error) {
+          showToast("error", res.error);
+          return;
+        }
+
+        setCustomers(res?.data?.data || []);
+        setCustomersLoaded(true);
+      } catch {
+        if (!cancelled) {
+          showToast("error", "Failed to fetch customers");
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
+    void fetchCustomers();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [setCustomers, setCustomersLoaded]);
 
   const openAddDialog = () => {
     setEditingCustomer(null);
@@ -50,56 +75,70 @@ const useCustomers = () => {
   const onSubmitCustomer = async (data: CustomerFormType) => {
     setSaving(true);
 
-    const response = editingCustomer
-      ? await updateCustomer(editingCustomer._id, {
-          name: data.name,
-          phone: data.phone,
-          email: data.email,
-        })
-      : await createCustomer({
-          name: data.name,
-          phone: data.phone,
-          email: data.email,
-          remainingAmount: Number(data.remainingAmount) || 0,
-        });
+    try {
+      const response = editingCustomer
+        ? await updateCustomer(editingCustomer._id, {
+            name: data.name,
+            phone: data.phone,
+            email: data.email,
+          })
+        : await createCustomer({
+            name: data.name,
+            phone: data.phone,
+            email: data.email,
+            remainingAmount: Number(data.remainingAmount) || 0,
+          });
 
-    setSaving(false);
+      if (response?.error || !response?.data) {
+        showToast("error", response?.error || "Request failed");
+        return;
+      }
 
-    if (response?.error || !response?.data) {
-      showToast("error", response?.error || "Request failed");
-      return;
+      const savedCustomer = response.data.data;
+
+      if (editingCustomer) {
+        updateCustomerById(savedCustomer);
+        showToast("success", "Customer updated successfully");
+      } else {
+        addCustomer(savedCustomer);
+        showToast("success", "Customer added successfully");
+      }
+
+      setOpen(false);
+      setEditingCustomer(null);
+    } catch {
+      showToast("error", "Failed to save customer");
+    } finally {
+      setSaving(false);
     }
-
-    const savedCustomer = response.data.data;
-
-    if (editingCustomer) {
-      setCustomers(prev => prev.map(c => (c._id === savedCustomer._id ? savedCustomer : c)));
-      showToast("success", "Customer updated successfully");
-    } else {
-      setCustomers(prev => [savedCustomer, ...prev]);
-      showToast("success", "Customer added successfully");
-    }
-
-    setOpen(false);
-    setEditingCustomer(null);
   };
 
   const onDeleteCustomer = async (
     id: string,
   ): Promise<{ state: boolean; message?: string; error?: string }> => {
-    const res = await deleteCustomer(id);
+    try {
+      const res = await deleteCustomer(id);
 
-    if (res?.error || !res?.data) {
-      return { state: false, error: res?.error || "Failed to delete customer" };
+      if (res?.error || !res?.data) {
+        return {
+          state: false,
+          error: res?.error || "Failed to delete customer",
+        };
+      }
+
+      removeCustomerById(id);
+
+      return { state: true, message: res.data.message };
+    } catch {
+      return {
+        state: false,
+        error: "Failed to delete customer",
+      };
     }
-
-    setCustomers(prev => prev.filter(c => c._id !== id));
-
-    return { state: true, message: res.data.message };
   };
 
   const updateCustomerInList = (updated: Customer) => {
-    setCustomers(prev => prev.map(c => (c._id === updated._id ? updated : c)));
+    updateCustomerById(updated);
   };
 
   const filtered = useMemo(() => {

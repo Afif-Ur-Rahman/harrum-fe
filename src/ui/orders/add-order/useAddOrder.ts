@@ -7,7 +7,7 @@ import { createOrder, getAllCustomers } from "@/api/api-call";
 import { getAllEmployees } from "@/api/api-call/employee";
 import { getAllStocks } from "@/api/api-call/stock";
 import { usePersistStore } from "@/store/presistStore";
-import { Customer, Stock } from "@/types";
+import { Stock } from "@/types";
 import { NO_COLOR_VARIANT_TYPES } from "@/ui/stock/constants";
 import { printOrder } from "@/utils";
 import { showToast } from "@/utils/toast";
@@ -23,9 +23,10 @@ const useAddOrder = () => {
     employeesLoaded,
     setEmployees,
     updateStocksByIds,
+    customers,
+    customersLoaded,
+    setCustomers,
   } = usePersistStore();
-
-  const [customers, setCustomers] = useState<Customer[]>([]);
 
   const [submitting, setSubmitting] = useState(false);
 
@@ -140,6 +141,8 @@ const useAddOrder = () => {
   };
 
   const getCustomers = async () => {
+    if (customersLoaded) return;
+
     const response = await getAllCustomers();
 
     if (response?.error) {
@@ -147,9 +150,7 @@ const useAddOrder = () => {
       return;
     }
 
-    const data = response?.data?.data || [];
-
-    setCustomers(data);
+    setCustomers(response?.data?.data || []);
   };
 
   const addOrderItem = (stock: Stock) => {
@@ -192,41 +193,43 @@ const useAddOrder = () => {
   const onSubmitOrder = async (data: OrderFormType) => {
     setSubmitting(true);
 
-    // `print` is frontend-only, never sent to the backend
-    const { print, ...orderPayload } = data;
+    try {
+      const { print, ...orderPayload } = data;
 
-    const response = await createOrder(orderPayload);
+      const response = await createOrder(orderPayload);
 
-    if (response?.error || !response?.data) {
-      showToast("error", response?.error || "Failed to create order");
+      if (response?.error || !response?.data) {
+        showToast("error", response?.error || "Failed to create order");
+        return;
+      }
+
+      if (response.data.updatedStocks?.length) {
+        updateStocksByIds(response.data.updatedStocks);
+      }
+
+      showToast("success", response.data.message || "Order created successfully");
+
+      if (print) {
+        printOrder(
+          response.data.data,
+          salesmanOptions.find(option => option.value === data.salesmanId)?.label,
+        );
+      }
+
+      form.reset({
+        ...initialValues,
+        salesmanId: data.salesmanId,
+        print: data.print,
+      });
+    } catch {
+      showToast("error", "Failed to create order");
+    } finally {
       setSubmitting(false);
-      return;
     }
-
-    if (response.data.updatedStocks?.length) {
-      updateStocksByIds(response.data.updatedStocks);
-    }
-
-    showToast("success", response.data.message || "Order created successfully");
-
-    if (print) {
-      printOrder(
-        response.data.data,
-        salesmanOptions.find(option => option.value === data.salesmanId)?.label,
-      );
-    }
-
-    form.reset({
-      ...initialValues,
-      salesmanId: data.salesmanId,
-      print: data.print,
-    });
-
-    setSubmitting(false);
   };
 
   useEffect(() => {
-    Promise.all([getStocks(), getEmployees(), getCustomers()]);
+    void Promise.all([getStocks(), getEmployees(), getCustomers()]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
