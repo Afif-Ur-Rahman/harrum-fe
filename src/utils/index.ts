@@ -5,3 +5,4 @@ export * from "./guest-id";
 export * from "./price-format";
 export * from "./colors";
 export * from "./print";
+export * from "./handle-key-down";

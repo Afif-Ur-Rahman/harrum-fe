@@ -6,6 +6,7 @@ import { Toaster } from "react-hot-toast";
 import { DevLogger } from "@/components/dev-logger";
 import { NavigationLoaderProvider } from "@/components/layout";
 import { MODE } from "@/constants";
+import { FormArrowKeyNavigation } from "@/lib/form-arrow-navigation";
 import { ServiceWorkerRegister } from "@/lib/sw-register";
 import { getAuthCookies } from "@/utils/cookies";
 import { ToastProvider } from "@/utils/toast-provider";
@@ -61,6 +62,7 @@ export default async function RootLayout({
           <NavigationLoaderProvider>
             <Theme appearance="dark" accentColor="cyan" grayColor="slate">
               {children}
+              <FormArrowKeyNavigation />
             </Theme>
           </NavigationLoaderProvider>
         </ToastProvider>
