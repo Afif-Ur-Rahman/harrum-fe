@@ -54,9 +54,10 @@ export const INVOICE_STYLES = `
     text-transform: uppercase;
     letter-spacing: 0.6px;
     color: #fff;
-    background: #a487ad;
+    background: #1e293b;
     padding: 6px 10px;
     border-radius: 4px 4px 0 0;
+    opacity: 0.85;
   }
 
   .no-data {
@@ -93,7 +94,6 @@ export const INVOICE_STYLES = `
   }
 
   .terms-list {
-    color: #777;
     font-size: 9px;
     line-height: 1.5;
   }
@@ -134,7 +134,6 @@ export const INVOICE_STYLES = `
     justify-content: space-between;
     padding-top: 8px;
     border-top: 1px solid #ddd;
-    color: #777;
     font-size: 10px;
     font-weight: 600;
   }
@@ -144,8 +143,67 @@ export const INVOICE_STYLES = `
     font-weight: 700;
   }
 
-  .saleman .software {
-    padding-top: 0;
-    border-top: none;
+  .invoice {
+    position: relative;
+  }
+
+  .paid-stamp {
+    position: absolute;
+    top: 85%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    padding: 4px 18px;
+    border: 3px solid #ed1c24;
+    outline: 1px solid #ed1c24;
+    outline-offset: 2px;
+    border-radius: 8px;
+    color: #ed1c24;
+    text-align: center;
+    opacity: 0.65;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .paid-stamp .stamp-brand {
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .paid-stamp .stamp-title {
+    font-size: 30px;
+    font-weight: 900;
+    letter-spacing: 5px;
+    line-height: 1.1;
+  }
+
+  .paid-stamp .stamp-sub {
+    font-size: 9px;
+    font-weight: 700;
+    border-top: 1px solid #ed1c24;
+    margin-top: 2px;
+    padding-top: 2px;
+  }
+
+  .header-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+  }
+
+  .support-stamp {
+    margin: 4px 8px 0 0;
+    padding: 3px 14px;
+    border: 1px dashed #000;
+    border-radius: 6px;
+    color: #000;
+    font-size: 11px;
+    font-style: italic;
+    letter-spacing: 1px;
+    text-align: center;
+    opacity: 0.7;
+    pointer-events: none;
   }
 `;

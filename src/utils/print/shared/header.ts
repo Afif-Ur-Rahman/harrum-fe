@@ -1,6 +1,6 @@
 import { CONTACT_INFO, CONTACT_LINKS, ICONS, LOGO } from "./constants";
 
-export const Header = (origin: string) => `
+export const Header = (origin: string, extra = "") => `
   <div class="header">
     <div class="logo">
       <img
@@ -9,36 +9,42 @@ export const Header = (origin: string) => `
       />
     </div>
 
-    <div class="contacts">
-      <a class="contact" href="${CONTACT_LINKS.phone}">
-        ${ICONS.phone}
-        <span>${CONTACT_INFO.phone}</span>
-      </a>
+    <div class="header-right">
 
-      <a
-        class="contact"
-        href="${CONTACT_LINKS.whatsapp}"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        ${ICONS.whatsapp}
-        <span>${CONTACT_INFO.phone}</span>
-      </a>
+    ${extra}
+    
+      <div class="contacts">
+        <a class="contact" href="${CONTACT_LINKS.phone}">
+          ${ICONS.phone}
+          <span>${CONTACT_INFO.phone}</span>
+        </a>
 
-      <a
-        class="contact"
-        href="${CONTACT_LINKS.facebook}"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        ${ICONS.facebook}
-        <span>${CONTACT_INFO.facebook}</span>
-      </a>
+        <a
+          class="contact"
+          href="${CONTACT_LINKS.whatsapp}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          ${ICONS.whatsapp}
+          <span>${CONTACT_INFO.phone}</span>
+        </a>
 
-      <a class="contact" href="${CONTACT_LINKS.gmail}">
-        ${ICONS.gmail}
-        <span>${CONTACT_INFO.gmail}</span>
-      </a>
+        <a
+          class="contact"
+          href="${CONTACT_LINKS.facebook}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          ${ICONS.facebook}
+          <span>${CONTACT_INFO.facebook}</span>
+        </a>
+
+        <a class="contact" href="${CONTACT_LINKS.gmail}">
+          ${ICONS.gmail}
+          <span>${CONTACT_INFO.gmail}</span>
+        </a>
+      </div>
+
     </div>
   </div>
 `;

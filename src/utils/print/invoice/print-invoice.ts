@@ -76,5 +76,6 @@ export const printOrder = (order: Order, salesmanName?: string) => {
     discount: order.discount,
     final: order.totalPrice,
     salesman: salesmanName ?? order.salesman?.username,
+    isPaid: order.isPaid,
   });
 };

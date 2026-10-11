@@ -19,6 +19,7 @@ export interface InvoiceData {
   discount: number;
   final: number;
   salesman?: string;
+  isPaid: boolean;
 }
 
 export type InvoiceOrder = Order;

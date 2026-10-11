@@ -39,10 +39,6 @@ const InvoiceFooter = (data: InvoiceData) => `
         ${data.salesman ? `<span class="name">${escapeHtml(data.salesman)}</span>` : ""}
       </div>
 
-      <div class="saleman software">
-        <span>Software Support</span>
-        <span class="name">03156690902</span>
-      </div>
     </div>
   </div>
 `;
@@ -63,7 +59,16 @@ export const InvoiceHtml = (data: InvoiceData) => {
 
 <body>
   <div class="invoice">
-    ${Header(origin)}
+  ${
+    data.isPaid
+      ? `<div class="paid-stamp">
+        <div class="stamp-brand">Harrum Cloth House</div>
+        <div class="stamp-title">PAID</div>
+        <div class="stamp-sub">${escapeHtml(data.date)}</div>
+      </div>`
+      : ""
+  }
+    ${Header(origin, `<div class="support-stamp">For Software Support Contact: 03156690902</div>`)}
 
     ${CustomerInfo({
       partyType: "Customer",
