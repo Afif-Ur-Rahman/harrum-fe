@@ -38,6 +38,11 @@ const InvoiceFooter = (data: InvoiceData) => `
 
         ${data.salesman ? `<span class="name">${escapeHtml(data.salesman)}</span>` : ""}
       </div>
+
+      <div class="saleman software">
+        <span>Software Support</span>
+        <span class="name">03156690902</span>
+      </div>
     </div>
   </div>
 `;

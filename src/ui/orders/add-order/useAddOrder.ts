@@ -157,33 +157,39 @@ const useAddOrder = () => {
     const isNoColorType = NO_COLOR_VARIANT_TYPES.includes(stock.type);
 
     if (isNoColorType) {
-      append({
+      append(
+        {
+          stockId: stock._id,
+          name: `${stock.name} - ${stock.brand}`,
+          size: stock.size,
+          priceType: "sale",
+          hasVariants: false,
+          quantity: "",
+          price: "0",
+          variants: [],
+        },
+        { shouldFocus: false },
+      );
+      return;
+    }
+
+    append(
+      {
         stockId: stock._id,
         name: `${stock.name} - ${stock.brand}`,
         size: stock.size,
         priceType: "sale",
-        hasVariants: false,
-        quantity: "",
-        price: "0",
-        variants: [],
-      });
-      return;
-    }
-
-    append({
-      stockId: stock._id,
-      name: `${stock.name} - ${stock.brand}`,
-      size: stock.size,
-      priceType: "sale",
-      hasVariants: true,
-      variants: [
-        {
-          color: "",
-          quantity: "",
-          price: "0",
-        },
-      ],
-    });
+        hasVariants: true,
+        variants: [
+          {
+            color: "",
+            quantity: "",
+            price: "0",
+          },
+        ],
+      },
+      { shouldFocus: false },
+    );
   };
 
   const removeOrderItem = (index: number) => {

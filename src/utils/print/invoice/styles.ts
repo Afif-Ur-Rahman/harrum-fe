@@ -3,7 +3,7 @@ import { HEADER_CUSTOMER_STYLES, TABLE_STYLES } from "../shared";
 export const INVOICE_STYLES = `
   @page {
     size: A4;
-    margin: 6mm 12mm 14mm;
+    margin: 0;
   }
 
   * {
@@ -15,7 +15,7 @@ export const INVOICE_STYLES = `
   html,
   body {
     margin: 0;
-    padding: 0;
+    padding: 6mm;
     background: #fff;
     font-family: Arial, Helvetica, sans-serif;
     color: #111;
@@ -132,7 +132,6 @@ export const INVOICE_STYLES = `
   .saleman {
     display: flex;
     justify-content: space-between;
-    margin-top: 10px;
     padding-top: 8px;
     border-top: 1px solid #ddd;
     color: #777;
@@ -143,5 +142,10 @@ export const INVOICE_STYLES = `
   .saleman .name {
     color: #111;
     font-weight: 700;
+  }
+
+  .saleman .software {
+    padding-top: 0;
+    border-top: none;
   }
 `;

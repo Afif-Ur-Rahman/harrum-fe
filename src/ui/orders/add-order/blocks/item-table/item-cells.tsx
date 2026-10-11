@@ -166,7 +166,7 @@ export const ItemCells = ({ index, stock, mode }: ItemCellsProps) => {
       {canAddMoreColors && (
         <button
           type="button"
-          onClick={() => append({ color: "", quantity: "", price: "0" })}
+          onClick={() => append({ color: "", quantity: "", price: "0" }, { shouldFocus: false })}
           disabled={!canAddMoreColors}
           className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-white/10 text-cyan-300 transition hover:bg-cyan-400/10 disabled:cursor-not-allowed disabled:opacity-30"
           aria-label="Add color"
