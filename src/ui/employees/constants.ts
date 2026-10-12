@@ -28,6 +28,13 @@ export const EMPLOYEE_FORM_INPUTS = [
     placeholder: "NIC (12345-1234567-1)",
     icon: IdCard,
     required: true,
+    rules: {
+      required: "CNIC is required",
+      pattern: {
+        value: /^\d{5}-\d{7}-\d$/,
+        message: "Enter a valid CNIC (12345-1234567-1)",
+      },
+    },
     className: "",
   },
   {

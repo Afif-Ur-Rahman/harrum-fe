@@ -3,7 +3,7 @@
 import { Select } from "@radix-ui/themes";
 import { format, isValid } from "date-fns";
 import { Eye, EyeOff } from "lucide-react";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Controller, RegisterOptions, useFormContext } from "react-hook-form";
 
 import { FormFieldError } from "../form";
@@ -31,8 +31,38 @@ interface FormInputProps {
 
 const capitalizeFirstLetter = (value: string) => {
   if (!value) return value;
+
   return value.charAt(0).toUpperCase() + value.slice(1);
 };
+
+const getCnicDigits = (value: string) => value.replace(/\D/g, "").slice(0, 13);
+
+const formatCnicValue = (value: string) => {
+  const digits = getCnicDigits(value);
+
+  if (digits.length <= 5) {
+    return digits;
+  }
+
+  if (digits.length <= 12) {
+    return `${digits.slice(0, 5)}-${digits.slice(5)}`;
+  }
+
+  return `${digits.slice(0, 5)}-${digits.slice(5, 12)}-${digits.slice(12)}`;
+};
+
+const formatCnicDisplay = (value: string) => {
+  const digits = getCnicDigits(value);
+
+  return (
+    `${digits.slice(0, 5).padEnd(5, "_")}-` +
+    `${digits.slice(5, 12).padEnd(7, "_")}-` +
+    digits.slice(12, 13).padEnd(1, "_")
+  );
+};
+
+const getCnicCursorPosition = (digitCount: number) =>
+  digitCount + (digitCount >= 5 ? 1 : 0) + (digitCount >= 12 ? 1 : 0);
 
 const FormInput = ({
   field,
@@ -52,15 +82,18 @@ const FormInput = ({
 }: FormInputProps) => {
   const { register, control } = useFormContext();
   const [show, setShow] = useState(false);
+  const cnicInputRef = useRef<HTMLInputElement>(null);
 
+  const isCnic = field === "cnic";
   const isPassword = type === "password";
   const isNumber = type === "number";
   const isSelect = type === "select";
   const isDate = type === "date";
   const isTextarea = type === "textarea";
   const isEmail = type === "email";
+
   const shouldCapitalize =
-    capitalizeFirst && !isNumber && !isPassword && !isSelect && !isDate && !isEmail;
+    capitalizeFirst && !isNumber && !isPassword && !isSelect && !isDate && !isEmail && !isCnic;
 
   const inputType = isPassword ? (show ? "text" : "password") : type;
 
@@ -96,7 +129,9 @@ const FormInput = ({
       }
     : (rules ?? {});
 
-  const { onChange: registerOnChange, ...registerRest } = register(field, numberRules);
+  const registration = isCnic ? null : register(field, numberRules);
+
+  const { onChange: registerOnChange, ...registerRest } = registration ?? { onChange: undefined };
 
   const handleCapitalizedChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -109,13 +144,14 @@ const FormInput = ({
 
       if (capitalized !== el.value) {
         el.value = capitalized;
+
         if (cursorStart !== null && cursorEnd !== null) {
           el.setSelectionRange(cursorStart, cursorEnd);
         }
       }
     }
 
-    registerOnChange(e);
+    registerOnChange?.(e);
   };
 
   const inputClassName =
@@ -208,9 +244,7 @@ const FormInput = ({
                     type="date"
                     value={dateValue}
                     onChange={e => {
-                      const raw = e.target.value;
-
-                      controllerField.onChange(raw || "");
+                      controllerField.onChange(e.target.value || "");
                     }}
                     onBlur={controllerField.onBlur}
                     className={`${inputClassName} scheme-dark`}
@@ -226,6 +260,116 @@ const FormInput = ({
               placeholder={placeholder}
               rows={rows}
               className={`${inputClassName} resize-none`}
+            />
+          ) : isCnic ? (
+            <Controller
+              name={field}
+              control={control}
+              rules={{
+                ...rules,
+                required: rules?.required ?? (required ? "CNIC is required" : false),
+              }}
+              render={({ field: controllerField }) => (
+                <input
+                  id={field}
+                  name={controllerField.name}
+                  ref={element => {
+                    controllerField.ref(element);
+                    cnicInputRef.current = element;
+                  }}
+                  value={formatCnicDisplay(controllerField.value ?? "")}
+                  onBlur={controllerField.onBlur}
+                  onFocus={e => {
+                    const digits = getCnicDigits(controllerField.value ?? "");
+
+                    if (!digits.length) {
+                      e.currentTarget.setSelectionRange(0, 0);
+                    }
+                  }}
+                  onChange={() => {}}
+                  onKeyDown={e => {
+                    const input = e.currentTarget;
+                    const start = input.selectionStart ?? 0;
+                    const end = input.selectionEnd ?? start;
+                    const currentDigits = getCnicDigits(String(controllerField.value ?? ""));
+
+                    const getDigitIndex = (position: number) =>
+                      formatCnicDisplay(currentDigits).slice(0, position).replace(/\D/g, "").length;
+
+                    const startIndex = getDigitIndex(start);
+                    const endIndex = getDigitIndex(end);
+
+                    let nextDigits = currentDigits;
+                    let cursorIndex = startIndex;
+
+                    if (/^\d$/.test(e.key)) {
+                      e.preventDefault();
+
+                      nextDigits =
+                        currentDigits.slice(0, startIndex) + e.key + currentDigits.slice(endIndex);
+
+                      nextDigits = nextDigits.slice(0, 13);
+                      cursorIndex = Math.min(startIndex + 1, nextDigits.length);
+                    } else if (e.key === "Backspace") {
+                      e.preventDefault();
+
+                      if (startIndex === endIndex && startIndex > 0) {
+                        nextDigits =
+                          currentDigits.slice(0, startIndex - 1) + currentDigits.slice(endIndex);
+                        cursorIndex = startIndex - 1;
+                      } else {
+                        nextDigits =
+                          currentDigits.slice(0, startIndex) + currentDigits.slice(endIndex);
+                      }
+                    } else if (e.key === "Delete") {
+                      e.preventDefault();
+
+                      if (startIndex === endIndex) {
+                        nextDigits =
+                          currentDigits.slice(0, startIndex) + currentDigits.slice(startIndex + 1);
+                      } else {
+                        nextDigits =
+                          currentDigits.slice(0, startIndex) + currentDigits.slice(endIndex);
+                      }
+                    } else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+                      e.preventDefault();
+                      return;
+                    } else {
+                      return;
+                    }
+
+                    controllerField.onChange(formatCnicValue(nextDigits));
+
+                    requestAnimationFrame(() => {
+                      const position = getCnicCursorPosition(cursorIndex);
+                      input.setSelectionRange(position, position);
+                    });
+                  }}
+                  onPaste={e => {
+                    e.preventDefault();
+
+                    const pastedDigits = getCnicDigits(e.clipboardData.getData("text"));
+
+                    controllerField.onChange(formatCnicValue(pastedDigits));
+
+                    requestAnimationFrame(() => {
+                      const element = cnicInputRef.current;
+
+                      if (!element) return;
+
+                      const position = getCnicCursorPosition(pastedDigits.length);
+
+                      element.setSelectionRange(position, position);
+                    });
+                  }}
+                  type="text"
+                  inputMode="numeric"
+                  autoComplete="off"
+                  maxLength={15}
+                  className={inputClassName}
+                  aria-label={label ?? "CNIC"}
+                />
+              )}
             />
           ) : (
             <>
@@ -244,7 +388,7 @@ const FormInput = ({
                   if (shouldCapitalize) {
                     handleCapitalizedChange(e);
                   } else {
-                    registerOnChange(e);
+                    registerOnChange?.(e);
                   }
                 }}
                 type={inputType}

@@ -75,15 +75,15 @@ const EmployeeForm = ({ employee = null, loading, onSubmit }: EmployeeFormProps)
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             {EMPLOYEE_FORM_INPUTS.filter(input => !isEdit || input.field !== "password").map(
               input => {
-                const Icon = input.icon;
-
                 return (
                   <div key={input.field} className={input.className}>
                     <FormInput
                       field={input.field}
                       type={input.type}
                       placeholder={input.placeholder}
-                      icon={Icon}
+                      icon={input.icon}
+                      rules={"rules" in input ? input.rules : undefined}
+                      required={"required" in input ? input.required : false}
                       compact
                     />
                   </div>
