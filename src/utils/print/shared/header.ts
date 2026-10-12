@@ -1,6 +1,6 @@
 import { CONTACT_INFO, CONTACT_LINKS, ICONS, LOGO } from "./constants";
 
-export const Header = (origin: string, extra = "") => `
+export const Header = (origin: string) => `
   <div class="header">
     <div class="logo">
       <img
@@ -10,8 +10,6 @@ export const Header = (origin: string, extra = "") => `
     </div>
 
     <div class="header-right">
-
-    ${extra}
     
       <div class="contacts">
         <a class="contact" href="${CONTACT_LINKS.phone}">

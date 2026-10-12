@@ -58,6 +58,9 @@ export const InvoiceHtml = (data: InvoiceData) => {
 </head>
 
 <body>
+<div class="support-stamp">
+    For Software Support Contact: 03156690902
+  </div>
   <div class="invoice">
   ${
     data.isPaid
@@ -68,7 +71,7 @@ export const InvoiceHtml = (data: InvoiceData) => {
       </div>`
       : ""
   }
-    ${Header(origin, `<div class="support-stamp">For Software Support Contact: 03156690902</div>`)}
+    ${Header(origin)}
 
     ${CustomerInfo({
       partyType: "Customer",

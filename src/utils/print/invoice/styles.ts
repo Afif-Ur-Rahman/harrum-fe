@@ -192,9 +192,11 @@ export const INVOICE_STYLES = `
     align-items: flex-end;
     gap: 10px;
   }
-
+  
   .support-stamp {
-    margin: 4px 8px 0 0;
+    position: absolute;
+    top: 3mm;
+    right: 6mm;
     padding: 3px 14px;
     border: 1px dashed #000;
     border-radius: 6px;
@@ -205,5 +207,6 @@ export const INVOICE_STYLES = `
     text-align: center;
     opacity: 0.7;
     pointer-events: none;
+    z-index: 5;
   }
 `;
