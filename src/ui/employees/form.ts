@@ -6,6 +6,7 @@ import { CreateEmployeeSchema, EmployeeFormType, EmployeeSchema } from "./schema
 const EMPTY_EMPLOYEE_VALUES: EmployeeFormType = {
   username: "",
   email: "",
+  cnic: "",
   password: "",
   phone: "",
   guardianName: "",

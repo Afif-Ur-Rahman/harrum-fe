@@ -6,6 +6,7 @@ export interface Employee {
   _id: string;
   username: string;
   email: string;
+  cnic: string;
   type: EmployeeRole;
   phone: string;
   guardianName: string;

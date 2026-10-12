@@ -235,6 +235,7 @@ const useEmployees = () => {
       [
         employee.username,
         employee.email,
+        employee.cnic,
         employee.phone,
         employee.guardianName,
         employee.guardianPhone,

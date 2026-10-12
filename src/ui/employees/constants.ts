@@ -1,4 +1,4 @@
-import { Home, Lock, Mail, MapPin, Phone, Type, UserRound } from "lucide-react";
+import { Home, IdCard, Lock, Mail, MapPin, Phone, Type, UserRound } from "lucide-react";
 
 export const ROLE_STYLES: Record<string, string> = {
   Salesman: "bg-emerald-500/15 text-emerald-200 ring-1 ring-inset ring-emerald-400/30",
@@ -22,6 +22,14 @@ export const ROLE_PANEL_STYLES: Record<
 };
 
 export const EMPLOYEE_FORM_INPUTS = [
+  {
+    field: "cnic",
+    type: "text",
+    placeholder: "NIC (12345-1234567-1)",
+    icon: IdCard,
+    required: true,
+    className: "",
+  },
   {
     field: "username",
     type: "text",
@@ -85,53 +93,5 @@ export const EMPLOYEE_FORM_INPUTS = [
     icon: Home,
     required: true,
     className: "sm:col-span-2",
-  },
-] as const;
-
-export const EMPLOYEE_TABLE_HEADERS = [
-  {
-    key: "username",
-    label: "Employee",
-    className: "px-5 py-4",
-  },
-  {
-    key: "email",
-    label: "Email",
-    className: "hidden px-5 py-4 md:table-cell",
-  },
-  {
-    key: "phone",
-    label: "Phone",
-    className: "hidden px-5 py-4 lg:table-cell",
-  },
-  {
-    key: "type",
-    label: "Role",
-    className: "px-5 py-4",
-  },
-  {
-    key: "guardianName",
-    label: "Guardian",
-    className: "hidden px-5 py-4 xl:table-cell",
-  },
-  {
-    key: "guardianPhone",
-    label: "Guardian Phone",
-    className: "hidden px-5 py-4 xl:table-cell",
-  },
-  {
-    key: "permanentAddress",
-    label: "Permanent Address",
-    className: "hidden px-5 py-4 2xl:table-cell",
-  },
-  {
-    key: "currentAddress",
-    label: "Current Address",
-    className: "hidden px-5 py-4 2xl:table-cell",
-  },
-  {
-    key: "actions",
-    label: "Action",
-    className: "px-5 py-4 text-right",
   },
 ] as const;

@@ -29,6 +29,7 @@ const EmployeeForm = ({ employee = null, loading, onSubmit }: EmployeeFormProps)
       form.reset({
         username: employee.username ?? "",
         email: employee.email ?? "",
+        cnic: employee.cnic ?? "",
         password: "",
         phone: employee.phone ?? "",
         guardianName: employee.guardianName ?? "",
@@ -41,6 +42,7 @@ const EmployeeForm = ({ employee = null, loading, onSubmit }: EmployeeFormProps)
       form.reset({
         username: "",
         email: "",
+        cnic: "",
         password: "",
         phone: "",
         guardianName: "",

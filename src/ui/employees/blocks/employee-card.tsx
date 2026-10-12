@@ -10,6 +10,7 @@ import {
   ShieldUser,
   Trash2,
   UserRound,
+  IdCard,
 } from "lucide-react";
 import React from "react";
 
@@ -156,6 +157,7 @@ const EmployeeCard = ({
 
         {/* Contact */}
         <div className="mt-5 space-y-2.5">
+          <InfoRow icon={IdCard} label="CNIC" value={employee.cnic} />
           <InfoRow icon={Mail} label="Email" value={employee.email} />
           <InfoRow icon={Phone} label="Phone" value={employee.phone} />
         </div>

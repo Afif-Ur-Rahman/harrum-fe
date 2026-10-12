@@ -6,6 +6,7 @@ export const EmployeeSchema = z.object({
     message: "Employee type is required",
   }),
   email: z.email("Invalid email address"),
+  cnic: z.string().regex(/^\d{5}-?\d{7}-?\d$/, "CNIC must be 13 digits (e.g. 12345-1234567-1)"),
   password: z.string().optional(),
   phone: z.string().min(1, "Phone number is required"),
   guardianName: z.string().min(1, "Father/Guardian name is required"),
