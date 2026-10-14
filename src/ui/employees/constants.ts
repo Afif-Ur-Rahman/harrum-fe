@@ -17,6 +17,8 @@ import {
 
 import type { Employee, EmployeeRole } from "@/types";
 
+export type EmployeeTab = "all" | EmployeeRole;
+
 export const ROLE_STYLES: Record<string, string> = {
   Cleaner: "bg-amber-500/15 text-amber-200 ring-1 ring-inset ring-amber-400/30",
   "Mop Boy": "bg-orange-500/15 text-orange-200 ring-1 ring-inset ring-orange-400/30",
@@ -53,13 +55,44 @@ export const ROLE_ACCENT_STYLES: Record<Employee["type"], string> = {
   senior_salesman: "bg-emerald-400",
 };
 
+export const TAB_COLORS: Record<EmployeeTab, { active: string; hover: string }> = {
+  all: {
+    active: "bg-slate-700/60 text-white ring-1 ring-inset ring-slate-500/40 shadow-sm",
+    hover: "hover:bg-slate-800/70 hover:text-white",
+  },
+  manager: {
+    active: "bg-violet-500/15 text-violet-200 ring-1 ring-inset ring-violet-400/30",
+    hover: "hover:bg-violet-500/10 hover:text-violet-200",
+  },
+  accountant: {
+    active: "bg-sky-500/15 text-sky-100 ring-1 ring-inset ring-sky-300/30",
+    hover: "hover:bg-sky-500/10 hover:text-sky-100",
+  },
+  senior_salesman: {
+    active: "bg-indigo-500/15 text-indigo-200 ring-1 ring-inset ring-indigo-400/30",
+    hover: "hover:bg-indigo-500/10 hover:text-indigo-200",
+  },
+  salesman: {
+    active: "bg-emerald-500/15 text-emerald-200 ring-1 ring-inset ring-emerald-400/30",
+    hover: "hover:bg-emerald-500/10 hover:text-emerald-200",
+  },
+  cleaner: {
+    active: "bg-amber-500/15 text-amber-200 ring-1 ring-inset ring-amber-400/30",
+    hover: "hover:bg-amber-500/10 hover:text-amber-200",
+  },
+  mop_boy: {
+    active: "bg-orange-500/15 text-orange-200 ring-1 ring-inset ring-orange-400/30",
+    hover: "hover:bg-orange-500/10 hover:text-orange-200",
+  },
+};
+
 export const EMPLOYEE_SECTIONS = [
+  { key: "manager", roleLabel: "Manager" },
+  { key: "accountant", roleLabel: "Accountant" },
+  { key: "senior_salesman", roleLabel: "Senior Salesman" },
+  { key: "salesman", roleLabel: "Salesman" },
   { key: "cleaner", roleLabel: "Cleaner" },
   { key: "mop_boy", roleLabel: "Mop Boy" },
-  { key: "salesman", roleLabel: "Salesman" },
-  { key: "accountant", roleLabel: "Accountant" },
-  { key: "manager", roleLabel: "Manager" },
-  { key: "senior_salesman", roleLabel: "Senior Salesman" },
 ] as const satisfies {
   key: EmployeeRole;
   roleLabel: string;
