@@ -8,23 +8,12 @@ import {
   updateEmployee,
 } from "@/api/api-call/employee";
 import { usePersistStore } from "@/store/presistStore";
-import { Employee, EmployeeRole, Employees } from "@/types/employees";
-import { PagePermission } from "@/types/permissions";
+import type { Employee, EmployeeRole, Employees } from "@/types/employees";
+import type { PagePermission } from "@/types/permissions";
 import { showToast } from "@/utils/toast";
 
-import { EmployeeFormType } from "./schema";
-
-const EMPLOYEE_SECTIONS = [
-  { key: "cleaner", roleLabel: "Cleaner" },
-  { key: "mop_boy", roleLabel: "Mop Boy" },
-  { key: "salesman", roleLabel: "Salesman" },
-  { key: "accountant", roleLabel: "Accountant" },
-  { key: "manager", roleLabel: "Manager" },
-  { key: "senior_salesman", roleLabel: "Senior Salesman" },
-] as const satisfies {
-  key: EmployeeRole;
-  roleLabel: string;
-}[];
+import { EMPLOYEE_SECTIONS } from "./constants";
+import type { EmployeeFormType } from "./schema";
 
 const EMPLOYEE_ROLES: EmployeeRole[] = [
   "cleaner",
@@ -62,6 +51,14 @@ const mapEmployeeGroups = (
 const useEmployees = () => {
   const { employees, employeesLoaded, setEmployees } = usePersistStore();
 
+  const groupedEmployees = useMemo<Employees>(
+    () => ({
+      ...createEmptyEmployees(),
+      ...employees,
+    }),
+    [employees],
+  );
+
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
@@ -71,7 +68,10 @@ const useEmployees = () => {
 
   useEffect(() => {
     const fetchAllEmployees = async () => {
-      if (employeesLoaded) return;
+      if (employeesLoaded) {
+        setLoading(false);
+        return;
+      }
 
       setLoading(true);
 
@@ -82,7 +82,10 @@ const useEmployees = () => {
           showToast("error", res.error);
         }
 
-        setEmployees(res?.data?.data || createEmptyEmployees());
+        setEmployees({
+          ...createEmptyEmployees(),
+          ...(res?.data?.data ?? {}),
+        });
       } catch (error) {
         showToast("error", (error as Error).message || "Failed to fetch employees");
       } finally {
@@ -117,8 +120,8 @@ const useEmployees = () => {
       }
 
       setEmployees({
-        ...employees,
-        [newEmployee.type]: [...employees[newEmployee.type], newEmployee],
+        ...groupedEmployees,
+        [newEmployee.type]: [...groupedEmployees[newEmployee.type], newEmployee],
       });
 
       showToast("success", "Employee added successfully");
@@ -155,10 +158,12 @@ const useEmployees = () => {
 
       const nextEmployees = createEmptyEmployees();
 
-      for (const employee of Object.values(employees).flat() as Employee[]) {
-        if (employee._id !== id && isEmployeeRole(employee.type)) {
-          const role: EmployeeRole = employee.type;
-          nextEmployees[role].push(employee);
+      for (const group of Object.values(groupedEmployees)) {
+        for (const employee of group) {
+          if (employee._id !== id && isEmployeeRole(employee.type)) {
+            const role: EmployeeRole = employee.type;
+            nextEmployees[role].push(employee);
+          }
         }
       }
 
@@ -195,7 +200,7 @@ const useEmployees = () => {
       }
 
       setEmployees(
-        mapEmployeeGroups(employees, list =>
+        mapEmployeeGroups(groupedEmployees, list =>
           list.map(employee =>
             employee._id === employeeId
               ? {
@@ -219,7 +224,6 @@ const useEmployees = () => {
       return true;
     } catch (error) {
       showToast("error", (error as Error).message || "Failed to update permissions");
-
       return false;
     } finally {
       setPermissionLoading(false);
@@ -237,11 +241,9 @@ const useEmployees = () => {
         };
       }
 
-      const updatedEmployees = mapEmployeeGroups(employees, list =>
-        list.filter(employee => employee._id !== id),
+      setEmployees(
+        mapEmployeeGroups(groupedEmployees, list => list.filter(employee => employee._id !== id)),
       );
-
-      setEmployees(updatedEmployees);
 
       if (selectedEmployee?._id === id) {
         setSelectedEmployee(null);
@@ -259,34 +261,68 @@ const useEmployees = () => {
     }
   };
 
-  const flatEmployees = useMemo(() => {
-    return EMPLOYEE_SECTIONS.flatMap(section =>
-      employees[section.key].map(employee => ({
-        ...employee,
-        roleLabel: section.roleLabel,
-      })),
-    );
-  }, [employees]);
-
-  const filtered = useMemo(() => {
+  const filteredEmployees = useMemo<Employees>(() => {
     const query = search.toLowerCase().trim();
 
-    if (!query) return flatEmployees;
+    return {
+      cleaner: groupedEmployees.cleaner.filter(employee =>
+        matchesSearch(employee, query, "Cleaner"),
+      ),
+      mop_boy: groupedEmployees.mop_boy.filter(employee =>
+        matchesSearch(employee, query, "Mop Boy"),
+      ),
+      salesman: groupedEmployees.salesman.filter(employee =>
+        matchesSearch(employee, query, "Salesman"),
+      ),
+      accountant: groupedEmployees.accountant.filter(employee =>
+        matchesSearch(employee, query, "Accountant"),
+      ),
+      manager: groupedEmployees.manager.filter(employee =>
+        matchesSearch(employee, query, "Manager"),
+      ),
+      senior_salesman: groupedEmployees.senior_salesman.filter(employee =>
+        matchesSearch(employee, query, "Senior Salesman"),
+      ),
+    };
+  }, [groupedEmployees, search]);
 
-    return flatEmployees.filter(employee =>
-      [
-        employee.username,
-        employee.email,
-        employee.cnic,
-        employee.phone,
-        employee.guardianName,
-        employee.guardianPhone,
-        employee.permanentAddress,
-        employee.currentAddress,
-        employee.roleLabel,
-      ].some(value => value?.toLowerCase().includes(query)),
-    );
-  }, [flatEmployees, search]);
+  function matchesSearch(employee: Employee, query: string, roleLabel: string): boolean {
+    if (!query) return true;
+
+    return [
+      employee.username,
+      employee.email,
+      employee.cnic,
+      employee.phone,
+      employee.guardianName,
+      employee.guardianPhone,
+      employee.permanentAddress,
+      employee.currentAddress,
+      roleLabel,
+    ].some(value => value?.toLowerCase().includes(query));
+  }
+
+  const flatEmployees = useMemo(
+    () =>
+      EMPLOYEE_SECTIONS.flatMap(({ key, roleLabel }) =>
+        groupedEmployees[key].map(employee => ({
+          ...employee,
+          roleLabel,
+        })),
+      ),
+    [groupedEmployees],
+  );
+
+  const filtered = useMemo(
+    () =>
+      EMPLOYEE_SECTIONS.flatMap(({ key, roleLabel }) =>
+        filteredEmployees[key].map(employee => ({
+          ...employee,
+          roleLabel,
+        })),
+      ),
+    [filteredEmployees],
+  );
 
   return {
     loading,
@@ -301,10 +337,12 @@ const useEmployees = () => {
     onUpdateEmployee,
     onUpdatePermissions,
     onDeleteEmployee,
+    employees: groupedEmployees,
+    filteredEmployees,
     flatEmployees,
+    filtered,
     search,
     setSearch,
-    filtered,
   };
 };
 

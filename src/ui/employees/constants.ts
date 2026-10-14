@@ -15,7 +15,7 @@ import {
   Waves,
 } from "lucide-react";
 
-import type { Employee } from "@/types";
+import type { Employee, EmployeeRole } from "@/types";
 
 export const ROLE_STYLES: Record<string, string> = {
   Cleaner: "bg-amber-500/15 text-amber-200 ring-1 ring-inset ring-amber-400/30",
@@ -52,6 +52,18 @@ export const ROLE_ACCENT_STYLES: Record<Employee["type"], string> = {
   manager: "bg-violet-400",
   senior_salesman: "bg-emerald-400",
 };
+
+export const EMPLOYEE_SECTIONS = [
+  { key: "cleaner", roleLabel: "Cleaner" },
+  { key: "mop_boy", roleLabel: "Mop Boy" },
+  { key: "salesman", roleLabel: "Salesman" },
+  { key: "accountant", roleLabel: "Accountant" },
+  { key: "manager", roleLabel: "Manager" },
+  { key: "senior_salesman", roleLabel: "Senior Salesman" },
+] as const satisfies {
+  key: EmployeeRole;
+  roleLabel: string;
+}[];
 
 export const EMPLOYEE_FORM_INPUTS = [
   {
@@ -120,7 +132,7 @@ export const EMPLOYEE_FORM_INPUTS = [
   {
     field: "type",
     type: "select",
-    placeholder: "Select employee role",
+    placeholder: "Select employee type",
     icon: BriefcaseBusiness,
     required: true,
     options: [
