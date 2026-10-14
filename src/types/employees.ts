@@ -1,6 +1,7 @@
 import { PagePermission } from "./permissions";
 
-export type EmployeeRole = "salesman" | "accountant";
+export type EmployeeRole =
+  "cleaner" | "mop_boy" | "salesman" | "accountant" | "manager" | "senior_salesman";
 
 export interface Employee {
   _id: string;
@@ -17,8 +18,12 @@ export interface Employee {
 }
 
 export interface Employees {
+  cleaner: Employee[];
+  mop_boy: Employee[];
   salesman: Employee[];
   accountant: Employee[];
+  manager: Employee[];
+  senior_salesman: Employee[];
 }
 
 export interface ResponseForEmployee {
@@ -31,7 +36,10 @@ export interface ResponseForEmployee {
 
 export interface CreateEmployeeResponse {
   state: boolean;
-  data?: { message: string; data?: Employee };
+  data?: {
+    message: string;
+    data?: Employee;
+  };
   error?: string;
 }
 

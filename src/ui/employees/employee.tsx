@@ -7,7 +7,6 @@ import { PageLayout } from "@/components/layout";
 import { Loader } from "@/components/ui/loader";
 
 import { EmployeeCards, EmployeeForm, EmployeesSearch } from "./blocks";
-import { ROLE_STYLES } from "./constants";
 import { useEmployees } from "./useEmployee";
 
 const Employees = () => {
@@ -98,7 +97,6 @@ const Employees = () => {
           }}
           onUpdatePermissions={onUpdatePermissions}
           permissionLoading={permissionLoading}
-          roleStyles={ROLE_STYLES}
         />
       )}
     </PageLayout>

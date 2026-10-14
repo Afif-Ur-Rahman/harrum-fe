@@ -7,8 +7,6 @@ import { FormProvider } from "react-hook-form";
 import { FormInput } from "@/components";
 import { Employee } from "@/types/employees";
 
-import { RoleSelector } from "./role-selector";
-
 import { EMPLOYEE_FORM_INPUTS } from "../constants";
 import { useEmployeeForm } from "../form";
 import { EmployeeFormType } from "../schema";
@@ -21,7 +19,6 @@ interface EmployeeFormProps {
 
 const EmployeeForm = ({ employee = null, loading, onSubmit }: EmployeeFormProps) => {
   const isEdit = Boolean(employee);
-
   const form = useEmployeeForm(isEdit);
 
   useEffect(() => {
@@ -74,25 +71,22 @@ const EmployeeForm = ({ employee = null, loading, onSubmit }: EmployeeFormProps)
         <div className="relative z-10 flex w-full flex-col gap-2">
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             {EMPLOYEE_FORM_INPUTS.filter(input => !isEdit || input.field !== "password").map(
-              input => {
-                return (
-                  <div key={input.field} className={input.className}>
-                    <FormInput
-                      field={input.field}
-                      type={input.type}
-                      placeholder={input.placeholder}
-                      icon={input.icon}
-                      rules={"rules" in input ? input.rules : undefined}
-                      required={"required" in input ? input.required : false}
-                      compact
-                    />
-                  </div>
-                );
-              },
+              input => (
+                <div key={input.field} className={input.className}>
+                  <FormInput
+                    field={input.field}
+                    type={input.type}
+                    placeholder={input.placeholder}
+                    icon={input.icon}
+                    rules={"rules" in input ? input.rules : undefined}
+                    required={"required" in input ? input.required : false}
+                    options={"options" in input ? [...input.options] : undefined}
+                    compact
+                  />
+                </div>
+              ),
             )}
           </div>
-
-          <RoleSelector />
 
           <button
             type="submit"

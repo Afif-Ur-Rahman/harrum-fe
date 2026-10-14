@@ -8,22 +8,56 @@ import {
   updateEmployee,
 } from "@/api/api-call/employee";
 import { usePersistStore } from "@/store/presistStore";
-import { Employee, Employees } from "@/types/employees";
+import { Employee, EmployeeRole, Employees } from "@/types/employees";
 import { PagePermission } from "@/types/permissions";
 import { showToast } from "@/utils/toast";
 
 import { EmployeeFormType } from "./schema";
 
 const EMPLOYEE_SECTIONS = [
-  { key: "salesman" as const, roleLabel: "Salesman" },
-  { key: "accountant" as const, roleLabel: "Accountant" },
+  { key: "cleaner", roleLabel: "Cleaner" },
+  { key: "mop_boy", roleLabel: "Mop Boy" },
+  { key: "salesman", roleLabel: "Salesman" },
+  { key: "accountant", roleLabel: "Accountant" },
+  { key: "manager", roleLabel: "Manager" },
+  { key: "senior_salesman", roleLabel: "Senior Salesman" },
+] as const satisfies {
+  key: EmployeeRole;
+  roleLabel: string;
+}[];
+
+const EMPLOYEE_ROLES: EmployeeRole[] = [
+  "cleaner",
+  "mop_boy",
+  "salesman",
+  "accountant",
+  "manager",
+  "senior_salesman",
 ];
 
-type EmployeeRole = keyof Employees;
+const createEmptyEmployees = (): Employees => ({
+  cleaner: [],
+  mop_boy: [],
+  salesman: [],
+  accountant: [],
+  manager: [],
+  senior_salesman: [],
+});
 
-const isEmployeeRole = (type: unknown): type is EmployeeRole => {
-  return type === "salesman" || type === "accountant";
-};
+const isEmployeeRole = (type: unknown): type is EmployeeRole =>
+  typeof type === "string" && EMPLOYEE_ROLES.includes(type as EmployeeRole);
+
+const mapEmployeeGroups = (
+  employees: Employees,
+  mapper: (list: Employee[]) => Employee[],
+): Employees => ({
+  cleaner: mapper(employees.cleaner),
+  mop_boy: mapper(employees.mop_boy),
+  salesman: mapper(employees.salesman),
+  accountant: mapper(employees.accountant),
+  manager: mapper(employees.manager),
+  senior_salesman: mapper(employees.senior_salesman),
+});
 
 const useEmployees = () => {
   const { employees, employeesLoaded, setEmployees } = usePersistStore();
@@ -41,14 +75,19 @@ const useEmployees = () => {
 
       setLoading(true);
 
-      const res = await getAllEmployees();
+      try {
+        const res = await getAllEmployees();
 
-      if (res?.error) {
-        showToast("error", res.error);
+        if (res?.error) {
+          showToast("error", res.error);
+        }
+
+        setEmployees(res?.data?.data || createEmptyEmployees());
+      } catch (error) {
+        showToast("error", (error as Error).message || "Failed to fetch employees");
+      } finally {
+        setLoading(false);
       }
-
-      setEmployees(res?.data?.data || { salesman: [], accountant: [] });
-      setLoading(false);
     };
 
     fetchAllEmployees();
@@ -67,11 +106,19 @@ const useEmployees = () => {
 
       const newEmployee = res?.data?.data;
 
-      if (!newEmployee) return;
+      if (!newEmployee) {
+        showToast("error", "Created employee was not returned by the server");
+        return;
+      }
+
+      if (!isEmployeeRole(newEmployee.type)) {
+        showToast("error", "Invalid employee type returned by server");
+        return;
+      }
 
       setEmployees({
         ...employees,
-        [newEmployee.type]: [...(employees[newEmployee.type] || []), newEmployee],
+        [newEmployee.type]: [...employees[newEmployee.type], newEmployee],
       });
 
       showToast("success", "Employee added successfully");
@@ -106,14 +153,12 @@ const useEmployees = () => {
         return;
       }
 
-      const nextEmployees: Employees = {
-        salesman: [],
-        accountant: [],
-      };
+      const nextEmployees = createEmptyEmployees();
 
-      for (const employee of [...employees.salesman, ...employees.accountant]) {
-        if (employee._id !== id) {
-          nextEmployees[employee.type].push(employee);
+      for (const employee of Object.values(employees).flat() as Employee[]) {
+        if (employee._id !== id && isEmployeeRole(employee.type)) {
+          const role: EmployeeRole = employee.type;
+          nextEmployees[role].push(employee);
         }
       }
 
@@ -149,20 +194,18 @@ const useEmployees = () => {
         return false;
       }
 
-      const updateEmployeePermissionsInList = (list: Employee[]) =>
-        list.map(employee =>
-          employee._id === employeeId
-            ? {
-                ...employee,
-                permissions: updatedPermissions.pages,
-              }
-            : employee,
-        );
-
-      setEmployees({
-        salesman: updateEmployeePermissionsInList(employees.salesman),
-        accountant: updateEmployeePermissionsInList(employees.accountant),
-      });
+      setEmployees(
+        mapEmployeeGroups(employees, list =>
+          list.map(employee =>
+            employee._id === employeeId
+              ? {
+                  ...employee,
+                  permissions: updatedPermissions.pages,
+                }
+              : employee,
+          ),
+        ),
+      );
 
       if (selectedEmployee?._id === employeeId) {
         setSelectedEmployee({
@@ -194,10 +237,9 @@ const useEmployees = () => {
         };
       }
 
-      const updatedEmployees: Employees = {
-        salesman: employees.salesman.filter(employee => employee._id !== id),
-        accountant: employees.accountant.filter(employee => employee._id !== id),
-      };
+      const updatedEmployees = mapEmployeeGroups(employees, list =>
+        list.filter(employee => employee._id !== id),
+      );
 
       setEmployees(updatedEmployees);
 
@@ -219,7 +261,7 @@ const useEmployees = () => {
 
   const flatEmployees = useMemo(() => {
     return EMPLOYEE_SECTIONS.flatMap(section =>
-      (employees[section.key] || []).map(employee => ({
+      employees[section.key].map(employee => ({
         ...employee,
         roleLabel: section.roleLabel,
       })),

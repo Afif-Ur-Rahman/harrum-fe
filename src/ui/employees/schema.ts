@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const EmployeeSchema = z.object({
   username: z.string().min(3, "Username is required"),
-  type: z.enum(["salesman", "accountant"], {
+  type: z.enum(["cleaner", "mop_boy", "salesman", "accountant", "manager", "senior_salesman"], {
     message: "Employee type is required",
   }),
   email: z.email("Invalid email address"),
