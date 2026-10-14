@@ -95,7 +95,12 @@ const useAddOrder = () => {
   }, [filteredStocks]);
 
   const salesmanOptions = useMemo(() => {
-    const allEmployees = [...(employees.salesman || []), ...(employees.accountant || [])];
+    const allEmployees = [
+      ...(employees.senior_salesman || []),
+      ...(employees.salesman || []),
+      ...(employees.accountant || []),
+      ...(employees.manager || []),
+    ];
 
     return allEmployees.map(employee => ({
       value: employee._id,
@@ -127,13 +132,22 @@ const useAddOrder = () => {
     }
 
     const data = response?.data?.data || {
+      cleaner: [],
+      mop_boy: [],
       salesman: [],
       accountant: [],
+      manager: [],
+      senior_salesman: [],
     };
 
     setEmployees(data);
 
-    const firstEmployee = [...(data.salesman || []), ...(data.accountant || [])][0];
+    const firstEmployee = [
+      ...(data.salesman || []),
+      ...(data.accountant || []),
+      ...(data.manager || []),
+      ...(data.senior_salesman || []),
+    ][0];
 
     if (firstEmployee && !form.getValues("salesmanId")) {
       form.setValue("salesmanId", firstEmployee._id);
