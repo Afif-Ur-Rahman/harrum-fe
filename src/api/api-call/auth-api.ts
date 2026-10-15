@@ -27,21 +27,6 @@ export const login = async (data: AuthRequest) => {
   }
 };
 
-// Server action for logout - runs on server, secure
-export const logout = async () => {
-  try {
-    const response = await serverAction({
-      url: "/auth/logout",
-      method: "POST",
-    });
-
-    return response as SimpleResponse;
-  } catch (error) {
-    console.error("Error fetching users:", error);
-    return null;
-  }
-};
-
 // Server action for username validation
 export const validateUsername = async (username: string) => {
   try {

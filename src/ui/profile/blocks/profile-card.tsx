@@ -1,6 +1,6 @@
 "use client";
 
-import { Mail, UserRound } from "lucide-react";
+import { Mail, ShieldCheck } from "lucide-react";
 import React from "react";
 
 import { User } from "@/types";
@@ -33,7 +33,7 @@ export const ProfileCard = ({ user }: { user: User }) => {
                 size: 40,
                 strokeWidth: 1.6,
               })
-            : React.createElement(UserRound, {
+            : React.createElement(ShieldCheck, {
                 size: 40,
                 strokeWidth: 1.6,
               })}

@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 import { FaBarsStaggered } from "react-icons/fa6";
 
-import { logout } from "@/api/api-call/auth-api";
 import { NavRes } from "@/components/layout/ResponsiveNavbar";
 import { useNavigation } from "@/lib/useNavigation";
 import { usePersistStore } from "@/store/presistStore";
@@ -160,17 +159,12 @@ export const AppSidebar = () => {
 
   const navTabs = useMemo(() => getNavTabs(user), [user]);
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-    } catch (error) {
-      showToast("error", "Error", (error as Error)?.message || "Logout Failed");
-    } finally {
-      setUser(null);
-      setToken(null);
-      clearClientAuthCookies();
-      router.push("/auth/login");
-    }
+  const handleLogout = () => {
+    setUser(null);
+    setToken(null);
+    clearClientAuthCookies();
+    showToast("success", "Success", "Logged Out Successfully");
+    router.push("/auth/login");
   };
 
   const toggleSidebar = () => {
