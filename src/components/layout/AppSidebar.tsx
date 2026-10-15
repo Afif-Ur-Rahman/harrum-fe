@@ -2,7 +2,7 @@
 
 import { CaretRightIcon } from "@radix-ui/react-icons";
 import { Flex } from "@radix-ui/themes";
-import Image from "next/image";
+import { LogOut } from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 import { FaBarsStaggered } from "react-icons/fa6";
@@ -12,8 +12,9 @@ import { NavRes } from "@/components/layout/ResponsiveNavbar";
 import { useNavigation } from "@/lib/useNavigation";
 import { usePersistStore } from "@/store/presistStore";
 import { clearClientAuthCookies } from "@/utils/client-cookies";
+import { showToast } from "@/utils/toast";
 
-import { getNavTabs } from "./constants";
+import { getNavTabs, getRoleIcon } from "./constants";
 
 import { NavigationLink } from "../navigation-link";
 
@@ -30,33 +31,46 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   type,
   onToggle,
 }) => (
-  <div className="flex items-center justify-between border-b border-white/10 px-4 py-4 text-white">
-    <div className="flex items-center gap-3">
-      <Image
-        src={type ? `/assets/svgs/${type}.svg` : "/assets/svgs/owner.svg"}
-        alt={type || "Owner"}
-        width={24}
-        height={24}
-      />
-      {!collapsed && (
-        <div className="min-w-0">
-          <div className="truncate text-sm font-semibold text-white">
-            {userFullName || "Super Admin"}
-          </div>
-          <div className="text-xs text-slate-400">Control Center</div>
+  <div
+    className={`flex items-center border-b border-white/10 py-4 text-white transition-all duration-200 ease-in-out ${
+      collapsed ? "justify-center px-2" : "justify-between px-4"
+    }`}
+  >
+    <div
+      className={`flex min-w-0 items-center gap-3 overflow-hidden transition-[max-width,opacity] duration-200 ease-in-out ${
+        collapsed ? "max-w-0 opacity-0" : "max-w-52 opacity-100"
+      }`}
+    >
+      <span className="flex size-6 shrink-0 items-center justify-center">
+        {React.createElement(getRoleIcon(type), {
+          size: 24,
+          strokeWidth: 1.8,
+          className: "text-cyan-400",
+        })}
+      </span>
+
+      <div className="min-w-0 flex-1 whitespace-nowrap">
+        <div className="truncate text-sm font-semibold text-white">
+          {userFullName || "Super Admin"}
         </div>
-      )}
+
+        <div className="truncate text-xs text-slate-400">
+          {type === "owner"
+            ? "Control Center"
+            : (type ?? "")?.charAt(0).toUpperCase() + type?.slice(1) || "User"}
+        </div>
+      </div>
     </div>
 
     <button
       onClick={onToggle}
-      className="rounded-full p-1.5 text-slate-300 transition hover:bg-white/10 hover:text-white"
-      aria-label="Toggle sidebar"
+      aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+      className={`flex size-8 shrink-0 items-center justify-center rounded-xl border border-cyan-400/20 text-slate-300 transition-all duration-200 ease-in-out hover:border-cyan-400/40 hover:bg-cyan-400/10 hover:text-white ${collapsed && "border-fuchsia-400 hover:border-fuchsia-600 hover:bg-fuchsia-600/10"}`}
     >
       <CaretRightIcon
         width={20}
         height={20}
-        className={`transition-transform duration-300 ${collapsed ? "" : "rotate-180"}`}
+        className={`transition-transform duration-200 ease-in-out ${collapsed ? "" : "rotate-180"}`}
       />
     </button>
   </div>
@@ -70,29 +84,27 @@ interface NavigationItemProps {
   isActive: boolean;
 }
 
-const NavigationItem: React.FC<NavigationItemProps> = ({
-  href,
-  label,
-  icon: Icon,
-  collapsed,
-  isActive,
-}) => (
-  <li>
-    <NavigationLink
-      href={href}
-      className={`ml-1 flex ${
-        collapsed ? "w-fit" : "w-full"
-      } items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium transition-all duration-200 ${
-        isActive
-          ? "bg-linear-to-r from-cyan-500/20 via-blue-500/20 to-fuchsia-500/20 text-white shadow-lg ring-1 shadow-cyan-950/30 ring-white/10 ring-inset"
-          : "text-slate-300 hover:bg-white/5 hover:text-white"
-      }`}
-    >
-      <Icon size={20} className="shrink-0" />
-      {!collapsed && <span>{label}</span>}
-    </NavigationLink>
-  </li>
+const NavigationItem = React.memo(
+  ({ href, label, icon: Icon, collapsed, isActive }: NavigationItemProps) => (
+    <li>
+      <NavigationLink
+        href={href}
+        className={`ml-1 flex ${
+          collapsed ? "w-fit" : "w-full"
+        } items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium ${
+          isActive
+            ? "bg-linear-to-r from-cyan-500/20 via-blue-500/20 to-fuchsia-500/20 text-white shadow-lg ring-1 shadow-cyan-950/30 ring-white/10 ring-inset"
+            : "text-slate-300 hover:bg-white/5 hover:text-white"
+        }`}
+      >
+        <Icon size={20} className="shrink-0" />
+        {!collapsed && <span>{label}</span>}
+      </NavigationLink>
+    </li>
+  ),
 );
+
+NavigationItem.displayName = "NavigationItem";
 
 interface MobileHeaderProps {
   userFullName?: string;
@@ -116,12 +128,11 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({
   >
     <Flex justify="between" align="center" p="3" className="max-w-full">
       <Flex align="center" gap="2">
-        <Image
-          src={type ? `/assets/svgs/${type}.svg` : "/assets/svgs/owner.svg"}
-          alt={type || "Owner"}
-          width={24}
-          height={24}
-        />
+        {React.createElement(getRoleIcon(type), {
+          size: 24,
+          strokeWidth: 1.8,
+          className: "shrink-0 text-cyan-400",
+        })}
         <span className="text-sm font-semibold text-white">{userFullName || "Super Admin"}</span>
       </Flex>
 
@@ -150,7 +161,7 @@ export const AppSidebar = () => {
     try {
       await logout();
     } catch (error) {
-      console.error("Logout failed:", error);
+      showToast("error", "Error", (error as Error)?.message || "Logout Failed");
     } finally {
       setUser(null);
       setToken(null);
@@ -177,12 +188,11 @@ export const AppSidebar = () => {
   return (
     <div>
       <aside
-        className={`sticky top-0 left-0 z-50 hidden h-screen border-r border-white/10 bg-[linear-gradient(180deg,rgba(2,6,23,0.96)_0%,rgba(15,23,42,0.94)_52%,rgba(17,24,39,0.96)_100%)] shadow-2xl shadow-black/30 backdrop-blur-xl transition-all duration-300 lg:block ${
+        className={`sticky top-0 left-0 z-50 hidden h-screen overflow-hidden border-r border-white/10 bg-slate-950 shadow-xl transition-[width] duration-200 ease-in-out motion-reduce:transition-none lg:block ${
           collapsed ? "w-20" : "w-64"
         }`}
       >
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.10),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(244,114,182,0.08),transparent_32%)]" />
-
+        <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-cyan-400/5 via-transparent to-fuchsia-400/5" />
         <div className="relative h-full">
           <SidebarHeader
             collapsed={collapsed}
@@ -204,16 +214,28 @@ export const AppSidebar = () => {
             </ul>
           </nav>
 
-          {!collapsed && (
-            <div className="absolute right-0 bottom-6 left-0 px-3">
-              <button
-                className="w-full rounded-2xl border border-white/10 bg-white/8 px-3 py-3 text-base font-medium text-white transition hover:bg-white/12"
-                onClick={handleLogout}
+          <div className="absolute right-0 bottom-6 left-0 px-3">
+            <button
+              title={collapsed ? "Logout" : undefined}
+              aria-label="Logout"
+              className={`flex w-full items-center gap-3 overflow-hidden rounded-2xl border border-white/10 bg-white/8 px-3 py-3 text-sm font-medium text-white transition-colors hover:bg-white/12 ${
+                collapsed ? "justify-start" : "justify-start"
+              }`}
+              onClick={handleLogout}
+            >
+              <span className="flex size-5 shrink-0 items-center justify-center">
+                <LogOut size={20} />
+              </span>
+
+              <span
+                className={`overflow-hidden whitespace-nowrap transition-[opacity,max-width] duration-200 ease-in-out ${
+                  collapsed ? "max-w-0 opacity-0" : "max-w-40 opacity-100"
+                }`}
               >
                 Logout
-              </button>
-            </div>
-          )}
+              </span>
+            </button>
+          </div>
         </div>
       </aside>
 

@@ -1,10 +1,11 @@
 "use client";
 
 import { Flex, Text } from "@radix-ui/themes";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import React from "react";
 import { IoClose } from "react-icons/io5";
+
+import { getRoleIcon } from "./constants";
 
 import { NavigationLink } from "../navigation-link";
 
@@ -53,18 +54,21 @@ const NavRes: React.FC<MobileDrawerProps> = ({
           {/* Header */}
           <Flex justify="between" align="center" className="border-b border-white/10 px-5 py-4">
             <Flex align="center" gap="3" className="min-w-0">
-              <Image
-                src={type ? `/assets/svgs/${type}.svg` : "/assets/svgs/owner.svg"}
-                alt={type || "Owner"}
-                width={28}
-                height={28}
-              />
+              {React.createElement(getRoleIcon(type), {
+                size: 24,
+                strokeWidth: 1.8,
+                className: "shrink-0 text-cyan-400",
+              })}
 
               <div className="min-w-0">
                 <Text className="block truncate text-sm font-semibold text-white">
                   {userFullName || "Super Admin"}
                 </Text>
-                <Text className="block text-xs text-slate-400">Control Center</Text>
+                <div className="text-xs text-slate-400">
+                  {type === "owner"
+                    ? "Control Center"
+                    : (type ?? "")?.charAt(0).toUpperCase() + type?.slice(1) || "User"}
+                </div>{" "}
               </div>
             </Flex>
 

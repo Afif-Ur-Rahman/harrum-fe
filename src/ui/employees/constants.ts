@@ -9,7 +9,6 @@ import {
   UserRound,
   BriefcaseBusiness,
   Calculator,
-  PersonStanding,
   ShieldUser,
   SprayCan,
   Waves,
@@ -29,12 +28,12 @@ export const ROLE_STYLES: Record<string, string> = {
 };
 
 export const ROLE_ICONS: Record<Employee["type"], React.ElementType> = {
+  manager: BriefcaseBusiness,
+  accountant: Calculator,
+  senior_salesman: ShieldUser,
+  salesman: UserRound,
   cleaner: SprayCan,
   mop_boy: Waves,
-  salesman: PersonStanding,
-  accountant: Calculator,
-  manager: BriefcaseBusiness,
-  senior_salesman: ShieldUser,
 };
 
 export const ROLE_ICON_STYLES: Record<Employee["type"], string> = {
