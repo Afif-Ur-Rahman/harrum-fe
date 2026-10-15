@@ -97,6 +97,15 @@ export const EMPLOYEE_SECTIONS = [
   roleLabel: string;
 }[];
 
+export const EMPLOYEE_OPTIONS = [
+  { label: "Cleaner", value: "cleaner" },
+  { label: "Mop Boy", value: "mop_boy" },
+  { label: "Salesman", value: "salesman" },
+  { label: "Accountant", value: "accountant" },
+  { label: "Manager", value: "manager" },
+  { label: "Senior Salesman", value: "senior_salesman" },
+];
+
 export const EMPLOYEE_FORM_INPUTS = [
   {
     field: "cnic",
@@ -167,14 +176,7 @@ export const EMPLOYEE_FORM_INPUTS = [
     placeholder: "Select employee type",
     icon: BriefcaseBusiness,
     required: true,
-    options: [
-      { label: "Cleaner", value: "cleaner" },
-      { label: "Mop Boy", value: "mop_boy" },
-      { label: "Salesman", value: "salesman" },
-      { label: "Accountant", value: "accountant" },
-      { label: "Manager", value: "manager" },
-      { label: "Senior Salesman", value: "senior_salesman" },
-    ],
+    options: EMPLOYEE_OPTIONS,
     className: "",
   },
   {

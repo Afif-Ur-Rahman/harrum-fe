@@ -11,6 +11,7 @@ import { logout } from "@/api/api-call/auth-api";
 import { NavRes } from "@/components/layout/ResponsiveNavbar";
 import { useNavigation } from "@/lib/useNavigation";
 import { usePersistStore } from "@/store/presistStore";
+import { EMPLOYEE_OPTIONS } from "@/ui/employees/constants";
 import { clearClientAuthCookies } from "@/utils/client-cookies";
 import { showToast } from "@/utils/toast";
 
@@ -30,51 +31,53 @@ const SidebarHeader: React.FC<SidebarHeaderProps> = ({
   userFullName,
   type,
   onToggle,
-}) => (
-  <div
-    className={`flex items-center border-b border-white/10 py-4 text-white transition-all duration-200 ease-in-out ${
-      collapsed ? "justify-center px-2" : "justify-between px-4"
-    }`}
-  >
+}) => {
+  const employeeLabel = EMPLOYEE_OPTIONS.find(option => option.value === type)?.label || "User";
+
+  return (
     <div
-      className={`flex min-w-0 items-center gap-3 overflow-hidden transition-[max-width,opacity] duration-200 ease-in-out ${
-        collapsed ? "max-w-0 opacity-0" : "max-w-52 opacity-100"
+      className={`flex items-center border-b border-white/10 py-4 text-white transition-all duration-200 ease-in-out ${
+        collapsed ? "justify-center px-2" : "justify-between px-4"
       }`}
     >
-      <span className="flex size-6 shrink-0 items-center justify-center">
-        {React.createElement(getRoleIcon(type), {
-          size: 24,
-          strokeWidth: 1.8,
-          className: "text-cyan-400",
-        })}
-      </span>
+      <div
+        className={`flex min-w-0 items-center gap-3 overflow-hidden transition-[max-width,opacity] duration-200 ease-in-out ${
+          collapsed ? "max-w-0 opacity-0" : "max-w-52 opacity-100"
+        }`}
+      >
+        <span className="flex size-6 shrink-0 items-center justify-center">
+          {React.createElement(getRoleIcon(type), {
+            size: 24,
+            strokeWidth: 1.8,
+            className: "text-cyan-400",
+          })}
+        </span>
 
-      <div className="min-w-0 flex-1 whitespace-nowrap">
-        <div className="truncate text-sm font-semibold text-white">
-          {userFullName || "Super Admin"}
-        </div>
+        <div className="min-w-0 flex-1 whitespace-nowrap">
+          <div className="truncate text-sm font-semibold text-white">
+            {userFullName || "Super Admin"}
+          </div>
 
-        <div className="truncate text-xs text-slate-400">
-          {type === "owner"
-            ? "Control Center"
-            : (type ?? "")?.charAt(0).toUpperCase() + type?.slice(1) || "User"}
+          <div className="truncate text-xs text-slate-400">
+            {type === "owner" ? "Control Center" : employeeLabel}
+          </div>
         </div>
       </div>
-    </div>
 
-    <button
-      onClick={onToggle}
-      aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-      className={`flex size-8 shrink-0 items-center justify-center rounded-xl border border-cyan-400/20 text-slate-300 transition-all duration-200 ease-in-out hover:border-cyan-400/40 hover:bg-cyan-400/10 hover:text-white ${collapsed && "border-fuchsia-400 hover:border-fuchsia-600 hover:bg-fuchsia-600/10"}`}
-    >
-      <CaretRightIcon
-        width={20}
-        height={20}
-        className={`transition-transform duration-200 ease-in-out ${collapsed ? "" : "rotate-180"}`}
-      />
-    </button>
-  </div>
-);
+      <button
+        onClick={onToggle}
+        aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        className={`flex size-8 shrink-0 items-center justify-center rounded-xl border border-cyan-400/20 text-slate-300 transition-all duration-200 ease-in-out hover:border-cyan-400/40 hover:bg-cyan-400/10 hover:text-white ${collapsed && "border-fuchsia-400 hover:border-fuchsia-600 hover:bg-fuchsia-600/10"}`}
+      >
+        <CaretRightIcon
+          width={20}
+          height={20}
+          className={`transition-transform duration-200 ease-in-out ${collapsed ? "" : "rotate-180"}`}
+        />
+      </button>
+    </div>
+  );
+};
 
 interface NavigationItemProps {
   href: string;

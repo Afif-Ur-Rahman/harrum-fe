@@ -1,27 +1,47 @@
 "use client";
 
-import { Mail } from "lucide-react";
-import Image from "next/image";
+import { Mail, UserRound } from "lucide-react";
+import React from "react";
 
 import { User } from "@/types";
+import { EMPLOYEE_OPTIONS, ROLE_ICON_STYLES, ROLE_ICONS } from "@/ui/employees/constants";
 
 export const ProfileCard = ({ user }: { user: User }) => {
+  const employeeType = user?.type;
+
+  const employeeLabel =
+    EMPLOYEE_OPTIONS.find(option => option.value === employeeType)?.label ||
+    (employeeType === "owner" ? "Owner" : "Logged-in User");
+
+  const RoleIcon =
+    employeeType && employeeType in ROLE_ICONS
+      ? ROLE_ICONS[employeeType as keyof typeof ROLE_ICONS]
+      : null;
+
+  const roleIconStyle =
+    ROLE_ICON_STYLES[employeeType as keyof typeof ROLE_ICON_STYLES] ||
+    "border-cyan-400/20 bg-cyan-500/10 text-cyan-300";
+
   return (
     <div className="overflow-hidden rounded-[28px] border border-white/10 bg-white/8 p-5 sm:p-6">
       <div className="flex flex-col items-center text-center">
-        <div className="relative flex h-24 w-24 items-center justify-center rounded-full border border-white/10 bg-white/10 shadow-2xl shadow-cyan-500/20">
-          <Image
-            src={user?.type ? `/assets/svgs/${user.type}.svg` : "/assets/svgs/owner.svg"}
-            alt={user?.type || "Owner"}
-            width={48}
-            height={48}
-            className="object-contain"
-          />
+        <div
+          className={`flex size-24 items-center justify-center rounded-full border-3 shadow-2xl ${roleIconStyle}`}
+        >
+          {RoleIcon
+            ? React.createElement(RoleIcon, {
+                size: 40,
+                strokeWidth: 1.6,
+              })
+            : React.createElement(UserRound, {
+                size: 40,
+                strokeWidth: 1.6,
+              })}
         </div>
 
         <h2 className="mt-4 text-lg font-semibold text-white">{user?.username || "User"}</h2>
 
-        <p className="mt-1 text-xs text-slate-400 capitalize">{user?.type || "Logged-in User"}</p>
+        <p className="mt-1 text-xs text-slate-400">{employeeLabel}</p>
       </div>
 
       <div className="mt-6 space-y-3">

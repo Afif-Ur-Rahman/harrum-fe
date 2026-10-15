@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import React from "react";
 import { IoClose } from "react-icons/io5";
 
+import { EMPLOYEE_OPTIONS } from "@/ui/employees/constants";
+
 import { getRoleIcon } from "./constants";
 
 import { NavigationLink } from "../navigation-link";
@@ -31,6 +33,7 @@ const NavRes: React.FC<MobileDrawerProps> = ({
   logout,
 }) => {
   const pathname = usePathname();
+  const employeeLabel = EMPLOYEE_OPTIONS.find(option => option.value === type)?.label || "User";
 
   return (
     <div
@@ -65,9 +68,7 @@ const NavRes: React.FC<MobileDrawerProps> = ({
                   {userFullName || "Super Admin"}
                 </Text>
                 <div className="text-xs text-slate-400">
-                  {type === "owner"
-                    ? "Control Center"
-                    : (type ?? "")?.charAt(0).toUpperCase() + type?.slice(1) || "User"}
+                  {type === "owner" ? "Control Center" : employeeLabel}
                 </div>{" "}
               </div>
             </Flex>
