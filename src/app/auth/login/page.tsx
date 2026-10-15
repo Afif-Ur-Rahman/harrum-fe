@@ -46,7 +46,7 @@ function Login() {
       const result = await login({ ...data, rememberMe });
 
       if (result?.error || !result?.data) {
-        showToast("error", result?.error || "Login Failed");
+        showToast("error", "Error", result?.error || "Login Failed");
         setIsLoading(false);
         return;
       }
@@ -54,7 +54,7 @@ function Login() {
       const user = result?.data?.data;
 
       if (!user.token) {
-        showToast("error", "Authentication failed. Please try again.");
+        showToast("error", "Error", "Authentication failed. Please try again.");
         setIsLoading(false);
         return;
       }
@@ -71,7 +71,7 @@ function Login() {
         document.cookie = `rememberEmail=; path=/; max-age=0`;
       }
 
-      showToast("success", result?.data?.message || "Login Successfully");
+      showToast("success", "Success", result?.data?.message || "Login Successfully");
       setIsLoading(false);
 
       router.replace(getDefaultRoute(user));

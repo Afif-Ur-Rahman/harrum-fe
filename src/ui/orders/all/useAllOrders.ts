@@ -39,7 +39,7 @@ const useAllOrders = () => {
       if (currentRequestId !== requestId.current) return;
 
       if (res?.error) {
-        showToast("error", res.error);
+        showToast("error", "Error", res.error);
         setLoading(false);
         setLoadingMore(false);
         return;

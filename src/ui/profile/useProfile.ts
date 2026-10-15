@@ -53,13 +53,18 @@ export const useProfile = () => {
 
       if (response.success) {
         reset();
-        showToast("success", "Password changed successfully.");
+        showToast("success", "Success", "Password changed successfully.");
       } else {
-        showToast("error", response.error || "Failed to change password. Please try again.");
+        showToast(
+          "error",
+          "Error",
+          response.error || "Failed to change password. Please try again.",
+        );
       }
     } catch (error) {
       showToast(
         "error",
+        "Error",
         (error as Error)?.message || "Failed to change password. Please try again.",
       );
     } finally {

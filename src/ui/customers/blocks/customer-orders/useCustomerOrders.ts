@@ -21,7 +21,7 @@ export const useCustomerOrders = (customerId?: string) => {
       });
 
       if (res?.error) {
-        showToast("error", res.error);
+        showToast("error", "Error", res.error);
         setLoading(false);
         return;
       }

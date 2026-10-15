@@ -80,7 +80,7 @@ export const useDashboard = () => {
     if (currentRequest !== requestId.current) return;
 
     if (!res || res.error) {
-      showToast("error", res?.error || "Failed to load dashboard stats");
+      showToast("error", "Error", res?.error || "Failed to load dashboard stats");
       setStatsLoading(false);
       return;
     }
@@ -122,7 +122,7 @@ export const useDashboard = () => {
 
     if (!res || res.error) {
       setStockAlerts(previous);
-      showToast("error", res?.error || "Failed to dismiss alert");
+      showToast("error", "Error", res?.error || "Failed to dismiss alert");
     }
   };
 

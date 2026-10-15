@@ -39,12 +39,13 @@ const ConfirmationDialog = <T extends { state: boolean; message?: string; error?
     const result = await confirmAction();
 
     if (result.state === false) {
-      showToast("error", result?.error || "An error occurred. Please try again.");
+      showToast("error", "Error", result?.error || "An error occurred. Please try again.");
       setLoading(false);
       return;
     }
 
-    if (result.state === true && result.message) showToast("success", result?.message || "");
+    if (result.state === true && result.message)
+      showToast("success", "Success", result?.message || "");
 
     router.refresh();
     setOpen(false);

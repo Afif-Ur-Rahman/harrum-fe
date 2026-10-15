@@ -145,7 +145,7 @@ const useStocks = () => {
     const response = await getAllStocks();
 
     if (response?.error) {
-      showToast("error", response.error);
+      showToast("error", "Error", response.error);
       return;
     }
 
@@ -158,7 +158,7 @@ const useStocks = () => {
     const response = await getAllVendors();
 
     if (response?.error) {
-      showToast("error", response.error);
+      showToast("error", "Error", response.error);
       return;
     }
 
@@ -190,7 +190,7 @@ const useStocks = () => {
     const alreadyAdded = currentItems.some(item => item._id === stock._id);
 
     if (alreadyAdded) {
-      showToast("error", "This stock item is already added");
+      showToast("error", "Error", "This stock item is already added");
       return;
     }
 
@@ -227,7 +227,7 @@ const useStocks = () => {
     const response = await createStock(data);
 
     if (response?.error) {
-      showToast("error", response.error || "Request failed");
+      showToast("error", "Error", response.error || "Request failed");
       return;
     }
 
@@ -237,7 +237,7 @@ const useStocks = () => {
       setStocks(response.data.data);
     }
 
-    showToast("success", "Stock created successfully");
+    showToast("success", "Success", "Stock created successfully");
   };
 
   useEffect(() => {

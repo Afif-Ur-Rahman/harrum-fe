@@ -32,7 +32,7 @@ export const useReceipts = <T extends ReceiptParty = ReceiptParty>(
     const res = await getAllReceipts({ party: partyId, type, limit: 100 });
 
     if (res?.error) {
-      showToast("error", res.error);
+      showToast("error", "Error", res.error);
       setLoading(false);
       return;
     }
@@ -60,11 +60,11 @@ export const useReceipts = <T extends ReceiptParty = ReceiptParty>(
     setSubmitting(false);
 
     if (response?.error || !response?.data) {
-      showToast("error", response?.error || "Failed to record payment");
+      showToast("error", "Error", response?.error || "Failed to record payment");
       return false;
     }
 
-    showToast("success", response.data.message || "Payment recorded successfully");
+    showToast("success", "Success", response.data.message || "Payment recorded successfully");
 
     setReceipts(prev => [response.data!.data, ...prev]);
 

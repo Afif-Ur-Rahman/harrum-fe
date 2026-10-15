@@ -21,7 +21,7 @@ const useVendorStocks = (vendorId: string) => {
     const response = await getVendorStocks(vendorId);
 
     if (response?.error) {
-      showToast("error", response.error);
+      showToast("error", "Error", response.error);
       setVendorStocks([]);
       setLoading(false);
       return;

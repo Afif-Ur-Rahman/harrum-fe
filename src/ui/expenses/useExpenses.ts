@@ -35,7 +35,7 @@ const useExpenses = () => {
         to: filters.to || undefined,
       });
       if (response?.error) {
-        showToast("error", response.error);
+        showToast("error", "Error", response.error);
         return;
       }
       setExpenses(response?.data?.data?.expenses || []);
@@ -59,12 +59,12 @@ const useExpenses = () => {
     });
     setSaving(false);
     if (response?.error || !response?.data) {
-      showToast("error", response?.error || "Failed to create expense");
+      showToast("error", "Error", response?.error || "Failed to create expense");
       return false;
     }
     setExpenses(prev => [response.data!.data, ...prev]);
     setTotal(prev => prev + 1);
-    showToast("success", response.data.message || "Expense created successfully");
+    showToast("success", "Success", response.data.message || "Expense created successfully");
     setOpen(false);
     return true;
   };

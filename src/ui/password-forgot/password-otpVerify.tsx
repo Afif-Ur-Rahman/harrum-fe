@@ -64,11 +64,11 @@ const OtpVerify = ({
     setIsLoading(false);
 
     if (result?.error || !result?.data) {
-      showToast("error", result?.error || "Request Failed");
+      showToast("error", "Error", result?.error || "Request Failed");
       return;
     }
 
-    showToast("success", result?.data?.message || "OTP Verified Successfully");
+    showToast("success", "Success", result?.data?.message || "OTP Verified Successfully");
     sessionStorage.setItem("otp", data.otp || "");
     setCurrentStep(steps.ResetPassword);
   };
@@ -83,11 +83,11 @@ const OtpVerify = ({
     setIsResending(false);
 
     if (result?.error || !result?.data) {
-      showToast("error", result?.error || "Request Failed");
+      showToast("error", "Error", result?.error || "Request Failed");
       return;
     }
 
-    showToast("success", result?.data?.message || "Code resent successfully");
+    showToast("success", "Success", result?.data?.message || "Code resent successfully");
 
     // Restart countdown after successful resend
     setTimer(RESEND_TIME);

@@ -38,7 +38,7 @@ const useCustomers = () => {
         if (cancelled) return;
 
         if (res?.error) {
-          showToast("error", res.error);
+          showToast("error", "Error", res.error);
           return;
         }
 
@@ -46,7 +46,7 @@ const useCustomers = () => {
         setCustomersLoaded(true);
       } catch {
         if (!cancelled) {
-          showToast("error", "Failed to fetch customers");
+          showToast("error", "Error", "Failed to fetch customers");
         }
       } finally {
         if (!cancelled) {
@@ -90,7 +90,7 @@ const useCustomers = () => {
           });
 
       if (response?.error || !response?.data) {
-        showToast("error", response?.error || "Request failed");
+        showToast("error", "Error", response?.error || "Request failed");
         return;
       }
 
@@ -98,16 +98,16 @@ const useCustomers = () => {
 
       if (editingCustomer) {
         updateCustomerById(savedCustomer);
-        showToast("success", "Customer updated successfully");
+        showToast("success", "Success", "Customer updated successfully");
       } else {
         addCustomer(savedCustomer);
-        showToast("success", "Customer added successfully");
+        showToast("success", "Success", "Customer added successfully");
       }
 
       setOpen(false);
       setEditingCustomer(null);
     } catch {
-      showToast("error", "Failed to save customer");
+      showToast("error", "Error", "Failed to save customer");
     } finally {
       setSaving(false);
     }

@@ -8,10 +8,10 @@ const useForgot = () => {
   const onForgot = async (data: ForgotFormType) => {
     const result = await forgotPassword(data.email);
     if (result?.error || !result?.data) {
-      showToast("error", result?.error || "Request Failed");
+      showToast("error", "Error", result?.error || "Request Failed");
       return;
     }
-    showToast("success", result?.data?.message || "OTP Sent Successfully");
+    showToast("success", "Success", result?.data?.message || "OTP Sent Successfully");
     sessionStorage.setItem("email", data.email);
 
     return result;
@@ -20,10 +20,10 @@ const useForgot = () => {
   const resetForgotPassword = async (data: ForgotFormType) => {
     const result = await resetPassword(data as PasswordResetData);
     if (result?.error || !result?.data) {
-      showToast("error", result?.error || "Request Failed");
+      showToast("error", "Error", result?.error || "Request Failed");
       return;
     }
-    showToast("success", result?.data?.message || "Password Reset Successfully");
+    showToast("success", "Success", result?.data?.message || "Password Reset Successfully");
     sessionStorage.setItem("otp", data.otp || "");
 
     return result;

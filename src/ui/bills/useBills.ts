@@ -27,7 +27,7 @@ export const useBills = (vendorId: string) => {
       const res = await getAllVendors();
 
       if (res?.error) {
-        showToast("error", res.error);
+        showToast("error", "Error", res.error);
         return;
       }
 
@@ -45,7 +45,7 @@ export const useBills = (vendorId: string) => {
     const res = await getAllBills(vendorId);
 
     if (res?.error) {
-      showToast("error", res.error);
+      showToast("error", "Error", res.error);
       setLoading(false);
       return;
     }
@@ -71,7 +71,7 @@ export const useBills = (vendorId: string) => {
     setSaving(false);
 
     if (response?.error || !response?.data) {
-      showToast("error", response?.error || "Failed to create bill");
+      showToast("error", "Error", response?.error || "Failed to create bill");
       return false;
     }
 
@@ -81,7 +81,7 @@ export const useBills = (vendorId: string) => {
       updateVendorById(response.data.updatedVendor);
     }
 
-    showToast("success", response.data.message || "Bill created successfully");
+    showToast("success", "Success", response.data.message || "Bill created successfully");
     setOpen(false);
 
     return true;

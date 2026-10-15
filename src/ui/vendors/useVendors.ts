@@ -30,7 +30,7 @@ const useVendors = () => {
     const res = await getAllVendors();
 
     if (res?.error) {
-      showToast("error", res.error);
+      showToast("error", "Error", res.error);
       setLoading(false);
       return;
     }
@@ -73,7 +73,7 @@ const useVendors = () => {
     setSaving(false);
 
     if (response?.error || !response?.data) {
-      showToast("error", response?.error || "Request failed");
+      showToast("error", "Error", response?.error || "Request failed");
       return;
     }
 
@@ -81,10 +81,10 @@ const useVendors = () => {
 
     if (editingVendor) {
       updateVendorById(savedVendor);
-      showToast("success", "Vendor updated successfully");
+      showToast("success", "Success", "Vendor updated successfully");
     } else {
       addVendor(savedVendor);
-      showToast("success", "Vendor added successfully");
+      showToast("success", "Success", "Vendor added successfully");
     }
 
     setOpen(false);

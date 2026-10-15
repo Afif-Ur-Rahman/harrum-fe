@@ -79,7 +79,7 @@ const useEmployees = () => {
         const res = await getAllEmployees();
 
         if (res?.error) {
-          showToast("error", res.error);
+          showToast("error", "Error", res.error);
         }
 
         setEmployees({
@@ -87,7 +87,7 @@ const useEmployees = () => {
           ...(res?.data?.data ?? {}),
         });
       } catch (error) {
-        showToast("error", (error as Error).message || "Failed to fetch employees");
+        showToast("error", "Error", (error as Error).message || "Failed to fetch employees");
       } finally {
         setLoading(false);
       }
@@ -103,19 +103,19 @@ const useEmployees = () => {
       const res = await createEmployees(data);
 
       if (res?.error) {
-        showToast("error", res.error);
+        showToast("error", "Error", res.error);
         return;
       }
 
       const newEmployee = res?.data?.data;
 
       if (!newEmployee) {
-        showToast("error", "Created employee was not returned by the server");
+        showToast("error", "Error", "Created employee was not returned by the server");
         return;
       }
 
       if (!isEmployeeRole(newEmployee.type)) {
-        showToast("error", "Invalid employee type returned by server");
+        showToast("error", "Error", "Invalid employee type returned by server");
         return;
       }
 
@@ -124,10 +124,10 @@ const useEmployees = () => {
         [newEmployee.type]: [...groupedEmployees[newEmployee.type], newEmployee],
       });
 
-      showToast("success", "Employee added successfully");
+      showToast("success", "Success", "Employee added successfully");
       setOpen(false);
     } catch (error) {
-      showToast("error", (error as Error).message || "Failed to add employee");
+      showToast("error", "Error", (error as Error).message || "Failed to add employee");
     } finally {
       setLoading(false);
     }
@@ -140,19 +140,19 @@ const useEmployees = () => {
       const res = await updateEmployee(id, data);
 
       if (res?.error) {
-        showToast("error", res.error);
+        showToast("error", "Error", res.error);
         return;
       }
 
       const updatedEmployee = res?.data?.data;
 
       if (!updatedEmployee) {
-        showToast("error", "Updated employee was not returned by the server");
+        showToast("error", "Error", "Updated employee was not returned by the server");
         return;
       }
 
       if (!isEmployeeRole(updatedEmployee.type)) {
-        showToast("error", "Invalid employee type returned by server");
+        showToast("error", "Error", "Invalid employee type returned by server");
         return;
       }
 
@@ -173,9 +173,9 @@ const useEmployees = () => {
       setSelectedEmployee(null);
       setEditOpen(false);
 
-      showToast("success", "Employee updated successfully");
+      showToast("success", "Success", "Employee updated successfully");
     } catch (error) {
-      showToast("error", (error as Error).message || "Failed to update employee");
+      showToast("error", "Error", (error as Error).message || "Failed to update employee");
     } finally {
       setLoading(false);
     }
@@ -188,14 +188,14 @@ const useEmployees = () => {
       const res = await updateEmployeePermissions(employeeId, { pages });
 
       if (res?.error) {
-        showToast("error", res.error);
+        showToast("error", "Error", res.error);
         return false;
       }
 
       const updatedPermissions = res?.data?.data;
 
       if (!updatedPermissions) {
-        showToast("error", "Updated permissions were not returned by the server");
+        showToast("error", "Error", "Updated permissions were not returned by the server");
         return false;
       }
 
@@ -219,11 +219,11 @@ const useEmployees = () => {
         });
       }
 
-      showToast("success", "Permissions updated successfully");
+      showToast("success", "Success", "Permissions updated successfully");
 
       return true;
     } catch (error) {
-      showToast("error", (error as Error).message || "Failed to update permissions");
+      showToast("error", "Error", (error as Error).message || "Failed to update permissions");
       return false;
     } finally {
       setPermissionLoading(false);

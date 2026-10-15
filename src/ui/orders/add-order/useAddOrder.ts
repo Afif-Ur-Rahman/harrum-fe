@@ -114,7 +114,7 @@ const useAddOrder = () => {
     const response = await getAllStocks();
 
     if (response?.error) {
-      showToast("error", response.error);
+      showToast("error", "Error", response.error);
       return;
     }
 
@@ -127,7 +127,7 @@ const useAddOrder = () => {
     const response = await getAllEmployees();
 
     if (response?.error) {
-      showToast("error", response.error);
+      showToast("error", "Error", response.error);
       return;
     }
 
@@ -160,7 +160,7 @@ const useAddOrder = () => {
     const response = await getAllCustomers();
 
     if (response?.error) {
-      showToast("error", response.error);
+      showToast("error", "Error", response.error);
       return;
     }
 
@@ -219,7 +219,7 @@ const useAddOrder = () => {
       const response = await createOrder(orderPayload);
 
       if (response?.error || !response?.data) {
-        showToast("error", response?.error || "Failed to create order");
+        showToast("error", "Error", response?.error || "Failed to create order");
         return;
       }
 
@@ -227,7 +227,7 @@ const useAddOrder = () => {
         updateStocksByIds(response.data.updatedStocks);
       }
 
-      showToast("success", response.data.message || "Order created successfully");
+      showToast("success", "Success", response.data.message || "Order created successfully");
 
       if (print) {
         printOrder(
@@ -242,7 +242,7 @@ const useAddOrder = () => {
         print: data.print,
       });
     } catch {
-      showToast("error", "Failed to create order");
+      showToast("error", "Error", "Failed to create order");
     } finally {
       setSubmitting(false);
     }
